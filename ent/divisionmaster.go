@@ -45,9 +45,11 @@ type DivisionMaster struct {
 type DivisionMasterEdges struct {
 	// Regions holds the value of the regions edge.
 	Regions []*RegionMaster `json:"regions,omitempty"`
+	// DivisionsRef holds the value of the divisions_ref edge.
+	DivisionsRef []*Facility `json:"divisions_ref,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // RegionsOrErr returns the Regions value or an error if the edge
@@ -57,6 +59,15 @@ func (e DivisionMasterEdges) RegionsOrErr() ([]*RegionMaster, error) {
 		return e.Regions, nil
 	}
 	return nil, &NotLoadedError{edge: "regions"}
+}
+
+// DivisionsRefOrErr returns the DivisionsRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e DivisionMasterEdges) DivisionsRefOrErr() ([]*Facility, error) {
+	if e.loadedTypes[1] {
+		return e.DivisionsRef, nil
+	}
+	return nil, &NotLoadedError{edge: "divisions_ref"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -168,6 +179,11 @@ func (dm *DivisionMaster) Value(name string) (ent.Value, error) {
 // QueryRegions queries the "regions" edge of the DivisionMaster entity.
 func (dm *DivisionMaster) QueryRegions() *RegionMasterQuery {
 	return NewDivisionMasterClient(dm.config).QueryRegions(dm)
+}
+
+// QueryDivisionsRef queries the "divisions_ref" edge of the DivisionMaster entity.
+func (dm *DivisionMaster) QueryDivisionsRef() *FacilityQuery {
+	return NewDivisionMasterClient(dm.config).QueryDivisionsRef(dm)
 }
 
 // Update returns a builder for updating this DivisionMaster.

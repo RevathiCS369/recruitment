@@ -5,7 +5,6 @@ package ent
 import (
 	"fmt"
 	"recruit/ent/ageeligibility"
-	"recruit/ent/exameligibility"
 	"strings"
 
 	"entgo.io/ent"
@@ -17,38 +16,13 @@ type AgeEligibility struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int32 `json:"id,omitempty"`
-	// EligibilityCode holds the value of the "EligibilityCode" field.
-	EligibilityCode int32 `json:"EligibilityCode,omitempty"`
+	// EligibillityCode holds the value of the "EligibillityCode" field.
+	EligibillityCode int32 `json:"EligibillityCode,omitempty"`
 	// Age holds the value of the "Age" field.
 	Age int32 `json:"Age,omitempty"`
 	// CategoryID holds the value of the "CategoryID" field.
-	CategoryID int32 `json:"CategoryID,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the AgeEligibilityQuery when eager-loading is set.
-	Edges        AgeEligibilityEdges `json:"edges"`
+	CategoryID   int32 `json:"CategoryID,omitempty"`
 	selectValues sql.SelectValues
-}
-
-// AgeEligibilityEdges holds the relations/edges for other nodes in the graph.
-type AgeEligibilityEdges struct {
-	// ExamEligibility holds the value of the exam_eligibility edge.
-	ExamEligibility *ExamEligibility `json:"exam_eligibility,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-}
-
-// ExamEligibilityOrErr returns the ExamEligibility value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e AgeEligibilityEdges) ExamEligibilityOrErr() (*ExamEligibility, error) {
-	if e.loadedTypes[0] {
-		if e.ExamEligibility == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: exameligibility.Label}
-		}
-		return e.ExamEligibility, nil
-	}
-	return nil, &NotLoadedError{edge: "exam_eligibility"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -56,7 +30,7 @@ func (*AgeEligibility) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case ageeligibility.FieldID, ageeligibility.FieldEligibilityCode, ageeligibility.FieldAge, ageeligibility.FieldCategoryID:
+		case ageeligibility.FieldID, ageeligibility.FieldEligibillityCode, ageeligibility.FieldAge, ageeligibility.FieldCategoryID:
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -79,11 +53,11 @@ func (ae *AgeEligibility) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			ae.ID = int32(value.Int64)
-		case ageeligibility.FieldEligibilityCode:
+		case ageeligibility.FieldEligibillityCode:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field EligibilityCode", values[i])
+				return fmt.Errorf("unexpected type %T for field EligibillityCode", values[i])
 			} else if value.Valid {
-				ae.EligibilityCode = int32(value.Int64)
+				ae.EligibillityCode = int32(value.Int64)
 			}
 		case ageeligibility.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -110,11 +84,6 @@ func (ae *AgeEligibility) Value(name string) (ent.Value, error) {
 	return ae.selectValues.Get(name)
 }
 
-// QueryExamEligibility queries the "exam_eligibility" edge of the AgeEligibility entity.
-func (ae *AgeEligibility) QueryExamEligibility() *ExamEligibilityQuery {
-	return NewAgeEligibilityClient(ae.config).QueryExamEligibility(ae)
-}
-
 // Update returns a builder for updating this AgeEligibility.
 // Note that you need to call AgeEligibility.Unwrap() before calling this method if this AgeEligibility
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -138,8 +107,8 @@ func (ae *AgeEligibility) String() string {
 	var builder strings.Builder
 	builder.WriteString("AgeEligibility(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", ae.ID))
-	builder.WriteString("EligibilityCode=")
-	builder.WriteString(fmt.Sprintf("%v", ae.EligibilityCode))
+	builder.WriteString("EligibillityCode=")
+	builder.WriteString(fmt.Sprintf("%v", ae.EligibillityCode))
 	builder.WriteString(", ")
 	builder.WriteString("Age=")
 	builder.WriteString(fmt.Sprintf("%v", ae.Age))

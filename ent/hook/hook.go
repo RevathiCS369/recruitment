@@ -8,6 +8,18 @@ import (
 	"recruit/ent"
 )
 
+// The AdminLoginFunc type is an adapter to allow the use of ordinary
+// function as AdminLogin mutator.
+type AdminLoginFunc func(context.Context, *ent.AdminLoginMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AdminLoginFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.AdminLoginMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AdminLoginMutation", m)
+}
+
 // The AgeEligibilityFunc type is an adapter to allow the use of ordinary
 // function as AgeEligibility mutator.
 type AgeEligibilityFunc func(context.Context, *ent.AgeEligibilityMutation) (ent.Value, error)
@@ -30,6 +42,54 @@ func (f ApplicationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApplicationMutation", m)
+}
+
+// The Cadre_Choice_IPFunc type is an adapter to allow the use of ordinary
+// function as Cadre_Choice_IP mutator.
+type Cadre_Choice_IPFunc func(context.Context, *ent.CadreChoiceIPMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Cadre_Choice_IPFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CadreChoiceIPMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CadreChoiceIPMutation", m)
+}
+
+// The Cadre_Choice_PAFunc type is an adapter to allow the use of ordinary
+// function as Cadre_Choice_PA mutator.
+type Cadre_Choice_PAFunc func(context.Context, *ent.CadreChoicePAMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Cadre_Choice_PAFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CadreChoicePAMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CadreChoicePAMutation", m)
+}
+
+// The Cadre_Choice_PMFunc type is an adapter to allow the use of ordinary
+// function as Cadre_Choice_PM mutator.
+type Cadre_Choice_PMFunc func(context.Context, *ent.CadreChoicePMMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Cadre_Choice_PMFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CadreChoicePMMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CadreChoicePMMutation", m)
+}
+
+// The Cadre_Choice_PSFunc type is an adapter to allow the use of ordinary
+// function as Cadre_Choice_PS mutator.
+type Cadre_Choice_PSFunc func(context.Context, *ent.CadreChoicePSMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Cadre_Choice_PSFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CadreChoicePSMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CadreChoicePSMutation", m)
 }
 
 // The CenterFunc type is an adapter to allow the use of ordinary
@@ -56,6 +116,18 @@ func (f CircleMasterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CircleMasterMutation", m)
 }
 
+// The DirectorateUsersFunc type is an adapter to allow the use of ordinary
+// function as DirectorateUsers mutator.
+type DirectorateUsersFunc func(context.Context, *ent.DirectorateUsersMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DirectorateUsersFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DirectorateUsersMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DirectorateUsersMutation", m)
+}
+
 // The DisabilityFunc type is an adapter to allow the use of ordinary
 // function as Disability mutator.
 type DisabilityFunc func(context.Context, *ent.DisabilityMutation) (ent.Value, error)
@@ -78,6 +150,54 @@ func (f DivisionMasterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Val
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DivisionMasterMutation", m)
+}
+
+// The Division_Choice_PAFunc type is an adapter to allow the use of ordinary
+// function as Division_Choice_PA mutator.
+type Division_Choice_PAFunc func(context.Context, *ent.DivisionChoicePAMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Division_Choice_PAFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DivisionChoicePAMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DivisionChoicePAMutation", m)
+}
+
+// The Division_Choice_PMFunc type is an adapter to allow the use of ordinary
+// function as Division_Choice_PM mutator.
+type Division_Choice_PMFunc func(context.Context, *ent.DivisionChoicePMMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Division_Choice_PMFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DivisionChoicePMMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DivisionChoicePMMutation", m)
+}
+
+// The Division_Choice_PSFunc type is an adapter to allow the use of ordinary
+// function as Division_Choice_PS mutator.
+type Division_Choice_PSFunc func(context.Context, *ent.DivisionChoicePSMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Division_Choice_PSFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DivisionChoicePSMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DivisionChoicePSMutation", m)
+}
+
+// The EligibilityMasterFunc type is an adapter to allow the use of ordinary
+// function as EligibilityMaster mutator.
+type EligibilityMasterFunc func(context.Context, *ent.EligibilityMasterMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EligibilityMasterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.EligibilityMasterMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EligibilityMasterMutation", m)
 }
 
 // The EmployeeCadreFunc type is an adapter to allow the use of ordinary
@@ -114,6 +234,18 @@ func (f EmployeeDesignationFunc) Mutate(ctx context.Context, m ent.Mutation) (en
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EmployeeDesignationMutation", m)
+}
+
+// The EmployeeMasterFunc type is an adapter to allow the use of ordinary
+// function as EmployeeMaster mutator.
+type EmployeeMasterFunc func(context.Context, *ent.EmployeeMasterMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EmployeeMasterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.EmployeeMasterMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EmployeeMasterMutation", m)
 }
 
 // The EmployeePostsFunc type is an adapter to allow the use of ordinary
@@ -164,18 +296,6 @@ func (f ExamCalendarFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamCalendarMutation", m)
 }
 
-// The ExamEligibilityFunc type is an adapter to allow the use of ordinary
-// function as ExamEligibility mutator.
-type ExamEligibilityFunc func(context.Context, *ent.ExamEligibilityMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ExamEligibilityFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.ExamEligibilityMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamEligibilityMutation", m)
-}
-
 // The ExamPapersFunc type is an adapter to allow the use of ordinary
 // function as ExamPapers mutator.
 type ExamPapersFunc func(context.Context, *ent.ExamPapersMutation) (ent.Value, error)
@@ -188,6 +308,90 @@ func (f ExamPapersFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamPapersMutation", m)
 }
 
+// The ExamTypeFunc type is an adapter to allow the use of ordinary
+// function as ExamType mutator.
+type ExamTypeFunc func(context.Context, *ent.ExamTypeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ExamTypeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ExamTypeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamTypeMutation", m)
+}
+
+// The Exam_Applications_IPFunc type is an adapter to allow the use of ordinary
+// function as Exam_Applications_IP mutator.
+type Exam_Applications_IPFunc func(context.Context, *ent.ExamApplicationsIPMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Exam_Applications_IPFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ExamApplicationsIPMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamApplicationsIPMutation", m)
+}
+
+// The Exam_Applications_PSFunc type is an adapter to allow the use of ordinary
+// function as Exam_Applications_PS mutator.
+type Exam_Applications_PSFunc func(context.Context, *ent.ExamApplicationsPSMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Exam_Applications_PSFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ExamApplicationsPSMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamApplicationsPSMutation", m)
+}
+
+// The Exam_IPFunc type is an adapter to allow the use of ordinary
+// function as Exam_IP mutator.
+type Exam_IPFunc func(context.Context, *ent.ExamIPMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Exam_IPFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ExamIPMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamIPMutation", m)
+}
+
+// The Exam_PAFunc type is an adapter to allow the use of ordinary
+// function as Exam_PA mutator.
+type Exam_PAFunc func(context.Context, *ent.ExamPAMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Exam_PAFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ExamPAMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamPAMutation", m)
+}
+
+// The Exam_PMFunc type is an adapter to allow the use of ordinary
+// function as Exam_PM mutator.
+type Exam_PMFunc func(context.Context, *ent.ExamPMMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Exam_PMFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ExamPMMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamPMMutation", m)
+}
+
+// The Exam_PSFunc type is an adapter to allow the use of ordinary
+// function as Exam_PS mutator.
+type Exam_PSFunc func(context.Context, *ent.ExamPSMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Exam_PSFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ExamPSMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ExamPSMutation", m)
+}
+
 // The FacilityFunc type is an adapter to allow the use of ordinary
 // function as Facility mutator.
 type FacilityFunc func(context.Context, *ent.FacilityMutation) (ent.Value, error)
@@ -198,6 +402,18 @@ func (f FacilityFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FacilityMutation", m)
+}
+
+// The LoginFunc type is an adapter to allow the use of ordinary
+// function as Login mutator.
+type LoginFunc func(context.Context, *ent.LoginMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LoginFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LoginMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LoginMutation", m)
 }
 
 // The NodalOfficerFunc type is an adapter to allow the use of ordinary
@@ -236,6 +452,30 @@ func (f PaperTypesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PaperTypesMutation", m)
 }
 
+// The PlaceOfPreferenceIPFunc type is an adapter to allow the use of ordinary
+// function as PlaceOfPreferenceIP mutator.
+type PlaceOfPreferenceIPFunc func(context.Context, *ent.PlaceOfPreferenceIPMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PlaceOfPreferenceIPFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PlaceOfPreferenceIPMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PlaceOfPreferenceIPMutation", m)
+}
+
+// The RecommendationsIPApplicationsFunc type is an adapter to allow the use of ordinary
+// function as RecommendationsIPApplications mutator.
+type RecommendationsIPApplicationsFunc func(context.Context, *ent.RecommendationsIPApplicationsMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f RecommendationsIPApplicationsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.RecommendationsIPApplicationsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RecommendationsIPApplicationsMutation", m)
+}
+
 // The RegionMasterFunc type is an adapter to allow the use of ordinary
 // function as RegionMaster mutator.
 type RegionMasterFunc func(context.Context, *ent.RegionMasterMutation) (ent.Value, error)
@@ -248,6 +488,30 @@ func (f RegionMasterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RegionMasterMutation", m)
 }
 
+// The Reversal_Application_IPFunc type is an adapter to allow the use of ordinary
+// function as Reversal_Application_IP mutator.
+type Reversal_Application_IPFunc func(context.Context, *ent.ReversalApplicationIPMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Reversal_Application_IPFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ReversalApplicationIPMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ReversalApplicationIPMutation", m)
+}
+
+// The RoleMasterFunc type is an adapter to allow the use of ordinary
+// function as RoleMaster mutator.
+type RoleMasterFunc func(context.Context, *ent.RoleMasterMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f RoleMasterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.RoleMasterMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleMasterMutation", m)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
@@ -258,6 +522,18 @@ func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+}
+
+// The UserMasterFunc type is an adapter to allow the use of ordinary
+// function as UserMaster mutator.
+type UserMasterFunc func(context.Context, *ent.UserMasterMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f UserMasterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.UserMasterMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMasterMutation", m)
 }
 
 // The VacancyYearFunc type is an adapter to allow the use of ordinary

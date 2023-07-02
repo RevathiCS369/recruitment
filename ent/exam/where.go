@@ -75,7 +75,7 @@ func ConductedBy(v string) predicate.Exam {
 }
 
 // NodalOfficerLevel applies equality check predicate on the "NodalOfficerLevel" field. It's identical to NodalOfficerLevelEQ.
-func NodalOfficerLevel(v int32) predicate.Exam {
+func NodalOfficerLevel(v string) predicate.Exam {
 	return predicate.Exam(sql.FieldEQ(FieldNodalOfficerLevel, v))
 }
 
@@ -87,6 +87,46 @@ func CalendarCode(v int32) predicate.Exam {
 // PaperCode applies equality check predicate on the "PaperCode" field. It's identical to PaperCodeEQ.
 func PaperCode(v int32) predicate.Exam {
 	return predicate.Exam(sql.FieldEQ(FieldPaperCode, v))
+}
+
+// ExamType applies equality check predicate on the "ExamType" field. It's identical to ExamTypeEQ.
+func ExamType(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldExamType, v))
+}
+
+// TentativeNotificationMandatoryDate applies equality check predicate on the "TentativeNotificationMandatoryDate" field. It's identical to TentativeNotificationMandatoryDateEQ.
+func TentativeNotificationMandatoryDate(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldTentativeNotificationMandatoryDate, v))
+}
+
+// LocalLanguage applies equality check predicate on the "LocalLanguage" field. It's identical to LocalLanguageEQ.
+func LocalLanguage(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldLocalLanguage, v))
+}
+
+// OptionForPost applies equality check predicate on the "OptionForPost" field. It's identical to OptionForPostEQ.
+func OptionForPost(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldOptionForPost, v))
+}
+
+// OptionToWriteExamOtherThanParent applies equality check predicate on the "OptionToWriteExamOtherThanParent" field. It's identical to OptionToWriteExamOtherThanParentEQ.
+func OptionToWriteExamOtherThanParent(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldOptionToWriteExamOtherThanParent, v))
+}
+
+// OrderNumber applies equality check predicate on the "OrderNumber" field. It's identical to OrderNumberEQ.
+func OrderNumber(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldOrderNumber, v))
+}
+
+// Status applies equality check predicate on the "Status" field. It's identical to StatusEQ.
+func Status(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldStatus, v))
+}
+
+// ExamTypeCode applies equality check predicate on the "ExamTypeCode" field. It's identical to ExamTypeCodeEQ.
+func ExamTypeCode(v int32) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldExamTypeCode, v))
 }
 
 // ExamNameEQ applies the EQ predicate on the "ExamName" field.
@@ -325,43 +365,58 @@ func ConductedByContainsFold(v string) predicate.Exam {
 }
 
 // NodalOfficerLevelEQ applies the EQ predicate on the "NodalOfficerLevel" field.
-func NodalOfficerLevelEQ(v int32) predicate.Exam {
+func NodalOfficerLevelEQ(v string) predicate.Exam {
 	return predicate.Exam(sql.FieldEQ(FieldNodalOfficerLevel, v))
 }
 
 // NodalOfficerLevelNEQ applies the NEQ predicate on the "NodalOfficerLevel" field.
-func NodalOfficerLevelNEQ(v int32) predicate.Exam {
+func NodalOfficerLevelNEQ(v string) predicate.Exam {
 	return predicate.Exam(sql.FieldNEQ(FieldNodalOfficerLevel, v))
 }
 
 // NodalOfficerLevelIn applies the In predicate on the "NodalOfficerLevel" field.
-func NodalOfficerLevelIn(vs ...int32) predicate.Exam {
+func NodalOfficerLevelIn(vs ...string) predicate.Exam {
 	return predicate.Exam(sql.FieldIn(FieldNodalOfficerLevel, vs...))
 }
 
 // NodalOfficerLevelNotIn applies the NotIn predicate on the "NodalOfficerLevel" field.
-func NodalOfficerLevelNotIn(vs ...int32) predicate.Exam {
+func NodalOfficerLevelNotIn(vs ...string) predicate.Exam {
 	return predicate.Exam(sql.FieldNotIn(FieldNodalOfficerLevel, vs...))
 }
 
 // NodalOfficerLevelGT applies the GT predicate on the "NodalOfficerLevel" field.
-func NodalOfficerLevelGT(v int32) predicate.Exam {
+func NodalOfficerLevelGT(v string) predicate.Exam {
 	return predicate.Exam(sql.FieldGT(FieldNodalOfficerLevel, v))
 }
 
 // NodalOfficerLevelGTE applies the GTE predicate on the "NodalOfficerLevel" field.
-func NodalOfficerLevelGTE(v int32) predicate.Exam {
+func NodalOfficerLevelGTE(v string) predicate.Exam {
 	return predicate.Exam(sql.FieldGTE(FieldNodalOfficerLevel, v))
 }
 
 // NodalOfficerLevelLT applies the LT predicate on the "NodalOfficerLevel" field.
-func NodalOfficerLevelLT(v int32) predicate.Exam {
+func NodalOfficerLevelLT(v string) predicate.Exam {
 	return predicate.Exam(sql.FieldLT(FieldNodalOfficerLevel, v))
 }
 
 // NodalOfficerLevelLTE applies the LTE predicate on the "NodalOfficerLevel" field.
-func NodalOfficerLevelLTE(v int32) predicate.Exam {
+func NodalOfficerLevelLTE(v string) predicate.Exam {
 	return predicate.Exam(sql.FieldLTE(FieldNodalOfficerLevel, v))
+}
+
+// NodalOfficerLevelContains applies the Contains predicate on the "NodalOfficerLevel" field.
+func NodalOfficerLevelContains(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldContains(FieldNodalOfficerLevel, v))
+}
+
+// NodalOfficerLevelHasPrefix applies the HasPrefix predicate on the "NodalOfficerLevel" field.
+func NodalOfficerLevelHasPrefix(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldHasPrefix(FieldNodalOfficerLevel, v))
+}
+
+// NodalOfficerLevelHasSuffix applies the HasSuffix predicate on the "NodalOfficerLevel" field.
+func NodalOfficerLevelHasSuffix(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldHasSuffix(FieldNodalOfficerLevel, v))
 }
 
 // NodalOfficerLevelIsNil applies the IsNil predicate on the "NodalOfficerLevel" field.
@@ -372,6 +427,16 @@ func NodalOfficerLevelIsNil() predicate.Exam {
 // NodalOfficerLevelNotNil applies the NotNil predicate on the "NodalOfficerLevel" field.
 func NodalOfficerLevelNotNil() predicate.Exam {
 	return predicate.Exam(sql.FieldNotNull(FieldNodalOfficerLevel))
+}
+
+// NodalOfficerLevelEqualFold applies the EqualFold predicate on the "NodalOfficerLevel" field.
+func NodalOfficerLevelEqualFold(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEqualFold(FieldNodalOfficerLevel, v))
+}
+
+// NodalOfficerLevelContainsFold applies the ContainsFold predicate on the "NodalOfficerLevel" field.
+func NodalOfficerLevelContainsFold(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldContainsFold(FieldNodalOfficerLevel, v))
 }
 
 // CalendarCodeEQ applies the EQ predicate on the "CalendarCode" field.
@@ -474,6 +539,301 @@ func PaperCodeNotNil() predicate.Exam {
 	return predicate.Exam(sql.FieldNotNull(FieldPaperCode))
 }
 
+// ExamTypeEQ applies the EQ predicate on the "ExamType" field.
+func ExamTypeEQ(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldExamType, v))
+}
+
+// ExamTypeNEQ applies the NEQ predicate on the "ExamType" field.
+func ExamTypeNEQ(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldNEQ(FieldExamType, v))
+}
+
+// ExamTypeIn applies the In predicate on the "ExamType" field.
+func ExamTypeIn(vs ...string) predicate.Exam {
+	return predicate.Exam(sql.FieldIn(FieldExamType, vs...))
+}
+
+// ExamTypeNotIn applies the NotIn predicate on the "ExamType" field.
+func ExamTypeNotIn(vs ...string) predicate.Exam {
+	return predicate.Exam(sql.FieldNotIn(FieldExamType, vs...))
+}
+
+// ExamTypeGT applies the GT predicate on the "ExamType" field.
+func ExamTypeGT(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldGT(FieldExamType, v))
+}
+
+// ExamTypeGTE applies the GTE predicate on the "ExamType" field.
+func ExamTypeGTE(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldGTE(FieldExamType, v))
+}
+
+// ExamTypeLT applies the LT predicate on the "ExamType" field.
+func ExamTypeLT(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldLT(FieldExamType, v))
+}
+
+// ExamTypeLTE applies the LTE predicate on the "ExamType" field.
+func ExamTypeLTE(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldLTE(FieldExamType, v))
+}
+
+// ExamTypeContains applies the Contains predicate on the "ExamType" field.
+func ExamTypeContains(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldContains(FieldExamType, v))
+}
+
+// ExamTypeHasPrefix applies the HasPrefix predicate on the "ExamType" field.
+func ExamTypeHasPrefix(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldHasPrefix(FieldExamType, v))
+}
+
+// ExamTypeHasSuffix applies the HasSuffix predicate on the "ExamType" field.
+func ExamTypeHasSuffix(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldHasSuffix(FieldExamType, v))
+}
+
+// ExamTypeEqualFold applies the EqualFold predicate on the "ExamType" field.
+func ExamTypeEqualFold(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEqualFold(FieldExamType, v))
+}
+
+// ExamTypeContainsFold applies the ContainsFold predicate on the "ExamType" field.
+func ExamTypeContainsFold(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldContainsFold(FieldExamType, v))
+}
+
+// TentativeNotificationMandatoryDateEQ applies the EQ predicate on the "TentativeNotificationMandatoryDate" field.
+func TentativeNotificationMandatoryDateEQ(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldTentativeNotificationMandatoryDate, v))
+}
+
+// TentativeNotificationMandatoryDateNEQ applies the NEQ predicate on the "TentativeNotificationMandatoryDate" field.
+func TentativeNotificationMandatoryDateNEQ(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldNEQ(FieldTentativeNotificationMandatoryDate, v))
+}
+
+// LocalLanguageEQ applies the EQ predicate on the "LocalLanguage" field.
+func LocalLanguageEQ(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldLocalLanguage, v))
+}
+
+// LocalLanguageNEQ applies the NEQ predicate on the "LocalLanguage" field.
+func LocalLanguageNEQ(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldNEQ(FieldLocalLanguage, v))
+}
+
+// OptionForPostEQ applies the EQ predicate on the "OptionForPost" field.
+func OptionForPostEQ(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldOptionForPost, v))
+}
+
+// OptionForPostNEQ applies the NEQ predicate on the "OptionForPost" field.
+func OptionForPostNEQ(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldNEQ(FieldOptionForPost, v))
+}
+
+// OptionToWriteExamOtherThanParentEQ applies the EQ predicate on the "OptionToWriteExamOtherThanParent" field.
+func OptionToWriteExamOtherThanParentEQ(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldOptionToWriteExamOtherThanParent, v))
+}
+
+// OptionToWriteExamOtherThanParentNEQ applies the NEQ predicate on the "OptionToWriteExamOtherThanParent" field.
+func OptionToWriteExamOtherThanParentNEQ(v bool) predicate.Exam {
+	return predicate.Exam(sql.FieldNEQ(FieldOptionToWriteExamOtherThanParent, v))
+}
+
+// OrderNumberEQ applies the EQ predicate on the "OrderNumber" field.
+func OrderNumberEQ(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldOrderNumber, v))
+}
+
+// OrderNumberNEQ applies the NEQ predicate on the "OrderNumber" field.
+func OrderNumberNEQ(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldNEQ(FieldOrderNumber, v))
+}
+
+// OrderNumberIn applies the In predicate on the "OrderNumber" field.
+func OrderNumberIn(vs ...string) predicate.Exam {
+	return predicate.Exam(sql.FieldIn(FieldOrderNumber, vs...))
+}
+
+// OrderNumberNotIn applies the NotIn predicate on the "OrderNumber" field.
+func OrderNumberNotIn(vs ...string) predicate.Exam {
+	return predicate.Exam(sql.FieldNotIn(FieldOrderNumber, vs...))
+}
+
+// OrderNumberGT applies the GT predicate on the "OrderNumber" field.
+func OrderNumberGT(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldGT(FieldOrderNumber, v))
+}
+
+// OrderNumberGTE applies the GTE predicate on the "OrderNumber" field.
+func OrderNumberGTE(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldGTE(FieldOrderNumber, v))
+}
+
+// OrderNumberLT applies the LT predicate on the "OrderNumber" field.
+func OrderNumberLT(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldLT(FieldOrderNumber, v))
+}
+
+// OrderNumberLTE applies the LTE predicate on the "OrderNumber" field.
+func OrderNumberLTE(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldLTE(FieldOrderNumber, v))
+}
+
+// OrderNumberContains applies the Contains predicate on the "OrderNumber" field.
+func OrderNumberContains(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldContains(FieldOrderNumber, v))
+}
+
+// OrderNumberHasPrefix applies the HasPrefix predicate on the "OrderNumber" field.
+func OrderNumberHasPrefix(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldHasPrefix(FieldOrderNumber, v))
+}
+
+// OrderNumberHasSuffix applies the HasSuffix predicate on the "OrderNumber" field.
+func OrderNumberHasSuffix(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldHasSuffix(FieldOrderNumber, v))
+}
+
+// OrderNumberIsNil applies the IsNil predicate on the "OrderNumber" field.
+func OrderNumberIsNil() predicate.Exam {
+	return predicate.Exam(sql.FieldIsNull(FieldOrderNumber))
+}
+
+// OrderNumberNotNil applies the NotNil predicate on the "OrderNumber" field.
+func OrderNumberNotNil() predicate.Exam {
+	return predicate.Exam(sql.FieldNotNull(FieldOrderNumber))
+}
+
+// OrderNumberEqualFold applies the EqualFold predicate on the "OrderNumber" field.
+func OrderNumberEqualFold(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEqualFold(FieldOrderNumber, v))
+}
+
+// OrderNumberContainsFold applies the ContainsFold predicate on the "OrderNumber" field.
+func OrderNumberContainsFold(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldContainsFold(FieldOrderNumber, v))
+}
+
+// StatusEQ applies the EQ predicate on the "Status" field.
+func StatusEQ(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "Status" field.
+func StatusNEQ(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "Status" field.
+func StatusIn(vs ...string) predicate.Exam {
+	return predicate.Exam(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "Status" field.
+func StatusNotIn(vs ...string) predicate.Exam {
+	return predicate.Exam(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "Status" field.
+func StatusGT(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "Status" field.
+func StatusGTE(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "Status" field.
+func StatusLT(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "Status" field.
+func StatusLTE(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusContains applies the Contains predicate on the "Status" field.
+func StatusContains(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldContains(FieldStatus, v))
+}
+
+// StatusHasPrefix applies the HasPrefix predicate on the "Status" field.
+func StatusHasPrefix(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldHasPrefix(FieldStatus, v))
+}
+
+// StatusHasSuffix applies the HasSuffix predicate on the "Status" field.
+func StatusHasSuffix(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldHasSuffix(FieldStatus, v))
+}
+
+// StatusEqualFold applies the EqualFold predicate on the "Status" field.
+func StatusEqualFold(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldEqualFold(FieldStatus, v))
+}
+
+// StatusContainsFold applies the ContainsFold predicate on the "Status" field.
+func StatusContainsFold(v string) predicate.Exam {
+	return predicate.Exam(sql.FieldContainsFold(FieldStatus, v))
+}
+
+// ExamTypeCodeEQ applies the EQ predicate on the "ExamTypeCode" field.
+func ExamTypeCodeEQ(v int32) predicate.Exam {
+	return predicate.Exam(sql.FieldEQ(FieldExamTypeCode, v))
+}
+
+// ExamTypeCodeNEQ applies the NEQ predicate on the "ExamTypeCode" field.
+func ExamTypeCodeNEQ(v int32) predicate.Exam {
+	return predicate.Exam(sql.FieldNEQ(FieldExamTypeCode, v))
+}
+
+// ExamTypeCodeIn applies the In predicate on the "ExamTypeCode" field.
+func ExamTypeCodeIn(vs ...int32) predicate.Exam {
+	return predicate.Exam(sql.FieldIn(FieldExamTypeCode, vs...))
+}
+
+// ExamTypeCodeNotIn applies the NotIn predicate on the "ExamTypeCode" field.
+func ExamTypeCodeNotIn(vs ...int32) predicate.Exam {
+	return predicate.Exam(sql.FieldNotIn(FieldExamTypeCode, vs...))
+}
+
+// ExamTypeCodeGT applies the GT predicate on the "ExamTypeCode" field.
+func ExamTypeCodeGT(v int32) predicate.Exam {
+	return predicate.Exam(sql.FieldGT(FieldExamTypeCode, v))
+}
+
+// ExamTypeCodeGTE applies the GTE predicate on the "ExamTypeCode" field.
+func ExamTypeCodeGTE(v int32) predicate.Exam {
+	return predicate.Exam(sql.FieldGTE(FieldExamTypeCode, v))
+}
+
+// ExamTypeCodeLT applies the LT predicate on the "ExamTypeCode" field.
+func ExamTypeCodeLT(v int32) predicate.Exam {
+	return predicate.Exam(sql.FieldLT(FieldExamTypeCode, v))
+}
+
+// ExamTypeCodeLTE applies the LTE predicate on the "ExamTypeCode" field.
+func ExamTypeCodeLTE(v int32) predicate.Exam {
+	return predicate.Exam(sql.FieldLTE(FieldExamTypeCode, v))
+}
+
+// ExamTypeCodeIsNil applies the IsNil predicate on the "ExamTypeCode" field.
+func ExamTypeCodeIsNil() predicate.Exam {
+	return predicate.Exam(sql.FieldIsNull(FieldExamTypeCode))
+}
+
+// ExamTypeCodeNotNil applies the NotNil predicate on the "ExamTypeCode" field.
+func ExamTypeCodeNotNil() predicate.Exam {
+	return predicate.Exam(sql.FieldNotNull(FieldExamTypeCode))
+}
+
 // HasNodalOfficers applies the HasEdge predicate on the "nodal_officers" edge.
 func HasNodalOfficers() predicate.Exam {
 	return predicate.Exam(func(s *sql.Selector) {
@@ -558,6 +918,52 @@ func HasPapers() predicate.Exam {
 func HasPapersWith(preds ...predicate.ExamPapers) predicate.Exam {
 	return predicate.Exam(func(s *sql.Selector) {
 		step := newPapersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasExamEligibility applies the HasEdge predicate on the "ExamEligibility" edge.
+func HasExamEligibility() predicate.Exam {
+	return predicate.Exam(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ExamEligibilityTable, ExamEligibilityColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasExamEligibilityWith applies the HasEdge predicate on the "ExamEligibility" edge with a given conditions (other predicates).
+func HasExamEligibilityWith(preds ...predicate.EligibilityMaster) predicate.Exam {
+	return predicate.Exam(func(s *sql.Selector) {
+		step := newExamEligibilityStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasExamsType applies the HasEdge predicate on the "exams_type" edge.
+func HasExamsType() predicate.Exam {
+	return predicate.Exam(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ExamsTypeTable, ExamsTypeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasExamsTypeWith applies the HasEdge predicate on the "exams_type" edge with a given conditions (other predicates).
+func HasExamsTypeWith(preds ...predicate.ExamType) predicate.Exam {
+	return predicate.Exam(func(s *sql.Selector) {
+		step := newExamsTypeStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

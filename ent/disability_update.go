@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/disability"
+	"recruit/ent/exampapers"
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -58,9 +59,45 @@ func (du *DisabilityUpdate) SetDisabilityFlag(df disability.DisabilityFlag) *Dis
 	return du
 }
 
+// AddDisRefIDs adds the "dis_ref" edge to the ExamPapers entity by IDs.
+func (du *DisabilityUpdate) AddDisRefIDs(ids ...int32) *DisabilityUpdate {
+	du.mutation.AddDisRefIDs(ids...)
+	return du
+}
+
+// AddDisRef adds the "dis_ref" edges to the ExamPapers entity.
+func (du *DisabilityUpdate) AddDisRef(e ...*ExamPapers) *DisabilityUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return du.AddDisRefIDs(ids...)
+}
+
 // Mutation returns the DisabilityMutation object of the builder.
 func (du *DisabilityUpdate) Mutation() *DisabilityMutation {
 	return du.mutation
+}
+
+// ClearDisRef clears all "dis_ref" edges to the ExamPapers entity.
+func (du *DisabilityUpdate) ClearDisRef() *DisabilityUpdate {
+	du.mutation.ClearDisRef()
+	return du
+}
+
+// RemoveDisRefIDs removes the "dis_ref" edge to ExamPapers entities by IDs.
+func (du *DisabilityUpdate) RemoveDisRefIDs(ids ...int32) *DisabilityUpdate {
+	du.mutation.RemoveDisRefIDs(ids...)
+	return du
+}
+
+// RemoveDisRef removes "dis_ref" edges to ExamPapers entities.
+func (du *DisabilityUpdate) RemoveDisRef(e ...*ExamPapers) *DisabilityUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return du.RemoveDisRefIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -127,6 +164,51 @@ func (du *DisabilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := du.mutation.DisabilityFlag(); ok {
 		_spec.SetField(disability.FieldDisabilityFlag, field.TypeEnum, value)
 	}
+	if du.mutation.DisRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   disability.DisRefTable,
+			Columns: []string{disability.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exampapers.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedDisRefIDs(); len(nodes) > 0 && !du.mutation.DisRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   disability.DisRefTable,
+			Columns: []string{disability.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exampapers.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.DisRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   disability.DisRefTable,
+			Columns: []string{disability.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exampapers.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, du.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{disability.Label}
@@ -178,9 +260,45 @@ func (duo *DisabilityUpdateOne) SetDisabilityFlag(df disability.DisabilityFlag) 
 	return duo
 }
 
+// AddDisRefIDs adds the "dis_ref" edge to the ExamPapers entity by IDs.
+func (duo *DisabilityUpdateOne) AddDisRefIDs(ids ...int32) *DisabilityUpdateOne {
+	duo.mutation.AddDisRefIDs(ids...)
+	return duo
+}
+
+// AddDisRef adds the "dis_ref" edges to the ExamPapers entity.
+func (duo *DisabilityUpdateOne) AddDisRef(e ...*ExamPapers) *DisabilityUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return duo.AddDisRefIDs(ids...)
+}
+
 // Mutation returns the DisabilityMutation object of the builder.
 func (duo *DisabilityUpdateOne) Mutation() *DisabilityMutation {
 	return duo.mutation
+}
+
+// ClearDisRef clears all "dis_ref" edges to the ExamPapers entity.
+func (duo *DisabilityUpdateOne) ClearDisRef() *DisabilityUpdateOne {
+	duo.mutation.ClearDisRef()
+	return duo
+}
+
+// RemoveDisRefIDs removes the "dis_ref" edge to ExamPapers entities by IDs.
+func (duo *DisabilityUpdateOne) RemoveDisRefIDs(ids ...int32) *DisabilityUpdateOne {
+	duo.mutation.RemoveDisRefIDs(ids...)
+	return duo
+}
+
+// RemoveDisRef removes "dis_ref" edges to ExamPapers entities.
+func (duo *DisabilityUpdateOne) RemoveDisRef(e ...*ExamPapers) *DisabilityUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return duo.RemoveDisRefIDs(ids...)
 }
 
 // Where appends a list predicates to the DisabilityUpdate builder.
@@ -276,6 +394,51 @@ func (duo *DisabilityUpdateOne) sqlSave(ctx context.Context) (_node *Disability,
 	}
 	if value, ok := duo.mutation.DisabilityFlag(); ok {
 		_spec.SetField(disability.FieldDisabilityFlag, field.TypeEnum, value)
+	}
+	if duo.mutation.DisRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   disability.DisRefTable,
+			Columns: []string{disability.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exampapers.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedDisRefIDs(); len(nodes) > 0 && !duo.mutation.DisRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   disability.DisRefTable,
+			Columns: []string{disability.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exampapers.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.DisRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   disability.DisRefTable,
+			Columns: []string{disability.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exampapers.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Disability{config: duo.config}
 	_spec.Assign = _node.assignValues

@@ -7,9 +7,11 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/exam"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
+	"recruit/ent/examtype"
 	"recruit/ent/nodalofficer"
 	"recruit/ent/notification"
 	"recruit/ent/predicate"
@@ -22,15 +24,17 @@ import (
 // ExamQuery is the builder for querying Exam entities.
 type ExamQuery struct {
 	config
-	ctx               *QueryContext
-	order             []exam.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Exam
-	withNodalOfficers *NodalOfficerQuery
-	withNotifications *NotificationQuery
-	withExamsRef      *ExamCalendarQuery
-	withPapers        *ExamPapersQuery
-	withFKs           bool
+	ctx                 *QueryContext
+	order               []exam.OrderOption
+	inters              []Interceptor
+	predicates          []predicate.Exam
+	withNodalOfficers   *NodalOfficerQuery
+	withNotifications   *NotificationQuery
+	withExamsRef        *ExamCalendarQuery
+	withPapers          *ExamPapersQuery
+	withExamEligibility *EligibilityMasterQuery
+	withExamsType       *ExamTypeQuery
+	withFKs             bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -148,6 +152,50 @@ func (eq *ExamQuery) QueryPapers() *ExamPapersQuery {
 			sqlgraph.From(exam.Table, exam.FieldID, selector),
 			sqlgraph.To(exampapers.Table, exampapers.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, exam.PapersTable, exam.PapersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryExamEligibility chains the current query on the "ExamEligibility" edge.
+func (eq *ExamQuery) QueryExamEligibility() *EligibilityMasterQuery {
+	query := (&EligibilityMasterClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam.Table, exam.FieldID, selector),
+			sqlgraph.To(eligibilitymaster.Table, eligibilitymaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam.ExamEligibilityTable, exam.ExamEligibilityColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryExamsType chains the current query on the "exams_type" edge.
+func (eq *ExamQuery) QueryExamsType() *ExamTypeQuery {
+	query := (&ExamTypeClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam.Table, exam.FieldID, selector),
+			sqlgraph.To(examtype.Table, examtype.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam.ExamsTypeTable, exam.ExamsTypeColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
 		return fromU, nil
@@ -342,15 +390,17 @@ func (eq *ExamQuery) Clone() *ExamQuery {
 		return nil
 	}
 	return &ExamQuery{
-		config:            eq.config,
-		ctx:               eq.ctx.Clone(),
-		order:             append([]exam.OrderOption{}, eq.order...),
-		inters:            append([]Interceptor{}, eq.inters...),
-		predicates:        append([]predicate.Exam{}, eq.predicates...),
-		withNodalOfficers: eq.withNodalOfficers.Clone(),
-		withNotifications: eq.withNotifications.Clone(),
-		withExamsRef:      eq.withExamsRef.Clone(),
-		withPapers:        eq.withPapers.Clone(),
+		config:              eq.config,
+		ctx:                 eq.ctx.Clone(),
+		order:               append([]exam.OrderOption{}, eq.order...),
+		inters:              append([]Interceptor{}, eq.inters...),
+		predicates:          append([]predicate.Exam{}, eq.predicates...),
+		withNodalOfficers:   eq.withNodalOfficers.Clone(),
+		withNotifications:   eq.withNotifications.Clone(),
+		withExamsRef:        eq.withExamsRef.Clone(),
+		withPapers:          eq.withPapers.Clone(),
+		withExamEligibility: eq.withExamEligibility.Clone(),
+		withExamsType:       eq.withExamsType.Clone(),
 		// clone intermediate query.
 		sql:  eq.sql.Clone(),
 		path: eq.path,
@@ -398,6 +448,28 @@ func (eq *ExamQuery) WithPapers(opts ...func(*ExamPapersQuery)) *ExamQuery {
 		opt(query)
 	}
 	eq.withPapers = query
+	return eq
+}
+
+// WithExamEligibility tells the query-builder to eager-load the nodes that are connected to
+// the "ExamEligibility" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *ExamQuery) WithExamEligibility(opts ...func(*EligibilityMasterQuery)) *ExamQuery {
+	query := (&EligibilityMasterClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withExamEligibility = query
+	return eq
+}
+
+// WithExamsType tells the query-builder to eager-load the nodes that are connected to
+// the "exams_type" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *ExamQuery) WithExamsType(opts ...func(*ExamTypeQuery)) *ExamQuery {
+	query := (&ExamTypeClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withExamsType = query
 	return eq
 }
 
@@ -480,11 +552,13 @@ func (eq *ExamQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Exam, e
 		nodes       = []*Exam{}
 		withFKs     = eq.withFKs
 		_spec       = eq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
 			eq.withNodalOfficers != nil,
 			eq.withNotifications != nil,
 			eq.withExamsRef != nil,
 			eq.withPapers != nil,
+			eq.withExamEligibility != nil,
+			eq.withExamsType != nil,
 		}
 	)
 	if withFKs {
@@ -533,6 +607,20 @@ func (eq *ExamQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Exam, e
 		if err := eq.loadPapers(ctx, query, nodes,
 			func(n *Exam) { n.Edges.Papers = []*ExamPapers{} },
 			func(n *Exam, e *ExamPapers) { n.Edges.Papers = append(n.Edges.Papers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := eq.withExamEligibility; query != nil {
+		if err := eq.loadExamEligibility(ctx, query, nodes,
+			func(n *Exam) { n.Edges.ExamEligibility = []*EligibilityMaster{} },
+			func(n *Exam, e *EligibilityMaster) { n.Edges.ExamEligibility = append(n.Edges.ExamEligibility, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := eq.withExamsType; query != nil {
+		if err := eq.loadExamsType(ctx, query, nodes,
+			func(n *Exam) { n.Edges.ExamsType = []*ExamType{} },
+			func(n *Exam, e *ExamType) { n.Edges.ExamsType = append(n.Edges.ExamsType, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -610,6 +698,7 @@ func (eq *ExamQuery) loadExamsRef(ctx context.Context, query *ExamCalendarQuery,
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(examcalendar.FieldExamCode)
 	}
@@ -640,11 +729,73 @@ func (eq *ExamQuery) loadPapers(ctx context.Context, query *ExamPapersQuery, nod
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(exampapers.FieldExamCode)
 	}
 	query.Where(predicate.ExamPapers(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(exam.PapersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ExamCode
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "ExamCode" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (eq *ExamQuery) loadExamEligibility(ctx context.Context, query *EligibilityMasterQuery, nodes []*Exam, init func(*Exam), assign func(*Exam, *EligibilityMaster)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*Exam)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(eligibilitymaster.FieldExamCode)
+	}
+	query.Where(predicate.EligibilityMaster(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(exam.ExamEligibilityColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ExamCode
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "ExamCode" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (eq *ExamQuery) loadExamsType(ctx context.Context, query *ExamTypeQuery, nodes []*Exam, init func(*Exam), assign func(*Exam, *ExamType)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*Exam)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(examtype.FieldExamCode)
+	}
+	query.Where(predicate.ExamType(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(exam.ExamsTypeColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {

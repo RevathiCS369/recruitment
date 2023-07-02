@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/ageeligibility"
-	"recruit/ent/exameligibility"
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -28,23 +27,30 @@ func (aeu *AgeEligibilityUpdate) Where(ps ...predicate.AgeEligibility) *AgeEligi
 	return aeu
 }
 
-// SetEligibilityCode sets the "EligibilityCode" field.
-func (aeu *AgeEligibilityUpdate) SetEligibilityCode(i int32) *AgeEligibilityUpdate {
-	aeu.mutation.SetEligibilityCode(i)
+// SetEligibillityCode sets the "EligibillityCode" field.
+func (aeu *AgeEligibilityUpdate) SetEligibillityCode(i int32) *AgeEligibilityUpdate {
+	aeu.mutation.ResetEligibillityCode()
+	aeu.mutation.SetEligibillityCode(i)
 	return aeu
 }
 
-// SetNillableEligibilityCode sets the "EligibilityCode" field if the given value is not nil.
-func (aeu *AgeEligibilityUpdate) SetNillableEligibilityCode(i *int32) *AgeEligibilityUpdate {
+// SetNillableEligibillityCode sets the "EligibillityCode" field if the given value is not nil.
+func (aeu *AgeEligibilityUpdate) SetNillableEligibillityCode(i *int32) *AgeEligibilityUpdate {
 	if i != nil {
-		aeu.SetEligibilityCode(*i)
+		aeu.SetEligibillityCode(*i)
 	}
 	return aeu
 }
 
-// ClearEligibilityCode clears the value of the "EligibilityCode" field.
-func (aeu *AgeEligibilityUpdate) ClearEligibilityCode() *AgeEligibilityUpdate {
-	aeu.mutation.ClearEligibilityCode()
+// AddEligibillityCode adds i to the "EligibillityCode" field.
+func (aeu *AgeEligibilityUpdate) AddEligibillityCode(i int32) *AgeEligibilityUpdate {
+	aeu.mutation.AddEligibillityCode(i)
+	return aeu
+}
+
+// ClearEligibillityCode clears the value of the "EligibillityCode" field.
+func (aeu *AgeEligibilityUpdate) ClearEligibillityCode() *AgeEligibilityUpdate {
+	aeu.mutation.ClearEligibillityCode()
 	return aeu
 }
 
@@ -102,34 +108,9 @@ func (aeu *AgeEligibilityUpdate) ClearCategoryID() *AgeEligibilityUpdate {
 	return aeu
 }
 
-// SetExamEligibilityID sets the "exam_eligibility" edge to the ExamEligibility entity by ID.
-func (aeu *AgeEligibilityUpdate) SetExamEligibilityID(id int32) *AgeEligibilityUpdate {
-	aeu.mutation.SetExamEligibilityID(id)
-	return aeu
-}
-
-// SetNillableExamEligibilityID sets the "exam_eligibility" edge to the ExamEligibility entity by ID if the given value is not nil.
-func (aeu *AgeEligibilityUpdate) SetNillableExamEligibilityID(id *int32) *AgeEligibilityUpdate {
-	if id != nil {
-		aeu = aeu.SetExamEligibilityID(*id)
-	}
-	return aeu
-}
-
-// SetExamEligibility sets the "exam_eligibility" edge to the ExamEligibility entity.
-func (aeu *AgeEligibilityUpdate) SetExamEligibility(e *ExamEligibility) *AgeEligibilityUpdate {
-	return aeu.SetExamEligibilityID(e.ID)
-}
-
 // Mutation returns the AgeEligibilityMutation object of the builder.
 func (aeu *AgeEligibilityUpdate) Mutation() *AgeEligibilityMutation {
 	return aeu.mutation
-}
-
-// ClearExamEligibility clears the "exam_eligibility" edge to the ExamEligibility entity.
-func (aeu *AgeEligibilityUpdate) ClearExamEligibility() *AgeEligibilityUpdate {
-	aeu.mutation.ClearExamEligibility()
-	return aeu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -168,6 +149,15 @@ func (aeu *AgeEligibilityUpdate) sqlSave(ctx context.Context) (n int, err error)
 			}
 		}
 	}
+	if value, ok := aeu.mutation.EligibillityCode(); ok {
+		_spec.SetField(ageeligibility.FieldEligibillityCode, field.TypeInt32, value)
+	}
+	if value, ok := aeu.mutation.AddedEligibillityCode(); ok {
+		_spec.AddField(ageeligibility.FieldEligibillityCode, field.TypeInt32, value)
+	}
+	if aeu.mutation.EligibillityCodeCleared() {
+		_spec.ClearField(ageeligibility.FieldEligibillityCode, field.TypeInt32)
+	}
 	if value, ok := aeu.mutation.Age(); ok {
 		_spec.SetField(ageeligibility.FieldAge, field.TypeInt32, value)
 	}
@@ -185,35 +175,6 @@ func (aeu *AgeEligibilityUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if aeu.mutation.CategoryIDCleared() {
 		_spec.ClearField(ageeligibility.FieldCategoryID, field.TypeInt32)
-	}
-	if aeu.mutation.ExamEligibilityCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   ageeligibility.ExamEligibilityTable,
-			Columns: []string{ageeligibility.ExamEligibilityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(exameligibility.FieldID, field.TypeInt32),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := aeu.mutation.ExamEligibilityIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   ageeligibility.ExamEligibilityTable,
-			Columns: []string{ageeligibility.ExamEligibilityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(exameligibility.FieldID, field.TypeInt32),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, aeu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -235,23 +196,30 @@ type AgeEligibilityUpdateOne struct {
 	mutation *AgeEligibilityMutation
 }
 
-// SetEligibilityCode sets the "EligibilityCode" field.
-func (aeuo *AgeEligibilityUpdateOne) SetEligibilityCode(i int32) *AgeEligibilityUpdateOne {
-	aeuo.mutation.SetEligibilityCode(i)
+// SetEligibillityCode sets the "EligibillityCode" field.
+func (aeuo *AgeEligibilityUpdateOne) SetEligibillityCode(i int32) *AgeEligibilityUpdateOne {
+	aeuo.mutation.ResetEligibillityCode()
+	aeuo.mutation.SetEligibillityCode(i)
 	return aeuo
 }
 
-// SetNillableEligibilityCode sets the "EligibilityCode" field if the given value is not nil.
-func (aeuo *AgeEligibilityUpdateOne) SetNillableEligibilityCode(i *int32) *AgeEligibilityUpdateOne {
+// SetNillableEligibillityCode sets the "EligibillityCode" field if the given value is not nil.
+func (aeuo *AgeEligibilityUpdateOne) SetNillableEligibillityCode(i *int32) *AgeEligibilityUpdateOne {
 	if i != nil {
-		aeuo.SetEligibilityCode(*i)
+		aeuo.SetEligibillityCode(*i)
 	}
 	return aeuo
 }
 
-// ClearEligibilityCode clears the value of the "EligibilityCode" field.
-func (aeuo *AgeEligibilityUpdateOne) ClearEligibilityCode() *AgeEligibilityUpdateOne {
-	aeuo.mutation.ClearEligibilityCode()
+// AddEligibillityCode adds i to the "EligibillityCode" field.
+func (aeuo *AgeEligibilityUpdateOne) AddEligibillityCode(i int32) *AgeEligibilityUpdateOne {
+	aeuo.mutation.AddEligibillityCode(i)
+	return aeuo
+}
+
+// ClearEligibillityCode clears the value of the "EligibillityCode" field.
+func (aeuo *AgeEligibilityUpdateOne) ClearEligibillityCode() *AgeEligibilityUpdateOne {
+	aeuo.mutation.ClearEligibillityCode()
 	return aeuo
 }
 
@@ -309,34 +277,9 @@ func (aeuo *AgeEligibilityUpdateOne) ClearCategoryID() *AgeEligibilityUpdateOne 
 	return aeuo
 }
 
-// SetExamEligibilityID sets the "exam_eligibility" edge to the ExamEligibility entity by ID.
-func (aeuo *AgeEligibilityUpdateOne) SetExamEligibilityID(id int32) *AgeEligibilityUpdateOne {
-	aeuo.mutation.SetExamEligibilityID(id)
-	return aeuo
-}
-
-// SetNillableExamEligibilityID sets the "exam_eligibility" edge to the ExamEligibility entity by ID if the given value is not nil.
-func (aeuo *AgeEligibilityUpdateOne) SetNillableExamEligibilityID(id *int32) *AgeEligibilityUpdateOne {
-	if id != nil {
-		aeuo = aeuo.SetExamEligibilityID(*id)
-	}
-	return aeuo
-}
-
-// SetExamEligibility sets the "exam_eligibility" edge to the ExamEligibility entity.
-func (aeuo *AgeEligibilityUpdateOne) SetExamEligibility(e *ExamEligibility) *AgeEligibilityUpdateOne {
-	return aeuo.SetExamEligibilityID(e.ID)
-}
-
 // Mutation returns the AgeEligibilityMutation object of the builder.
 func (aeuo *AgeEligibilityUpdateOne) Mutation() *AgeEligibilityMutation {
 	return aeuo.mutation
-}
-
-// ClearExamEligibility clears the "exam_eligibility" edge to the ExamEligibility entity.
-func (aeuo *AgeEligibilityUpdateOne) ClearExamEligibility() *AgeEligibilityUpdateOne {
-	aeuo.mutation.ClearExamEligibility()
-	return aeuo
 }
 
 // Where appends a list predicates to the AgeEligibilityUpdate builder.
@@ -405,6 +348,15 @@ func (aeuo *AgeEligibilityUpdateOne) sqlSave(ctx context.Context) (_node *AgeEli
 			}
 		}
 	}
+	if value, ok := aeuo.mutation.EligibillityCode(); ok {
+		_spec.SetField(ageeligibility.FieldEligibillityCode, field.TypeInt32, value)
+	}
+	if value, ok := aeuo.mutation.AddedEligibillityCode(); ok {
+		_spec.AddField(ageeligibility.FieldEligibillityCode, field.TypeInt32, value)
+	}
+	if aeuo.mutation.EligibillityCodeCleared() {
+		_spec.ClearField(ageeligibility.FieldEligibillityCode, field.TypeInt32)
+	}
 	if value, ok := aeuo.mutation.Age(); ok {
 		_spec.SetField(ageeligibility.FieldAge, field.TypeInt32, value)
 	}
@@ -422,35 +374,6 @@ func (aeuo *AgeEligibilityUpdateOne) sqlSave(ctx context.Context) (_node *AgeEli
 	}
 	if aeuo.mutation.CategoryIDCleared() {
 		_spec.ClearField(ageeligibility.FieldCategoryID, field.TypeInt32)
-	}
-	if aeuo.mutation.ExamEligibilityCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   ageeligibility.ExamEligibilityTable,
-			Columns: []string{ageeligibility.ExamEligibilityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(exameligibility.FieldID, field.TypeInt32),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := aeuo.mutation.ExamEligibilityIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   ageeligibility.ExamEligibilityTable,
-			Columns: []string{ageeligibility.ExamEligibilityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(exameligibility.FieldID, field.TypeInt32),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &AgeEligibility{config: aeuo.config}
 	_spec.Assign = _node.assignValues

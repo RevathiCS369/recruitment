@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"recruit/ent/ageeligibility"
-	"recruit/ent/exameligibility"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -19,16 +18,16 @@ type AgeEligibilityCreate struct {
 	hooks    []Hook
 }
 
-// SetEligibilityCode sets the "EligibilityCode" field.
-func (aec *AgeEligibilityCreate) SetEligibilityCode(i int32) *AgeEligibilityCreate {
-	aec.mutation.SetEligibilityCode(i)
+// SetEligibillityCode sets the "EligibillityCode" field.
+func (aec *AgeEligibilityCreate) SetEligibillityCode(i int32) *AgeEligibilityCreate {
+	aec.mutation.SetEligibillityCode(i)
 	return aec
 }
 
-// SetNillableEligibilityCode sets the "EligibilityCode" field if the given value is not nil.
-func (aec *AgeEligibilityCreate) SetNillableEligibilityCode(i *int32) *AgeEligibilityCreate {
+// SetNillableEligibillityCode sets the "EligibillityCode" field if the given value is not nil.
+func (aec *AgeEligibilityCreate) SetNillableEligibillityCode(i *int32) *AgeEligibilityCreate {
 	if i != nil {
-		aec.SetEligibilityCode(*i)
+		aec.SetEligibillityCode(*i)
 	}
 	return aec
 }
@@ -65,25 +64,6 @@ func (aec *AgeEligibilityCreate) SetNillableCategoryID(i *int32) *AgeEligibility
 func (aec *AgeEligibilityCreate) SetID(i int32) *AgeEligibilityCreate {
 	aec.mutation.SetID(i)
 	return aec
-}
-
-// SetExamEligibilityID sets the "exam_eligibility" edge to the ExamEligibility entity by ID.
-func (aec *AgeEligibilityCreate) SetExamEligibilityID(id int32) *AgeEligibilityCreate {
-	aec.mutation.SetExamEligibilityID(id)
-	return aec
-}
-
-// SetNillableExamEligibilityID sets the "exam_eligibility" edge to the ExamEligibility entity by ID if the given value is not nil.
-func (aec *AgeEligibilityCreate) SetNillableExamEligibilityID(id *int32) *AgeEligibilityCreate {
-	if id != nil {
-		aec = aec.SetExamEligibilityID(*id)
-	}
-	return aec
-}
-
-// SetExamEligibility sets the "exam_eligibility" edge to the ExamEligibility entity.
-func (aec *AgeEligibilityCreate) SetExamEligibility(e *ExamEligibility) *AgeEligibilityCreate {
-	return aec.SetExamEligibilityID(e.ID)
 }
 
 // Mutation returns the AgeEligibilityMutation object of the builder.
@@ -152,6 +132,10 @@ func (aec *AgeEligibilityCreate) createSpec() (*AgeEligibility, *sqlgraph.Create
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := aec.mutation.EligibillityCode(); ok {
+		_spec.SetField(ageeligibility.FieldEligibillityCode, field.TypeInt32, value)
+		_node.EligibillityCode = value
+	}
 	if value, ok := aec.mutation.Age(); ok {
 		_spec.SetField(ageeligibility.FieldAge, field.TypeInt32, value)
 		_node.Age = value
@@ -159,23 +143,6 @@ func (aec *AgeEligibilityCreate) createSpec() (*AgeEligibility, *sqlgraph.Create
 	if value, ok := aec.mutation.CategoryID(); ok {
 		_spec.SetField(ageeligibility.FieldCategoryID, field.TypeInt32, value)
 		_node.CategoryID = value
-	}
-	if nodes := aec.mutation.ExamEligibilityIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   ageeligibility.ExamEligibilityTable,
-			Columns: []string{ageeligibility.ExamEligibilityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(exameligibility.FieldID, field.TypeInt32),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.EligibilityCode = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

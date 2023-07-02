@@ -6,7 +6,6 @@ import (
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -54,9 +53,9 @@ func IDLTE(id int32) predicate.AgeEligibility {
 	return predicate.AgeEligibility(sql.FieldLTE(FieldID, id))
 }
 
-// EligibilityCode applies equality check predicate on the "EligibilityCode" field. It's identical to EligibilityCodeEQ.
-func EligibilityCode(v int32) predicate.AgeEligibility {
-	return predicate.AgeEligibility(sql.FieldEQ(FieldEligibilityCode, v))
+// EligibillityCode applies equality check predicate on the "EligibillityCode" field. It's identical to EligibillityCodeEQ.
+func EligibillityCode(v int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldEQ(FieldEligibillityCode, v))
 }
 
 // Age applies equality check predicate on the "Age" field. It's identical to AgeEQ.
@@ -69,34 +68,54 @@ func CategoryID(v int32) predicate.AgeEligibility {
 	return predicate.AgeEligibility(sql.FieldEQ(FieldCategoryID, v))
 }
 
-// EligibilityCodeEQ applies the EQ predicate on the "EligibilityCode" field.
-func EligibilityCodeEQ(v int32) predicate.AgeEligibility {
-	return predicate.AgeEligibility(sql.FieldEQ(FieldEligibilityCode, v))
+// EligibillityCodeEQ applies the EQ predicate on the "EligibillityCode" field.
+func EligibillityCodeEQ(v int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldEQ(FieldEligibillityCode, v))
 }
 
-// EligibilityCodeNEQ applies the NEQ predicate on the "EligibilityCode" field.
-func EligibilityCodeNEQ(v int32) predicate.AgeEligibility {
-	return predicate.AgeEligibility(sql.FieldNEQ(FieldEligibilityCode, v))
+// EligibillityCodeNEQ applies the NEQ predicate on the "EligibillityCode" field.
+func EligibillityCodeNEQ(v int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldNEQ(FieldEligibillityCode, v))
 }
 
-// EligibilityCodeIn applies the In predicate on the "EligibilityCode" field.
-func EligibilityCodeIn(vs ...int32) predicate.AgeEligibility {
-	return predicate.AgeEligibility(sql.FieldIn(FieldEligibilityCode, vs...))
+// EligibillityCodeIn applies the In predicate on the "EligibillityCode" field.
+func EligibillityCodeIn(vs ...int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldIn(FieldEligibillityCode, vs...))
 }
 
-// EligibilityCodeNotIn applies the NotIn predicate on the "EligibilityCode" field.
-func EligibilityCodeNotIn(vs ...int32) predicate.AgeEligibility {
-	return predicate.AgeEligibility(sql.FieldNotIn(FieldEligibilityCode, vs...))
+// EligibillityCodeNotIn applies the NotIn predicate on the "EligibillityCode" field.
+func EligibillityCodeNotIn(vs ...int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldNotIn(FieldEligibillityCode, vs...))
 }
 
-// EligibilityCodeIsNil applies the IsNil predicate on the "EligibilityCode" field.
-func EligibilityCodeIsNil() predicate.AgeEligibility {
-	return predicate.AgeEligibility(sql.FieldIsNull(FieldEligibilityCode))
+// EligibillityCodeGT applies the GT predicate on the "EligibillityCode" field.
+func EligibillityCodeGT(v int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldGT(FieldEligibillityCode, v))
 }
 
-// EligibilityCodeNotNil applies the NotNil predicate on the "EligibilityCode" field.
-func EligibilityCodeNotNil() predicate.AgeEligibility {
-	return predicate.AgeEligibility(sql.FieldNotNull(FieldEligibilityCode))
+// EligibillityCodeGTE applies the GTE predicate on the "EligibillityCode" field.
+func EligibillityCodeGTE(v int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldGTE(FieldEligibillityCode, v))
+}
+
+// EligibillityCodeLT applies the LT predicate on the "EligibillityCode" field.
+func EligibillityCodeLT(v int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldLT(FieldEligibillityCode, v))
+}
+
+// EligibillityCodeLTE applies the LTE predicate on the "EligibillityCode" field.
+func EligibillityCodeLTE(v int32) predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldLTE(FieldEligibillityCode, v))
+}
+
+// EligibillityCodeIsNil applies the IsNil predicate on the "EligibillityCode" field.
+func EligibillityCodeIsNil() predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldIsNull(FieldEligibillityCode))
+}
+
+// EligibillityCodeNotNil applies the NotNil predicate on the "EligibillityCode" field.
+func EligibillityCodeNotNil() predicate.AgeEligibility {
+	return predicate.AgeEligibility(sql.FieldNotNull(FieldEligibillityCode))
 }
 
 // AgeEQ applies the EQ predicate on the "Age" field.
@@ -197,29 +216,6 @@ func CategoryIDIsNil() predicate.AgeEligibility {
 // CategoryIDNotNil applies the NotNil predicate on the "CategoryID" field.
 func CategoryIDNotNil() predicate.AgeEligibility {
 	return predicate.AgeEligibility(sql.FieldNotNull(FieldCategoryID))
-}
-
-// HasExamEligibility applies the HasEdge predicate on the "exam_eligibility" edge.
-func HasExamEligibility() predicate.AgeEligibility {
-	return predicate.AgeEligibility(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ExamEligibilityTable, ExamEligibilityColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasExamEligibilityWith applies the HasEdge predicate on the "exam_eligibility" edge with a given conditions (other predicates).
-func HasExamEligibilityWith(preds ...predicate.ExamEligibility) predicate.AgeEligibility {
-	return predicate.AgeEligibility(func(s *sql.Selector) {
-		step := newExamEligibilityStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
 }
 
 // And groups predicates with the AND operator between them.

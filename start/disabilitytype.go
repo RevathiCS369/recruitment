@@ -17,6 +17,8 @@ func CreateEmployeeDisability(client *ent.Client, newDisability *ent.Disability)
 		SetDisabilityTypeDescription(newDisability.DisabilityTypeDescription).
 		SetDisabilityPercentage(newDisability.DisabilityPercentage).
 		SetDisabilityFlag(newDisability.DisabilityFlag).
+		//SetPaperCode(newDisability.PaperCode).
+
 		Save(ctx)
 	if err != nil {
 		log.Println("error at Creating Employee Disability: ", newDisability)

@@ -58,9 +58,21 @@ type Employees struct {
 	// GenderRemarks holds the value of the "genderRemarks" field.
 	GenderRemarks string `json:"genderRemarks,omitempty"`
 	// MobileNumber holds the value of the "MobileNumber" field.
-	MobileNumber int32 `json:"MobileNumber,omitempty"`
+	MobileNumber int64 `json:"MobileNumber,omitempty"`
+	// MobileNumberVerified holds the value of the "MobileNumberVerified" field.
+	MobileNumberVerified bool `json:"MobileNumberVerified,omitempty"`
+	// MobileNumberRemStatus holds the value of the "MobileNumberRemStatus" field.
+	MobileNumberRemStatus bool `json:"MobileNumberRemStatus,omitempty"`
+	// MobileNumberRemarks holds the value of the "MobileNumberRemarks" field.
+	MobileNumberRemarks string `json:"MobileNumberRemarks,omitempty"`
 	// EmailID holds the value of the "EmailID" field.
 	EmailID string `json:"EmailID,omitempty"`
+	// EmailIDVerified holds the value of the "EmailIDVerified" field.
+	EmailIDVerified bool `json:"EmailIDVerified,omitempty"`
+	// EmailIDRemStatus holds the value of the "EmailIDRemStatus" field.
+	EmailIDRemStatus bool `json:"EmailIDRemStatus,omitempty"`
+	// EmailIDRemarks holds the value of the "EmailIDRemarks" field.
+	EmailIDRemarks string `json:"EmailIDRemarks,omitempty"`
 	// Categoryid holds the value of the "Categoryid" field.
 	Categoryid int32 `json:"Categoryid,omitempty"`
 	// EmployeeCategoryCode holds the value of the "EmployeeCategoryCode" field.
@@ -113,16 +125,18 @@ type Employees struct {
 	PhotoRemStatus bool `json:"PhotoRemStatus,omitempty"`
 	// PhotoRemarks holds the value of the "PhotoRemarks" field.
 	PhotoRemarks string `json:"PhotoRemarks,omitempty"`
-	// Cadreid holds the value of the "Cadreid" field.
-	Cadreid int32 `json:"Cadreid,omitempty"`
-	// EmployeeCadre holds the value of the "EmployeeCadre" field.
-	EmployeeCadre string `json:"EmployeeCadre,omitempty"`
-	// EmployeeCadreVerified holds the value of the "EmployeeCadreVerified" field.
-	EmployeeCadreVerified bool `json:"EmployeeCadreVerified,omitempty"`
-	// EmployeeCadreRemStatus holds the value of the "EmployeeCadreRemStatus" field.
-	EmployeeCadreRemStatus bool `json:"EmployeeCadreRemStatus,omitempty"`
-	// EmployeeCadreRemarks holds the value of the "EmployeeCadreRemarks" field.
-	EmployeeCadreRemarks string `json:"EmployeeCadreRemarks,omitempty"`
+	// PostID holds the value of the "PostID" field.
+	PostID int32 `json:"PostID,omitempty"`
+	// PostCode holds the value of the "PostCode" field.
+	PostCode string `json:"PostCode,omitempty"`
+	// EmployeePost holds the value of the "EmployeePost" field.
+	EmployeePost string `json:"EmployeePost,omitempty"`
+	// EmployeePostVerified holds the value of the "EmployeePostVerified" field.
+	EmployeePostVerified bool `json:"EmployeePostVerified,omitempty"`
+	// EmployeePostRemStatus holds the value of the "EmployeePostRemStatus" field.
+	EmployeePostRemStatus bool `json:"EmployeePostRemStatus,omitempty"`
+	// EmployeePostRemarks holds the value of the "EmployeePostRemarks" field.
+	EmployeePostRemarks string `json:"EmployeePostRemarks,omitempty"`
 	// DesignationID holds the value of the "DesignationID" field.
 	DesignationID int32 `json:"DesignationID,omitempty"`
 	// EmployeeDesignation holds the value of the "EmployeeDesignation" field.
@@ -207,7 +221,11 @@ type Employees struct {
 	APSWorkingRemarks string `json:"APSWorkingRemarks,omitempty"`
 	// Profilestatus holds the value of the "profilestatus" field.
 	Profilestatus bool `json:"profilestatus,omitempty"`
-	selectValues  sql.SelectValues
+	// RoleUserCode holds the value of the "RoleUserCode" field.
+	RoleUserCode                    int32 `json:"RoleUserCode,omitempty"`
+	directorate_users_employee_user *int32
+	employee_posts_emp_posts        *int32
+	selectValues                    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -215,14 +233,18 @@ func (*Employees) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case employees.FieldIDVerified, employees.FieldIDRemStatus, employees.FieldNameVerified, employees.FieldNameRemStatus, employees.FieldFathersNameVerified, employees.FieldFathersNameRemStatus, employees.FieldDOBVerified, employees.FieldDOBRemStatus, employees.FieldGenderVerified, employees.FieldGenderRemStatus, employees.FieldEmployeeCategoryCodeVerified, employees.FieldEmployeeCategoryCodeRemStatus, employees.FieldWithDisabilityVerified, employees.FieldWithDisabilityRemStatus, employees.FieldWithDisabilityRemarks, employees.FieldDisabilityTypeVerified, employees.FieldDisabilityTypeRemStatus, employees.FieldDisabilityPercentageVerified, employees.FieldDisabilityPercentageRemStatus, employees.FieldSignatureVerified, employees.FieldSignatureRemStatus, employees.FieldPhotoVerified, employees.FieldPhotoRemStatus, employees.FieldEmployeeCadreVerified, employees.FieldEmployeeCadreRemStatus, employees.FieldEmployeeDesignationVerified, employees.FieldEmployeeDesignationRemStatus, employees.FieldCircleVerified, employees.FieldCircleRemStatus, employees.FieldRegionVerified, employees.FieldRegionRemStatus, employees.FieldDivisionVerified, employees.FieldDivisionRemStatus, employees.FieldOfficeVerified, employees.FieldOfficeRemStatus, employees.FieldRoleVerified, employees.FieldRoleRemStatus, employees.FieldDCCSVerified, employees.FieldDCCSRemStatus, employees.FieldDCInPresentCadreVerified, employees.FieldDCInPresentCadreRemStatus, employees.FieldAPSWorking, employees.FieldAPSWorkingVerified, employees.FieldAPSWorkingRemStatus, employees.FieldProfilestatus:
+		case employees.FieldIDVerified, employees.FieldIDRemStatus, employees.FieldNameVerified, employees.FieldNameRemStatus, employees.FieldFathersNameVerified, employees.FieldFathersNameRemStatus, employees.FieldDOBVerified, employees.FieldDOBRemStatus, employees.FieldGenderVerified, employees.FieldGenderRemStatus, employees.FieldMobileNumberVerified, employees.FieldMobileNumberRemStatus, employees.FieldEmailIDVerified, employees.FieldEmailIDRemStatus, employees.FieldEmployeeCategoryCodeVerified, employees.FieldEmployeeCategoryCodeRemStatus, employees.FieldWithDisabilityVerified, employees.FieldWithDisabilityRemStatus, employees.FieldWithDisabilityRemarks, employees.FieldDisabilityTypeVerified, employees.FieldDisabilityTypeRemStatus, employees.FieldDisabilityPercentageVerified, employees.FieldDisabilityPercentageRemStatus, employees.FieldSignatureVerified, employees.FieldSignatureRemStatus, employees.FieldPhotoVerified, employees.FieldPhotoRemStatus, employees.FieldEmployeePostVerified, employees.FieldEmployeePostRemStatus, employees.FieldEmployeeDesignationVerified, employees.FieldEmployeeDesignationRemStatus, employees.FieldCircleVerified, employees.FieldCircleRemStatus, employees.FieldRegionVerified, employees.FieldRegionRemStatus, employees.FieldDivisionVerified, employees.FieldDivisionRemStatus, employees.FieldOfficeVerified, employees.FieldOfficeRemStatus, employees.FieldRoleVerified, employees.FieldRoleRemStatus, employees.FieldDCCSVerified, employees.FieldDCCSRemStatus, employees.FieldDCInPresentCadreVerified, employees.FieldDCInPresentCadreRemStatus, employees.FieldAPSWorking, employees.FieldAPSWorkingVerified, employees.FieldAPSWorkingRemStatus, employees.FieldProfilestatus:
 			values[i] = new(sql.NullBool)
-		case employees.FieldID, employees.FieldEmployeedID, employees.FieldMobileNumber, employees.FieldCategoryid, employees.FieldDisabilityPercentage, employees.FieldCadreid, employees.FieldDesignationID, employees.FieldCircleID, employees.FieldRegionID, employees.FieldDivisionID, employees.FieldOfficeID:
+		case employees.FieldID, employees.FieldEmployeedID, employees.FieldMobileNumber, employees.FieldCategoryid, employees.FieldDisabilityPercentage, employees.FieldPostID, employees.FieldDesignationID, employees.FieldCircleID, employees.FieldRegionID, employees.FieldDivisionID, employees.FieldOfficeID, employees.FieldRoleUserCode:
 			values[i] = new(sql.NullInt64)
-		case employees.FieldIDRemarks, employees.FieldEmployeeName, employees.FieldNameRemarks, employees.FieldEmployeeFathersName, employees.FieldFathersNameRemarks, employees.FieldDOBRemarks, employees.FieldGender, employees.FieldGenderRemarks, employees.FieldEmailID, employees.FieldEmployeeCategoryCode, employees.FieldEmployeeCategory, employees.FieldEmployeeCategoryCodeRemarks, employees.FieldWithDisability, employees.FieldDisabilityType, employees.FieldDisabilityTypeRemarks, employees.FieldDisabilityPercentageRemarks, employees.FieldSignature, employees.FieldSignatureRemarks, employees.FieldPhoto, employees.FieldPhotoRemarks, employees.FieldEmployeeCadre, employees.FieldEmployeeCadreRemarks, employees.FieldEmployeeDesignation, employees.FieldEmployeeDesignationRemarks, employees.FieldCircleName, employees.FieldCircleRemarks, employees.FieldRegionName, employees.FieldRegionRemarks, employees.FieldDivisionName, employees.FieldDivisionRemarks, employees.FieldOfficeName, employees.FieldOfficeRemarks, employees.FieldRole, employees.FieldRoleRemarks, employees.FieldDCCSRemarks, employees.FieldDCInPresentCadreRemarks, employees.FieldAPSWorkingRemarks:
+		case employees.FieldIDRemarks, employees.FieldEmployeeName, employees.FieldNameRemarks, employees.FieldEmployeeFathersName, employees.FieldFathersNameRemarks, employees.FieldDOBRemarks, employees.FieldGender, employees.FieldGenderRemarks, employees.FieldMobileNumberRemarks, employees.FieldEmailID, employees.FieldEmailIDRemarks, employees.FieldEmployeeCategoryCode, employees.FieldEmployeeCategory, employees.FieldEmployeeCategoryCodeRemarks, employees.FieldWithDisability, employees.FieldDisabilityType, employees.FieldDisabilityTypeRemarks, employees.FieldDisabilityPercentageRemarks, employees.FieldSignature, employees.FieldSignatureRemarks, employees.FieldPhoto, employees.FieldPhotoRemarks, employees.FieldPostCode, employees.FieldEmployeePost, employees.FieldEmployeePostRemarks, employees.FieldEmployeeDesignation, employees.FieldEmployeeDesignationRemarks, employees.FieldCircleName, employees.FieldCircleRemarks, employees.FieldRegionName, employees.FieldRegionRemarks, employees.FieldDivisionName, employees.FieldDivisionRemarks, employees.FieldOfficeName, employees.FieldOfficeRemarks, employees.FieldRole, employees.FieldRoleRemarks, employees.FieldDCCSRemarks, employees.FieldDCInPresentCadreRemarks, employees.FieldAPSWorkingRemarks:
 			values[i] = new(sql.NullString)
 		case employees.FieldDOB, employees.FieldDCCS, employees.FieldDCInPresentCadre:
 			values[i] = new(sql.NullTime)
+		case employees.ForeignKeys[0]: // directorate_users_employee_user
+			values[i] = new(sql.NullInt64)
+		case employees.ForeignKeys[1]: // employee_posts_emp_posts
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -368,13 +390,49 @@ func (e *Employees) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field MobileNumber", values[i])
 			} else if value.Valid {
-				e.MobileNumber = int32(value.Int64)
+				e.MobileNumber = value.Int64
+			}
+		case employees.FieldMobileNumberVerified:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field MobileNumberVerified", values[i])
+			} else if value.Valid {
+				e.MobileNumberVerified = value.Bool
+			}
+		case employees.FieldMobileNumberRemStatus:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field MobileNumberRemStatus", values[i])
+			} else if value.Valid {
+				e.MobileNumberRemStatus = value.Bool
+			}
+		case employees.FieldMobileNumberRemarks:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field MobileNumberRemarks", values[i])
+			} else if value.Valid {
+				e.MobileNumberRemarks = value.String
 			}
 		case employees.FieldEmailID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field EmailID", values[i])
 			} else if value.Valid {
 				e.EmailID = value.String
+			}
+		case employees.FieldEmailIDVerified:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field EmailIDVerified", values[i])
+			} else if value.Valid {
+				e.EmailIDVerified = value.Bool
+			}
+		case employees.FieldEmailIDRemStatus:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field EmailIDRemStatus", values[i])
+			} else if value.Valid {
+				e.EmailIDRemStatus = value.Bool
+			}
+		case employees.FieldEmailIDRemarks:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field EmailIDRemarks", values[i])
+			} else if value.Valid {
+				e.EmailIDRemarks = value.String
 			}
 		case employees.FieldCategoryid:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -532,35 +590,41 @@ func (e *Employees) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.PhotoRemarks = value.String
 			}
-		case employees.FieldCadreid:
+		case employees.FieldPostID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field Cadreid", values[i])
+				return fmt.Errorf("unexpected type %T for field PostID", values[i])
 			} else if value.Valid {
-				e.Cadreid = int32(value.Int64)
+				e.PostID = int32(value.Int64)
 			}
-		case employees.FieldEmployeeCadre:
+		case employees.FieldPostCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field EmployeeCadre", values[i])
+				return fmt.Errorf("unexpected type %T for field PostCode", values[i])
 			} else if value.Valid {
-				e.EmployeeCadre = value.String
+				e.PostCode = value.String
 			}
-		case employees.FieldEmployeeCadreVerified:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field EmployeeCadreVerified", values[i])
-			} else if value.Valid {
-				e.EmployeeCadreVerified = value.Bool
-			}
-		case employees.FieldEmployeeCadreRemStatus:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field EmployeeCadreRemStatus", values[i])
-			} else if value.Valid {
-				e.EmployeeCadreRemStatus = value.Bool
-			}
-		case employees.FieldEmployeeCadreRemarks:
+		case employees.FieldEmployeePost:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field EmployeeCadreRemarks", values[i])
+				return fmt.Errorf("unexpected type %T for field EmployeePost", values[i])
 			} else if value.Valid {
-				e.EmployeeCadreRemarks = value.String
+				e.EmployeePost = value.String
+			}
+		case employees.FieldEmployeePostVerified:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field EmployeePostVerified", values[i])
+			} else if value.Valid {
+				e.EmployeePostVerified = value.Bool
+			}
+		case employees.FieldEmployeePostRemStatus:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field EmployeePostRemStatus", values[i])
+			} else if value.Valid {
+				e.EmployeePostRemStatus = value.Bool
+			}
+		case employees.FieldEmployeePostRemarks:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field EmployeePostRemarks", values[i])
+			} else if value.Valid {
+				e.EmployeePostRemarks = value.String
 			}
 		case employees.FieldDesignationID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -814,6 +878,26 @@ func (e *Employees) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.Profilestatus = value.Bool
 			}
+		case employees.FieldRoleUserCode:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field RoleUserCode", values[i])
+			} else if value.Valid {
+				e.RoleUserCode = int32(value.Int64)
+			}
+		case employees.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field directorate_users_employee_user", value)
+			} else if value.Valid {
+				e.directorate_users_employee_user = new(int32)
+				*e.directorate_users_employee_user = int32(value.Int64)
+			}
+		case employees.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field employee_posts_emp_posts", value)
+			} else if value.Valid {
+				e.employee_posts_emp_posts = new(int32)
+				*e.employee_posts_emp_posts = int32(value.Int64)
+			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
 		}
@@ -913,8 +997,26 @@ func (e *Employees) String() string {
 	builder.WriteString("MobileNumber=")
 	builder.WriteString(fmt.Sprintf("%v", e.MobileNumber))
 	builder.WriteString(", ")
+	builder.WriteString("MobileNumberVerified=")
+	builder.WriteString(fmt.Sprintf("%v", e.MobileNumberVerified))
+	builder.WriteString(", ")
+	builder.WriteString("MobileNumberRemStatus=")
+	builder.WriteString(fmt.Sprintf("%v", e.MobileNumberRemStatus))
+	builder.WriteString(", ")
+	builder.WriteString("MobileNumberRemarks=")
+	builder.WriteString(e.MobileNumberRemarks)
+	builder.WriteString(", ")
 	builder.WriteString("EmailID=")
 	builder.WriteString(e.EmailID)
+	builder.WriteString(", ")
+	builder.WriteString("EmailIDVerified=")
+	builder.WriteString(fmt.Sprintf("%v", e.EmailIDVerified))
+	builder.WriteString(", ")
+	builder.WriteString("EmailIDRemStatus=")
+	builder.WriteString(fmt.Sprintf("%v", e.EmailIDRemStatus))
+	builder.WriteString(", ")
+	builder.WriteString("EmailIDRemarks=")
+	builder.WriteString(e.EmailIDRemarks)
 	builder.WriteString(", ")
 	builder.WriteString("Categoryid=")
 	builder.WriteString(fmt.Sprintf("%v", e.Categoryid))
@@ -994,20 +1096,23 @@ func (e *Employees) String() string {
 	builder.WriteString("PhotoRemarks=")
 	builder.WriteString(e.PhotoRemarks)
 	builder.WriteString(", ")
-	builder.WriteString("Cadreid=")
-	builder.WriteString(fmt.Sprintf("%v", e.Cadreid))
+	builder.WriteString("PostID=")
+	builder.WriteString(fmt.Sprintf("%v", e.PostID))
 	builder.WriteString(", ")
-	builder.WriteString("EmployeeCadre=")
-	builder.WriteString(e.EmployeeCadre)
+	builder.WriteString("PostCode=")
+	builder.WriteString(e.PostCode)
 	builder.WriteString(", ")
-	builder.WriteString("EmployeeCadreVerified=")
-	builder.WriteString(fmt.Sprintf("%v", e.EmployeeCadreVerified))
+	builder.WriteString("EmployeePost=")
+	builder.WriteString(e.EmployeePost)
 	builder.WriteString(", ")
-	builder.WriteString("EmployeeCadreRemStatus=")
-	builder.WriteString(fmt.Sprintf("%v", e.EmployeeCadreRemStatus))
+	builder.WriteString("EmployeePostVerified=")
+	builder.WriteString(fmt.Sprintf("%v", e.EmployeePostVerified))
 	builder.WriteString(", ")
-	builder.WriteString("EmployeeCadreRemarks=")
-	builder.WriteString(e.EmployeeCadreRemarks)
+	builder.WriteString("EmployeePostRemStatus=")
+	builder.WriteString(fmt.Sprintf("%v", e.EmployeePostRemStatus))
+	builder.WriteString(", ")
+	builder.WriteString("EmployeePostRemarks=")
+	builder.WriteString(e.EmployeePostRemarks)
 	builder.WriteString(", ")
 	builder.WriteString("DesignationID=")
 	builder.WriteString(fmt.Sprintf("%v", e.DesignationID))
@@ -1134,6 +1239,9 @@ func (e *Employees) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("profilestatus=")
 	builder.WriteString(fmt.Sprintf("%v", e.Profilestatus))
+	builder.WriteString(", ")
+	builder.WriteString("RoleUserCode=")
+	builder.WriteString(fmt.Sprintf("%v", e.RoleUserCode))
 	builder.WriteByte(')')
 	return builder.String()
 }

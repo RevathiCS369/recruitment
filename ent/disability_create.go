@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/disability"
+	"recruit/ent/exampapers"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -47,6 +48,21 @@ func (dc *DisabilityCreate) SetDisabilityFlag(df disability.DisabilityFlag) *Dis
 func (dc *DisabilityCreate) SetID(i int32) *DisabilityCreate {
 	dc.mutation.SetID(i)
 	return dc
+}
+
+// AddDisRefIDs adds the "dis_ref" edge to the ExamPapers entity by IDs.
+func (dc *DisabilityCreate) AddDisRefIDs(ids ...int32) *DisabilityCreate {
+	dc.mutation.AddDisRefIDs(ids...)
+	return dc
+}
+
+// AddDisRef adds the "dis_ref" edges to the ExamPapers entity.
+func (dc *DisabilityCreate) AddDisRef(e ...*ExamPapers) *DisabilityCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return dc.AddDisRefIDs(ids...)
 }
 
 // Mutation returns the DisabilityMutation object of the builder.
@@ -147,6 +163,22 @@ func (dc *DisabilityCreate) createSpec() (*Disability, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.DisabilityFlag(); ok {
 		_spec.SetField(disability.FieldDisabilityFlag, field.TypeEnum, value)
 		_node.DisabilityFlag = value
+	}
+	if nodes := dc.mutation.DisRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   disability.DisRefTable,
+			Columns: []string{disability.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exampapers.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

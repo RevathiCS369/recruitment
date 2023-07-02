@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"recruit/ent"
+
 	"recruit/ent/exam"
 	"recruit/ent/exampapers"
 )
@@ -16,10 +17,15 @@ func CreateExam(client *ent.Client, newExam *ent.Exam) (*ent.Exam, error) {
 	u, err := client.Exam.
 		Create().
 		SetExamName(newExam.ExamName).
+		SetExamType(newExam.ExamType).
 		SetNotificationBy(newExam.NotificationBy).
 		SetNumOfPapers(newExam.NumOfPapers).
 		SetNodalOfficerLevel(newExam.NodalOfficerLevel).
 		SetConductedBy(newExam.ConductedBy).
+		SetTentativeNotificationMandatoryDate(newExam.TentativeNotificationMandatoryDate).
+		SetLocalLanguage(newExam.LocalLanguage).
+		SetOptionForPost(newExam.OptionForPost).
+		SetOptionToWriteExamOtherThanParent(newExam.OptionToWriteExamOtherThanParent).
 		Save(ctx)
 	if err != nil {
 		log.Println("error at Creating exam: ", newExam)
@@ -99,10 +105,16 @@ func UpdateExam(client *ent.Client, id int32, newExam *ent.Exam) (*ent.Exam, err
 	}
 	updatedExam, err := client.Exam.UpdateOneID(id).
 		SetExamName(newExam.ExamName).
+		SetExamType(newExam.ExamType).
 		SetNotificationBy(newExam.NotificationBy).
 		SetNumOfPapers(newExam.NumOfPapers).
 		SetNodalOfficerLevel(newExam.NodalOfficerLevel).
-		SetConductedBy(newExam.ConductedBy).Save(context.Background())
+		SetConductedBy(newExam.ConductedBy).
+		SetTentativeNotificationMandatoryDate(newExam.TentativeNotificationMandatoryDate).
+		SetLocalLanguage(newExam.LocalLanguage).
+		SetOptionForPost(newExam.OptionForPost).
+		SetOptionToWriteExamOtherThanParent(newExam.OptionToWriteExamOtherThanParent).
+		Save(context.Background())
 	if err != nil {
 		return nil, err
 	}

@@ -64,7 +64,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "facility" package.
 	RegionRefRefInverseTable = "Facility"
 	// RegionRefRefColumn is the table column denoting the region_ref_ref relation/edge.
-	RegionRefRefColumn = "region_master_region_ref_ref"
+	RegionRefRefColumn = "region_id"
 )
 
 // Columns holds all SQL columns for regionmaster fields.
@@ -86,7 +86,6 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"circle_master_region_ref",
 	"division_master_regions",
-	"facility_region_ref",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

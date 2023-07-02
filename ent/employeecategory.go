@@ -21,8 +21,9 @@ type EmployeeCategory struct {
 	// CategoryDescription holds the value of the "CategoryDescription" field.
 	CategoryDescription string `json:"CategoryDescription,omitempty"`
 	// MinimumMarks holds the value of the "MinimumMarks" field.
-	MinimumMarks int32 `json:"MinimumMarks,omitempty"`
-	selectValues sql.SelectValues
+	MinimumMarks                            int32 `json:"MinimumMarks,omitempty"`
+	eligibility_master_category_eligibility *int32
+	selectValues                            sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -34,6 +35,8 @@ func (*EmployeeCategory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case employeecategory.FieldCategrycode, employeecategory.FieldCategoryDescription:
 			values[i] = new(sql.NullString)
+		case employeecategory.ForeignKeys[0]: // eligibility_master_category_eligibility
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -72,6 +75,13 @@ func (ec *EmployeeCategory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field MinimumMarks", values[i])
 			} else if value.Valid {
 				ec.MinimumMarks = int32(value.Int64)
+			}
+		case employeecategory.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field eligibility_master_category_eligibility", value)
+			} else if value.Valid {
+				ec.eligibility_master_category_eligibility = new(int32)
+				*ec.eligibility_master_category_eligibility = int32(value.Int64)
 			}
 		default:
 			ec.selectValues.Set(columns[i], values[i])

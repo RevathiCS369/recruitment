@@ -7,6 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
 	"recruit/ent/notification"
@@ -140,6 +142,20 @@ func (ecc *ExamCalendarCreate) SetNillablePaperCode(i *int32) *ExamCalendarCreat
 	return ecc
 }
 
+// SetExamCodePS sets the "ExamCodePS" field.
+func (ecc *ExamCalendarCreate) SetExamCodePS(i int32) *ExamCalendarCreate {
+	ecc.mutation.SetExamCodePS(i)
+	return ecc
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (ecc *ExamCalendarCreate) SetNillableExamCodePS(i *int32) *ExamCalendarCreate {
+	if i != nil {
+		ecc.SetExamCodePS(*i)
+	}
+	return ecc
+}
+
 // SetID sets the "id" field.
 func (ecc *ExamCalendarCreate) SetID(i int32) *ExamCalendarCreate {
 	ecc.mutation.SetID(i)
@@ -216,6 +232,36 @@ func (ecc *ExamCalendarCreate) AddNotifyRef(n ...*Notification) *ExamCalendarCre
 		ids[i] = n[i].ID
 	}
 	return ecc.AddNotifyRefIDs(ids...)
+}
+
+// AddExamcalPsRefIDs adds the "examcal_ps_ref" edge to the Exam_PS entity by IDs.
+func (ecc *ExamCalendarCreate) AddExamcalPsRefIDs(ids ...int32) *ExamCalendarCreate {
+	ecc.mutation.AddExamcalPsRefIDs(ids...)
+	return ecc
+}
+
+// AddExamcalPsRef adds the "examcal_ps_ref" edges to the Exam_PS entity.
+func (ecc *ExamCalendarCreate) AddExamcalPsRef(e ...*Exam_PS) *ExamCalendarCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecc.AddExamcalPsRefIDs(ids...)
+}
+
+// AddExamcalIPRefIDs adds the "examcal_ip_ref" edge to the Exam_IP entity by IDs.
+func (ecc *ExamCalendarCreate) AddExamcalIPRefIDs(ids ...int32) *ExamCalendarCreate {
+	ecc.mutation.AddExamcalIPRefIDs(ids...)
+	return ecc
+}
+
+// AddExamcalIPRef adds the "examcal_ip_ref" edges to the Exam_IP entity.
+func (ecc *ExamCalendarCreate) AddExamcalIPRef(e ...*Exam_IP) *ExamCalendarCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecc.AddExamcalIPRefIDs(ids...)
 }
 
 // Mutation returns the ExamCalendarMutation object of the builder.
@@ -357,6 +403,10 @@ func (ecc *ExamCalendarCreate) createSpec() (*ExamCalendar, *sqlgraph.CreateSpec
 		_spec.SetField(examcalendar.FieldExamPapers, field.TypeJSON, value)
 		_node.ExamPapers = value
 	}
+	if value, ok := ecc.mutation.ExamCodePS(); ok {
+		_spec.SetField(examcalendar.FieldExamCodePS, field.TypeInt32, value)
+		_node.ExamCodePS = value
+	}
 	if nodes := ecc.mutation.VcyYearsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -417,6 +467,38 @@ func (ecc *ExamCalendarCreate) createSpec() (*ExamCalendar, *sqlgraph.CreateSpec
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ecc.mutation.ExamcalPsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalPsRefTable,
+			Columns: []string{examcalendar.ExamcalPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ecc.mutation.ExamcalIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalIPRefTable,
+			Columns: []string{examcalendar.ExamcalIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {

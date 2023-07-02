@@ -5,6 +5,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -17,7 +18,7 @@ type RegionMaster struct {
 func (RegionMaster) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int32("id").StorageKey("RegionID"), 
-		field.Int32("RegionCode"),
+		field.Int32("RegionCode").Unique(),
 		field.String("RegionOfficeId"),
 		field.String("OfficeType"),
 		field.String("RegionOfficeName"),
@@ -38,3 +39,4 @@ func (RegionMaster) Edges() []ent.Edge {
 func (RegionMaster) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "RegionMaster"}}
 }
+ 

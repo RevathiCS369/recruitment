@@ -10,27 +10,50 @@ import (
 
 	"recruit/ent/migrate"
 
+	"recruit/ent/adminlogin"
 	"recruit/ent/ageeligibility"
 	"recruit/ent/application"
+	"recruit/ent/cadre_choice_ip"
+	"recruit/ent/cadre_choice_pa"
+	"recruit/ent/cadre_choice_pm"
+	"recruit/ent/cadre_choice_ps"
 	"recruit/ent/center"
 	"recruit/ent/circlemaster"
+	"recruit/ent/directorateusers"
 	"recruit/ent/disability"
+	"recruit/ent/division_choice_pa"
+	"recruit/ent/division_choice_pm"
+	"recruit/ent/division_choice_ps"
 	"recruit/ent/divisionmaster"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/employeecadre"
 	"recruit/ent/employeecategory"
 	"recruit/ent/employeedesignation"
+	"recruit/ent/employeemaster"
 	"recruit/ent/employeeposts"
 	"recruit/ent/employees"
 	"recruit/ent/exam"
+	"recruit/ent/exam_applications_ip"
+	"recruit/ent/exam_applications_ps"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_pa"
+	"recruit/ent/exam_pm"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
-	"recruit/ent/exameligibility"
 	"recruit/ent/exampapers"
+	"recruit/ent/examtype"
 	"recruit/ent/facility"
+	"recruit/ent/login"
 	"recruit/ent/nodalofficer"
 	"recruit/ent/notification"
 	"recruit/ent/papertypes"
+	"recruit/ent/placeofpreferenceip"
+	"recruit/ent/recommendationsipapplications"
 	"recruit/ent/regionmaster"
+	"recruit/ent/reversal_application_ip"
+	"recruit/ent/rolemaster"
 	"recruit/ent/user"
+	"recruit/ent/usermaster"
 	"recruit/ent/vacancyyear"
 
 	"entgo.io/ent"
@@ -44,24 +67,46 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// AdminLogin is the client for interacting with the AdminLogin builders.
+	AdminLogin *AdminLoginClient
 	// AgeEligibility is the client for interacting with the AgeEligibility builders.
 	AgeEligibility *AgeEligibilityClient
 	// Application is the client for interacting with the Application builders.
 	Application *ApplicationClient
+	// Cadre_Choice_IP is the client for interacting with the Cadre_Choice_IP builders.
+	Cadre_Choice_IP *CadreChoiceIPClient
+	// Cadre_Choice_PA is the client for interacting with the Cadre_Choice_PA builders.
+	Cadre_Choice_PA *CadreChoicePAClient
+	// Cadre_Choice_PM is the client for interacting with the Cadre_Choice_PM builders.
+	Cadre_Choice_PM *CadreChoicePMClient
+	// Cadre_Choice_PS is the client for interacting with the Cadre_Choice_PS builders.
+	Cadre_Choice_PS *CadreChoicePSClient
 	// Center is the client for interacting with the Center builders.
 	Center *CenterClient
 	// CircleMaster is the client for interacting with the CircleMaster builders.
 	CircleMaster *CircleMasterClient
+	// DirectorateUsers is the client for interacting with the DirectorateUsers builders.
+	DirectorateUsers *DirectorateUsersClient
 	// Disability is the client for interacting with the Disability builders.
 	Disability *DisabilityClient
 	// DivisionMaster is the client for interacting with the DivisionMaster builders.
 	DivisionMaster *DivisionMasterClient
+	// Division_Choice_PA is the client for interacting with the Division_Choice_PA builders.
+	Division_Choice_PA *DivisionChoicePAClient
+	// Division_Choice_PM is the client for interacting with the Division_Choice_PM builders.
+	Division_Choice_PM *DivisionChoicePMClient
+	// Division_Choice_PS is the client for interacting with the Division_Choice_PS builders.
+	Division_Choice_PS *DivisionChoicePSClient
+	// EligibilityMaster is the client for interacting with the EligibilityMaster builders.
+	EligibilityMaster *EligibilityMasterClient
 	// EmployeeCadre is the client for interacting with the EmployeeCadre builders.
 	EmployeeCadre *EmployeeCadreClient
 	// EmployeeCategory is the client for interacting with the EmployeeCategory builders.
 	EmployeeCategory *EmployeeCategoryClient
 	// EmployeeDesignation is the client for interacting with the EmployeeDesignation builders.
 	EmployeeDesignation *EmployeeDesignationClient
+	// EmployeeMaster is the client for interacting with the EmployeeMaster builders.
+	EmployeeMaster *EmployeeMasterClient
 	// EmployeePosts is the client for interacting with the EmployeePosts builders.
 	EmployeePosts *EmployeePostsClient
 	// Employees is the client for interacting with the Employees builders.
@@ -70,22 +115,46 @@ type Client struct {
 	Exam *ExamClient
 	// ExamCalendar is the client for interacting with the ExamCalendar builders.
 	ExamCalendar *ExamCalendarClient
-	// ExamEligibility is the client for interacting with the ExamEligibility builders.
-	ExamEligibility *ExamEligibilityClient
 	// ExamPapers is the client for interacting with the ExamPapers builders.
 	ExamPapers *ExamPapersClient
+	// ExamType is the client for interacting with the ExamType builders.
+	ExamType *ExamTypeClient
+	// Exam_Applications_IP is the client for interacting with the Exam_Applications_IP builders.
+	Exam_Applications_IP *ExamApplicationsIPClient
+	// Exam_Applications_PS is the client for interacting with the Exam_Applications_PS builders.
+	Exam_Applications_PS *ExamApplicationsPSClient
+	// Exam_IP is the client for interacting with the Exam_IP builders.
+	Exam_IP *ExamIPClient
+	// Exam_PA is the client for interacting with the Exam_PA builders.
+	Exam_PA *ExamPAClient
+	// Exam_PM is the client for interacting with the Exam_PM builders.
+	Exam_PM *ExamPMClient
+	// Exam_PS is the client for interacting with the Exam_PS builders.
+	Exam_PS *ExamPSClient
 	// Facility is the client for interacting with the Facility builders.
 	Facility *FacilityClient
+	// Login is the client for interacting with the Login builders.
+	Login *LoginClient
 	// NodalOfficer is the client for interacting with the NodalOfficer builders.
 	NodalOfficer *NodalOfficerClient
 	// Notification is the client for interacting with the Notification builders.
 	Notification *NotificationClient
 	// PaperTypes is the client for interacting with the PaperTypes builders.
 	PaperTypes *PaperTypesClient
+	// PlaceOfPreferenceIP is the client for interacting with the PlaceOfPreferenceIP builders.
+	PlaceOfPreferenceIP *PlaceOfPreferenceIPClient
+	// RecommendationsIPApplications is the client for interacting with the RecommendationsIPApplications builders.
+	RecommendationsIPApplications *RecommendationsIPApplicationsClient
 	// RegionMaster is the client for interacting with the RegionMaster builders.
 	RegionMaster *RegionMasterClient
+	// Reversal_Application_IP is the client for interacting with the Reversal_Application_IP builders.
+	Reversal_Application_IP *ReversalApplicationIPClient
+	// RoleMaster is the client for interacting with the RoleMaster builders.
+	RoleMaster *RoleMasterClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserMaster is the client for interacting with the UserMaster builders.
+	UserMaster *UserMasterClient
 	// VacancyYear is the client for interacting with the VacancyYear builders.
 	VacancyYear *VacancyYearClient
 }
@@ -101,27 +170,50 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.AdminLogin = NewAdminLoginClient(c.config)
 	c.AgeEligibility = NewAgeEligibilityClient(c.config)
 	c.Application = NewApplicationClient(c.config)
+	c.Cadre_Choice_IP = NewCadreChoiceIPClient(c.config)
+	c.Cadre_Choice_PA = NewCadreChoicePAClient(c.config)
+	c.Cadre_Choice_PM = NewCadreChoicePMClient(c.config)
+	c.Cadre_Choice_PS = NewCadreChoicePSClient(c.config)
 	c.Center = NewCenterClient(c.config)
 	c.CircleMaster = NewCircleMasterClient(c.config)
+	c.DirectorateUsers = NewDirectorateUsersClient(c.config)
 	c.Disability = NewDisabilityClient(c.config)
 	c.DivisionMaster = NewDivisionMasterClient(c.config)
+	c.Division_Choice_PA = NewDivisionChoicePAClient(c.config)
+	c.Division_Choice_PM = NewDivisionChoicePMClient(c.config)
+	c.Division_Choice_PS = NewDivisionChoicePSClient(c.config)
+	c.EligibilityMaster = NewEligibilityMasterClient(c.config)
 	c.EmployeeCadre = NewEmployeeCadreClient(c.config)
 	c.EmployeeCategory = NewEmployeeCategoryClient(c.config)
 	c.EmployeeDesignation = NewEmployeeDesignationClient(c.config)
+	c.EmployeeMaster = NewEmployeeMasterClient(c.config)
 	c.EmployeePosts = NewEmployeePostsClient(c.config)
 	c.Employees = NewEmployeesClient(c.config)
 	c.Exam = NewExamClient(c.config)
 	c.ExamCalendar = NewExamCalendarClient(c.config)
-	c.ExamEligibility = NewExamEligibilityClient(c.config)
 	c.ExamPapers = NewExamPapersClient(c.config)
+	c.ExamType = NewExamTypeClient(c.config)
+	c.Exam_Applications_IP = NewExamApplicationsIPClient(c.config)
+	c.Exam_Applications_PS = NewExamApplicationsPSClient(c.config)
+	c.Exam_IP = NewExamIPClient(c.config)
+	c.Exam_PA = NewExamPAClient(c.config)
+	c.Exam_PM = NewExamPMClient(c.config)
+	c.Exam_PS = NewExamPSClient(c.config)
 	c.Facility = NewFacilityClient(c.config)
+	c.Login = NewLoginClient(c.config)
 	c.NodalOfficer = NewNodalOfficerClient(c.config)
 	c.Notification = NewNotificationClient(c.config)
 	c.PaperTypes = NewPaperTypesClient(c.config)
+	c.PlaceOfPreferenceIP = NewPlaceOfPreferenceIPClient(c.config)
+	c.RecommendationsIPApplications = NewRecommendationsIPApplicationsClient(c.config)
 	c.RegionMaster = NewRegionMasterClient(c.config)
+	c.Reversal_Application_IP = NewReversalApplicationIPClient(c.config)
+	c.RoleMaster = NewRoleMasterClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.UserMaster = NewUserMasterClient(c.config)
 	c.VacancyYear = NewVacancyYearClient(c.config)
 }
 
@@ -203,30 +295,53 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                 ctx,
-		config:              cfg,
-		AgeEligibility:      NewAgeEligibilityClient(cfg),
-		Application:         NewApplicationClient(cfg),
-		Center:              NewCenterClient(cfg),
-		CircleMaster:        NewCircleMasterClient(cfg),
-		Disability:          NewDisabilityClient(cfg),
-		DivisionMaster:      NewDivisionMasterClient(cfg),
-		EmployeeCadre:       NewEmployeeCadreClient(cfg),
-		EmployeeCategory:    NewEmployeeCategoryClient(cfg),
-		EmployeeDesignation: NewEmployeeDesignationClient(cfg),
-		EmployeePosts:       NewEmployeePostsClient(cfg),
-		Employees:           NewEmployeesClient(cfg),
-		Exam:                NewExamClient(cfg),
-		ExamCalendar:        NewExamCalendarClient(cfg),
-		ExamEligibility:     NewExamEligibilityClient(cfg),
-		ExamPapers:          NewExamPapersClient(cfg),
-		Facility:            NewFacilityClient(cfg),
-		NodalOfficer:        NewNodalOfficerClient(cfg),
-		Notification:        NewNotificationClient(cfg),
-		PaperTypes:          NewPaperTypesClient(cfg),
-		RegionMaster:        NewRegionMasterClient(cfg),
-		User:                NewUserClient(cfg),
-		VacancyYear:         NewVacancyYearClient(cfg),
+		ctx:                           ctx,
+		config:                        cfg,
+		AdminLogin:                    NewAdminLoginClient(cfg),
+		AgeEligibility:                NewAgeEligibilityClient(cfg),
+		Application:                   NewApplicationClient(cfg),
+		Cadre_Choice_IP:               NewCadreChoiceIPClient(cfg),
+		Cadre_Choice_PA:               NewCadreChoicePAClient(cfg),
+		Cadre_Choice_PM:               NewCadreChoicePMClient(cfg),
+		Cadre_Choice_PS:               NewCadreChoicePSClient(cfg),
+		Center:                        NewCenterClient(cfg),
+		CircleMaster:                  NewCircleMasterClient(cfg),
+		DirectorateUsers:              NewDirectorateUsersClient(cfg),
+		Disability:                    NewDisabilityClient(cfg),
+		DivisionMaster:                NewDivisionMasterClient(cfg),
+		Division_Choice_PA:            NewDivisionChoicePAClient(cfg),
+		Division_Choice_PM:            NewDivisionChoicePMClient(cfg),
+		Division_Choice_PS:            NewDivisionChoicePSClient(cfg),
+		EligibilityMaster:             NewEligibilityMasterClient(cfg),
+		EmployeeCadre:                 NewEmployeeCadreClient(cfg),
+		EmployeeCategory:              NewEmployeeCategoryClient(cfg),
+		EmployeeDesignation:           NewEmployeeDesignationClient(cfg),
+		EmployeeMaster:                NewEmployeeMasterClient(cfg),
+		EmployeePosts:                 NewEmployeePostsClient(cfg),
+		Employees:                     NewEmployeesClient(cfg),
+		Exam:                          NewExamClient(cfg),
+		ExamCalendar:                  NewExamCalendarClient(cfg),
+		ExamPapers:                    NewExamPapersClient(cfg),
+		ExamType:                      NewExamTypeClient(cfg),
+		Exam_Applications_IP:          NewExamApplicationsIPClient(cfg),
+		Exam_Applications_PS:          NewExamApplicationsPSClient(cfg),
+		Exam_IP:                       NewExamIPClient(cfg),
+		Exam_PA:                       NewExamPAClient(cfg),
+		Exam_PM:                       NewExamPMClient(cfg),
+		Exam_PS:                       NewExamPSClient(cfg),
+		Facility:                      NewFacilityClient(cfg),
+		Login:                         NewLoginClient(cfg),
+		NodalOfficer:                  NewNodalOfficerClient(cfg),
+		Notification:                  NewNotificationClient(cfg),
+		PaperTypes:                    NewPaperTypesClient(cfg),
+		PlaceOfPreferenceIP:           NewPlaceOfPreferenceIPClient(cfg),
+		RecommendationsIPApplications: NewRecommendationsIPApplicationsClient(cfg),
+		RegionMaster:                  NewRegionMasterClient(cfg),
+		Reversal_Application_IP:       NewReversalApplicationIPClient(cfg),
+		RoleMaster:                    NewRoleMasterClient(cfg),
+		User:                          NewUserClient(cfg),
+		UserMaster:                    NewUserMasterClient(cfg),
+		VacancyYear:                   NewVacancyYearClient(cfg),
 	}, nil
 }
 
@@ -244,37 +359,60 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                 ctx,
-		config:              cfg,
-		AgeEligibility:      NewAgeEligibilityClient(cfg),
-		Application:         NewApplicationClient(cfg),
-		Center:              NewCenterClient(cfg),
-		CircleMaster:        NewCircleMasterClient(cfg),
-		Disability:          NewDisabilityClient(cfg),
-		DivisionMaster:      NewDivisionMasterClient(cfg),
-		EmployeeCadre:       NewEmployeeCadreClient(cfg),
-		EmployeeCategory:    NewEmployeeCategoryClient(cfg),
-		EmployeeDesignation: NewEmployeeDesignationClient(cfg),
-		EmployeePosts:       NewEmployeePostsClient(cfg),
-		Employees:           NewEmployeesClient(cfg),
-		Exam:                NewExamClient(cfg),
-		ExamCalendar:        NewExamCalendarClient(cfg),
-		ExamEligibility:     NewExamEligibilityClient(cfg),
-		ExamPapers:          NewExamPapersClient(cfg),
-		Facility:            NewFacilityClient(cfg),
-		NodalOfficer:        NewNodalOfficerClient(cfg),
-		Notification:        NewNotificationClient(cfg),
-		PaperTypes:          NewPaperTypesClient(cfg),
-		RegionMaster:        NewRegionMasterClient(cfg),
-		User:                NewUserClient(cfg),
-		VacancyYear:         NewVacancyYearClient(cfg),
+		ctx:                           ctx,
+		config:                        cfg,
+		AdminLogin:                    NewAdminLoginClient(cfg),
+		AgeEligibility:                NewAgeEligibilityClient(cfg),
+		Application:                   NewApplicationClient(cfg),
+		Cadre_Choice_IP:               NewCadreChoiceIPClient(cfg),
+		Cadre_Choice_PA:               NewCadreChoicePAClient(cfg),
+		Cadre_Choice_PM:               NewCadreChoicePMClient(cfg),
+		Cadre_Choice_PS:               NewCadreChoicePSClient(cfg),
+		Center:                        NewCenterClient(cfg),
+		CircleMaster:                  NewCircleMasterClient(cfg),
+		DirectorateUsers:              NewDirectorateUsersClient(cfg),
+		Disability:                    NewDisabilityClient(cfg),
+		DivisionMaster:                NewDivisionMasterClient(cfg),
+		Division_Choice_PA:            NewDivisionChoicePAClient(cfg),
+		Division_Choice_PM:            NewDivisionChoicePMClient(cfg),
+		Division_Choice_PS:            NewDivisionChoicePSClient(cfg),
+		EligibilityMaster:             NewEligibilityMasterClient(cfg),
+		EmployeeCadre:                 NewEmployeeCadreClient(cfg),
+		EmployeeCategory:              NewEmployeeCategoryClient(cfg),
+		EmployeeDesignation:           NewEmployeeDesignationClient(cfg),
+		EmployeeMaster:                NewEmployeeMasterClient(cfg),
+		EmployeePosts:                 NewEmployeePostsClient(cfg),
+		Employees:                     NewEmployeesClient(cfg),
+		Exam:                          NewExamClient(cfg),
+		ExamCalendar:                  NewExamCalendarClient(cfg),
+		ExamPapers:                    NewExamPapersClient(cfg),
+		ExamType:                      NewExamTypeClient(cfg),
+		Exam_Applications_IP:          NewExamApplicationsIPClient(cfg),
+		Exam_Applications_PS:          NewExamApplicationsPSClient(cfg),
+		Exam_IP:                       NewExamIPClient(cfg),
+		Exam_PA:                       NewExamPAClient(cfg),
+		Exam_PM:                       NewExamPMClient(cfg),
+		Exam_PS:                       NewExamPSClient(cfg),
+		Facility:                      NewFacilityClient(cfg),
+		Login:                         NewLoginClient(cfg),
+		NodalOfficer:                  NewNodalOfficerClient(cfg),
+		Notification:                  NewNotificationClient(cfg),
+		PaperTypes:                    NewPaperTypesClient(cfg),
+		PlaceOfPreferenceIP:           NewPlaceOfPreferenceIPClient(cfg),
+		RecommendationsIPApplications: NewRecommendationsIPApplicationsClient(cfg),
+		RegionMaster:                  NewRegionMasterClient(cfg),
+		Reversal_Application_IP:       NewReversalApplicationIPClient(cfg),
+		RoleMaster:                    NewRoleMasterClient(cfg),
+		User:                          NewUserClient(cfg),
+		UserMaster:                    NewUserMasterClient(cfg),
+		VacancyYear:                   NewVacancyYearClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		AgeEligibility.
+//		AdminLogin.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -297,11 +435,17 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.AgeEligibility, c.Application, c.Center, c.CircleMaster, c.Disability,
-		c.DivisionMaster, c.EmployeeCadre, c.EmployeeCategory, c.EmployeeDesignation,
-		c.EmployeePosts, c.Employees, c.Exam, c.ExamCalendar, c.ExamEligibility,
-		c.ExamPapers, c.Facility, c.NodalOfficer, c.Notification, c.PaperTypes,
-		c.RegionMaster, c.User, c.VacancyYear,
+		c.AdminLogin, c.AgeEligibility, c.Application, c.Cadre_Choice_IP,
+		c.Cadre_Choice_PA, c.Cadre_Choice_PM, c.Cadre_Choice_PS, c.Center,
+		c.CircleMaster, c.DirectorateUsers, c.Disability, c.DivisionMaster,
+		c.Division_Choice_PA, c.Division_Choice_PM, c.Division_Choice_PS,
+		c.EligibilityMaster, c.EmployeeCadre, c.EmployeeCategory,
+		c.EmployeeDesignation, c.EmployeeMaster, c.EmployeePosts, c.Employees, c.Exam,
+		c.ExamCalendar, c.ExamPapers, c.ExamType, c.Exam_Applications_IP,
+		c.Exam_Applications_PS, c.Exam_IP, c.Exam_PA, c.Exam_PM, c.Exam_PS, c.Facility,
+		c.Login, c.NodalOfficer, c.Notification, c.PaperTypes, c.PlaceOfPreferenceIP,
+		c.RecommendationsIPApplications, c.RegionMaster, c.Reversal_Application_IP,
+		c.RoleMaster, c.User, c.UserMaster, c.VacancyYear,
 	} {
 		n.Use(hooks...)
 	}
@@ -311,11 +455,17 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.AgeEligibility, c.Application, c.Center, c.CircleMaster, c.Disability,
-		c.DivisionMaster, c.EmployeeCadre, c.EmployeeCategory, c.EmployeeDesignation,
-		c.EmployeePosts, c.Employees, c.Exam, c.ExamCalendar, c.ExamEligibility,
-		c.ExamPapers, c.Facility, c.NodalOfficer, c.Notification, c.PaperTypes,
-		c.RegionMaster, c.User, c.VacancyYear,
+		c.AdminLogin, c.AgeEligibility, c.Application, c.Cadre_Choice_IP,
+		c.Cadre_Choice_PA, c.Cadre_Choice_PM, c.Cadre_Choice_PS, c.Center,
+		c.CircleMaster, c.DirectorateUsers, c.Disability, c.DivisionMaster,
+		c.Division_Choice_PA, c.Division_Choice_PM, c.Division_Choice_PS,
+		c.EligibilityMaster, c.EmployeeCadre, c.EmployeeCategory,
+		c.EmployeeDesignation, c.EmployeeMaster, c.EmployeePosts, c.Employees, c.Exam,
+		c.ExamCalendar, c.ExamPapers, c.ExamType, c.Exam_Applications_IP,
+		c.Exam_Applications_PS, c.Exam_IP, c.Exam_PA, c.Exam_PM, c.Exam_PS, c.Facility,
+		c.Login, c.NodalOfficer, c.Notification, c.PaperTypes, c.PlaceOfPreferenceIP,
+		c.RecommendationsIPApplications, c.RegionMaster, c.Reversal_Application_IP,
+		c.RoleMaster, c.User, c.UserMaster, c.VacancyYear,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -324,24 +474,46 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *AdminLoginMutation:
+		return c.AdminLogin.mutate(ctx, m)
 	case *AgeEligibilityMutation:
 		return c.AgeEligibility.mutate(ctx, m)
 	case *ApplicationMutation:
 		return c.Application.mutate(ctx, m)
+	case *CadreChoiceIPMutation:
+		return c.Cadre_Choice_IP.mutate(ctx, m)
+	case *CadreChoicePAMutation:
+		return c.Cadre_Choice_PA.mutate(ctx, m)
+	case *CadreChoicePMMutation:
+		return c.Cadre_Choice_PM.mutate(ctx, m)
+	case *CadreChoicePSMutation:
+		return c.Cadre_Choice_PS.mutate(ctx, m)
 	case *CenterMutation:
 		return c.Center.mutate(ctx, m)
 	case *CircleMasterMutation:
 		return c.CircleMaster.mutate(ctx, m)
+	case *DirectorateUsersMutation:
+		return c.DirectorateUsers.mutate(ctx, m)
 	case *DisabilityMutation:
 		return c.Disability.mutate(ctx, m)
 	case *DivisionMasterMutation:
 		return c.DivisionMaster.mutate(ctx, m)
+	case *DivisionChoicePAMutation:
+		return c.Division_Choice_PA.mutate(ctx, m)
+	case *DivisionChoicePMMutation:
+		return c.Division_Choice_PM.mutate(ctx, m)
+	case *DivisionChoicePSMutation:
+		return c.Division_Choice_PS.mutate(ctx, m)
+	case *EligibilityMasterMutation:
+		return c.EligibilityMaster.mutate(ctx, m)
 	case *EmployeeCadreMutation:
 		return c.EmployeeCadre.mutate(ctx, m)
 	case *EmployeeCategoryMutation:
 		return c.EmployeeCategory.mutate(ctx, m)
 	case *EmployeeDesignationMutation:
 		return c.EmployeeDesignation.mutate(ctx, m)
+	case *EmployeeMasterMutation:
+		return c.EmployeeMaster.mutate(ctx, m)
 	case *EmployeePostsMutation:
 		return c.EmployeePosts.mutate(ctx, m)
 	case *EmployeesMutation:
@@ -350,26 +522,184 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Exam.mutate(ctx, m)
 	case *ExamCalendarMutation:
 		return c.ExamCalendar.mutate(ctx, m)
-	case *ExamEligibilityMutation:
-		return c.ExamEligibility.mutate(ctx, m)
 	case *ExamPapersMutation:
 		return c.ExamPapers.mutate(ctx, m)
+	case *ExamTypeMutation:
+		return c.ExamType.mutate(ctx, m)
+	case *ExamApplicationsIPMutation:
+		return c.Exam_Applications_IP.mutate(ctx, m)
+	case *ExamApplicationsPSMutation:
+		return c.Exam_Applications_PS.mutate(ctx, m)
+	case *ExamIPMutation:
+		return c.Exam_IP.mutate(ctx, m)
+	case *ExamPAMutation:
+		return c.Exam_PA.mutate(ctx, m)
+	case *ExamPMMutation:
+		return c.Exam_PM.mutate(ctx, m)
+	case *ExamPSMutation:
+		return c.Exam_PS.mutate(ctx, m)
 	case *FacilityMutation:
 		return c.Facility.mutate(ctx, m)
+	case *LoginMutation:
+		return c.Login.mutate(ctx, m)
 	case *NodalOfficerMutation:
 		return c.NodalOfficer.mutate(ctx, m)
 	case *NotificationMutation:
 		return c.Notification.mutate(ctx, m)
 	case *PaperTypesMutation:
 		return c.PaperTypes.mutate(ctx, m)
+	case *PlaceOfPreferenceIPMutation:
+		return c.PlaceOfPreferenceIP.mutate(ctx, m)
+	case *RecommendationsIPApplicationsMutation:
+		return c.RecommendationsIPApplications.mutate(ctx, m)
 	case *RegionMasterMutation:
 		return c.RegionMaster.mutate(ctx, m)
+	case *ReversalApplicationIPMutation:
+		return c.Reversal_Application_IP.mutate(ctx, m)
+	case *RoleMasterMutation:
+		return c.RoleMaster.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
+	case *UserMasterMutation:
+		return c.UserMaster.mutate(ctx, m)
 	case *VacancyYearMutation:
 		return c.VacancyYear.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// AdminLoginClient is a client for the AdminLogin schema.
+type AdminLoginClient struct {
+	config
+}
+
+// NewAdminLoginClient returns a client for the AdminLogin from the given config.
+func NewAdminLoginClient(c config) *AdminLoginClient {
+	return &AdminLoginClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `adminlogin.Hooks(f(g(h())))`.
+func (c *AdminLoginClient) Use(hooks ...Hook) {
+	c.hooks.AdminLogin = append(c.hooks.AdminLogin, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `adminlogin.Intercept(f(g(h())))`.
+func (c *AdminLoginClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AdminLogin = append(c.inters.AdminLogin, interceptors...)
+}
+
+// Create returns a builder for creating a AdminLogin entity.
+func (c *AdminLoginClient) Create() *AdminLoginCreate {
+	mutation := newAdminLoginMutation(c.config, OpCreate)
+	return &AdminLoginCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AdminLogin entities.
+func (c *AdminLoginClient) CreateBulk(builders ...*AdminLoginCreate) *AdminLoginCreateBulk {
+	return &AdminLoginCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AdminLogin.
+func (c *AdminLoginClient) Update() *AdminLoginUpdate {
+	mutation := newAdminLoginMutation(c.config, OpUpdate)
+	return &AdminLoginUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AdminLoginClient) UpdateOne(al *AdminLogin) *AdminLoginUpdateOne {
+	mutation := newAdminLoginMutation(c.config, OpUpdateOne, withAdminLogin(al))
+	return &AdminLoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AdminLoginClient) UpdateOneID(id int32) *AdminLoginUpdateOne {
+	mutation := newAdminLoginMutation(c.config, OpUpdateOne, withAdminLoginID(id))
+	return &AdminLoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AdminLogin.
+func (c *AdminLoginClient) Delete() *AdminLoginDelete {
+	mutation := newAdminLoginMutation(c.config, OpDelete)
+	return &AdminLoginDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AdminLoginClient) DeleteOne(al *AdminLogin) *AdminLoginDeleteOne {
+	return c.DeleteOneID(al.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AdminLoginClient) DeleteOneID(id int32) *AdminLoginDeleteOne {
+	builder := c.Delete().Where(adminlogin.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AdminLoginDeleteOne{builder}
+}
+
+// Query returns a query builder for AdminLogin.
+func (c *AdminLoginClient) Query() *AdminLoginQuery {
+	return &AdminLoginQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAdminLogin},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AdminLogin entity by its id.
+func (c *AdminLoginClient) Get(ctx context.Context, id int32) (*AdminLogin, error) {
+	return c.Query().Where(adminlogin.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AdminLoginClient) GetX(ctx context.Context, id int32) *AdminLogin {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryRoleMaster queries the role_master edge of a AdminLogin.
+func (c *AdminLoginClient) QueryRoleMaster(al *AdminLogin) *RoleMasterQuery {
+	query := (&RoleMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := al.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(adminlogin.Table, adminlogin.FieldID, id),
+			sqlgraph.To(rolemaster.Table, rolemaster.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, adminlogin.RoleMasterTable, adminlogin.RoleMasterColumn),
+		)
+		fromV = sqlgraph.Neighbors(al.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AdminLoginClient) Hooks() []Hook {
+	return c.hooks.AdminLogin
+}
+
+// Interceptors returns the client interceptors.
+func (c *AdminLoginClient) Interceptors() []Interceptor {
+	return c.inters.AdminLogin
+}
+
+func (c *AdminLoginClient) mutate(ctx context.Context, m *AdminLoginMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AdminLoginCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AdminLoginUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AdminLoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AdminLoginDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown AdminLogin mutation op: %q", m.Op())
 	}
 }
 
@@ -464,22 +794,6 @@ func (c *AgeEligibilityClient) GetX(ctx context.Context, id int32) *AgeEligibili
 		panic(err)
 	}
 	return obj
-}
-
-// QueryExamEligibility queries the exam_eligibility edge of a AgeEligibility.
-func (c *AgeEligibilityClient) QueryExamEligibility(ae *AgeEligibility) *ExamEligibilityQuery {
-	query := (&ExamEligibilityClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ae.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(ageeligibility.Table, ageeligibility.FieldID, id),
-			sqlgraph.To(exameligibility.Table, exameligibility.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ageeligibility.ExamEligibilityTable, ageeligibility.ExamEligibilityColumn),
-		)
-		fromV = sqlgraph.Neighbors(ae.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // Hooks returns the client hooks.
@@ -654,6 +968,494 @@ func (c *ApplicationClient) mutate(ctx context.Context, m *ApplicationMutation) 
 		return (&ApplicationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Application mutation op: %q", m.Op())
+	}
+}
+
+// CadreChoiceIPClient is a client for the Cadre_Choice_IP schema.
+type CadreChoiceIPClient struct {
+	config
+}
+
+// NewCadreChoiceIPClient returns a client for the Cadre_Choice_IP from the given config.
+func NewCadreChoiceIPClient(c config) *CadreChoiceIPClient {
+	return &CadreChoiceIPClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cadre_choice_ip.Hooks(f(g(h())))`.
+func (c *CadreChoiceIPClient) Use(hooks ...Hook) {
+	c.hooks.Cadre_Choice_IP = append(c.hooks.Cadre_Choice_IP, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cadre_choice_ip.Intercept(f(g(h())))`.
+func (c *CadreChoiceIPClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Cadre_Choice_IP = append(c.inters.Cadre_Choice_IP, interceptors...)
+}
+
+// Create returns a builder for creating a Cadre_Choice_IP entity.
+func (c *CadreChoiceIPClient) Create() *CadreChoiceIPCreate {
+	mutation := newCadreChoiceIPMutation(c.config, OpCreate)
+	return &CadreChoiceIPCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Cadre_Choice_IP entities.
+func (c *CadreChoiceIPClient) CreateBulk(builders ...*CadreChoiceIPCreate) *CadreChoiceIPCreateBulk {
+	return &CadreChoiceIPCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Cadre_Choice_IP.
+func (c *CadreChoiceIPClient) Update() *CadreChoiceIPUpdate {
+	mutation := newCadreChoiceIPMutation(c.config, OpUpdate)
+	return &CadreChoiceIPUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CadreChoiceIPClient) UpdateOne(cci *Cadre_Choice_IP) *CadreChoiceIPUpdateOne {
+	mutation := newCadreChoiceIPMutation(c.config, OpUpdateOne, withCadre_Choice_IP(cci))
+	return &CadreChoiceIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CadreChoiceIPClient) UpdateOneID(id int32) *CadreChoiceIPUpdateOne {
+	mutation := newCadreChoiceIPMutation(c.config, OpUpdateOne, withCadre_Choice_IPID(id))
+	return &CadreChoiceIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Cadre_Choice_IP.
+func (c *CadreChoiceIPClient) Delete() *CadreChoiceIPDelete {
+	mutation := newCadreChoiceIPMutation(c.config, OpDelete)
+	return &CadreChoiceIPDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CadreChoiceIPClient) DeleteOne(cci *Cadre_Choice_IP) *CadreChoiceIPDeleteOne {
+	return c.DeleteOneID(cci.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CadreChoiceIPClient) DeleteOneID(id int32) *CadreChoiceIPDeleteOne {
+	builder := c.Delete().Where(cadre_choice_ip.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CadreChoiceIPDeleteOne{builder}
+}
+
+// Query returns a query builder for Cadre_Choice_IP.
+func (c *CadreChoiceIPClient) Query() *CadreChoiceIPQuery {
+	return &CadreChoiceIPQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCadreChoiceIP},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Cadre_Choice_IP entity by its id.
+func (c *CadreChoiceIPClient) Get(ctx context.Context, id int32) (*Cadre_Choice_IP, error) {
+	return c.Query().Where(cadre_choice_ip.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CadreChoiceIPClient) GetX(ctx context.Context, id int32) *Cadre_Choice_IP {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryApplnIPRef queries the ApplnIP_Ref edge of a Cadre_Choice_IP.
+func (c *CadreChoiceIPClient) QueryApplnIPRef(cci *Cadre_Choice_IP) *ExamApplicationsIPQuery {
+	query := (&ExamApplicationsIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cci.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(cadre_choice_ip.Table, cadre_choice_ip.FieldID, id),
+			sqlgraph.To(exam_applications_ip.Table, exam_applications_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, cadre_choice_ip.ApplnIPRefTable, cadre_choice_ip.ApplnIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(cci.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CadreChoiceIPClient) Hooks() []Hook {
+	return c.hooks.Cadre_Choice_IP
+}
+
+// Interceptors returns the client interceptors.
+func (c *CadreChoiceIPClient) Interceptors() []Interceptor {
+	return c.inters.Cadre_Choice_IP
+}
+
+func (c *CadreChoiceIPClient) mutate(ctx context.Context, m *CadreChoiceIPMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CadreChoiceIPCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CadreChoiceIPUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CadreChoiceIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CadreChoiceIPDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Cadre_Choice_IP mutation op: %q", m.Op())
+	}
+}
+
+// CadreChoicePAClient is a client for the Cadre_Choice_PA schema.
+type CadreChoicePAClient struct {
+	config
+}
+
+// NewCadreChoicePAClient returns a client for the Cadre_Choice_PA from the given config.
+func NewCadreChoicePAClient(c config) *CadreChoicePAClient {
+	return &CadreChoicePAClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cadre_choice_pa.Hooks(f(g(h())))`.
+func (c *CadreChoicePAClient) Use(hooks ...Hook) {
+	c.hooks.Cadre_Choice_PA = append(c.hooks.Cadre_Choice_PA, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cadre_choice_pa.Intercept(f(g(h())))`.
+func (c *CadreChoicePAClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Cadre_Choice_PA = append(c.inters.Cadre_Choice_PA, interceptors...)
+}
+
+// Create returns a builder for creating a Cadre_Choice_PA entity.
+func (c *CadreChoicePAClient) Create() *CadreChoicePACreate {
+	mutation := newCadreChoicePAMutation(c.config, OpCreate)
+	return &CadreChoicePACreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Cadre_Choice_PA entities.
+func (c *CadreChoicePAClient) CreateBulk(builders ...*CadreChoicePACreate) *CadreChoicePACreateBulk {
+	return &CadreChoicePACreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Cadre_Choice_PA.
+func (c *CadreChoicePAClient) Update() *CadreChoicePAUpdate {
+	mutation := newCadreChoicePAMutation(c.config, OpUpdate)
+	return &CadreChoicePAUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CadreChoicePAClient) UpdateOne(ccp *Cadre_Choice_PA) *CadreChoicePAUpdateOne {
+	mutation := newCadreChoicePAMutation(c.config, OpUpdateOne, withCadre_Choice_PA(ccp))
+	return &CadreChoicePAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CadreChoicePAClient) UpdateOneID(id int32) *CadreChoicePAUpdateOne {
+	mutation := newCadreChoicePAMutation(c.config, OpUpdateOne, withCadre_Choice_PAID(id))
+	return &CadreChoicePAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Cadre_Choice_PA.
+func (c *CadreChoicePAClient) Delete() *CadreChoicePADelete {
+	mutation := newCadreChoicePAMutation(c.config, OpDelete)
+	return &CadreChoicePADelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CadreChoicePAClient) DeleteOne(ccp *Cadre_Choice_PA) *CadreChoicePADeleteOne {
+	return c.DeleteOneID(ccp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CadreChoicePAClient) DeleteOneID(id int32) *CadreChoicePADeleteOne {
+	builder := c.Delete().Where(cadre_choice_pa.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CadreChoicePADeleteOne{builder}
+}
+
+// Query returns a query builder for Cadre_Choice_PA.
+func (c *CadreChoicePAClient) Query() *CadreChoicePAQuery {
+	return &CadreChoicePAQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCadreChoicePA},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Cadre_Choice_PA entity by its id.
+func (c *CadreChoicePAClient) Get(ctx context.Context, id int32) (*Cadre_Choice_PA, error) {
+	return c.Query().Where(cadre_choice_pa.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CadreChoicePAClient) GetX(ctx context.Context, id int32) *Cadre_Choice_PA {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CadreChoicePAClient) Hooks() []Hook {
+	return c.hooks.Cadre_Choice_PA
+}
+
+// Interceptors returns the client interceptors.
+func (c *CadreChoicePAClient) Interceptors() []Interceptor {
+	return c.inters.Cadre_Choice_PA
+}
+
+func (c *CadreChoicePAClient) mutate(ctx context.Context, m *CadreChoicePAMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CadreChoicePACreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CadreChoicePAUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CadreChoicePAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CadreChoicePADelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Cadre_Choice_PA mutation op: %q", m.Op())
+	}
+}
+
+// CadreChoicePMClient is a client for the Cadre_Choice_PM schema.
+type CadreChoicePMClient struct {
+	config
+}
+
+// NewCadreChoicePMClient returns a client for the Cadre_Choice_PM from the given config.
+func NewCadreChoicePMClient(c config) *CadreChoicePMClient {
+	return &CadreChoicePMClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cadre_choice_pm.Hooks(f(g(h())))`.
+func (c *CadreChoicePMClient) Use(hooks ...Hook) {
+	c.hooks.Cadre_Choice_PM = append(c.hooks.Cadre_Choice_PM, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cadre_choice_pm.Intercept(f(g(h())))`.
+func (c *CadreChoicePMClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Cadre_Choice_PM = append(c.inters.Cadre_Choice_PM, interceptors...)
+}
+
+// Create returns a builder for creating a Cadre_Choice_PM entity.
+func (c *CadreChoicePMClient) Create() *CadreChoicePMCreate {
+	mutation := newCadreChoicePMMutation(c.config, OpCreate)
+	return &CadreChoicePMCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Cadre_Choice_PM entities.
+func (c *CadreChoicePMClient) CreateBulk(builders ...*CadreChoicePMCreate) *CadreChoicePMCreateBulk {
+	return &CadreChoicePMCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Cadre_Choice_PM.
+func (c *CadreChoicePMClient) Update() *CadreChoicePMUpdate {
+	mutation := newCadreChoicePMMutation(c.config, OpUpdate)
+	return &CadreChoicePMUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CadreChoicePMClient) UpdateOne(ccp *Cadre_Choice_PM) *CadreChoicePMUpdateOne {
+	mutation := newCadreChoicePMMutation(c.config, OpUpdateOne, withCadre_Choice_PM(ccp))
+	return &CadreChoicePMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CadreChoicePMClient) UpdateOneID(id int32) *CadreChoicePMUpdateOne {
+	mutation := newCadreChoicePMMutation(c.config, OpUpdateOne, withCadre_Choice_PMID(id))
+	return &CadreChoicePMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Cadre_Choice_PM.
+func (c *CadreChoicePMClient) Delete() *CadreChoicePMDelete {
+	mutation := newCadreChoicePMMutation(c.config, OpDelete)
+	return &CadreChoicePMDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CadreChoicePMClient) DeleteOne(ccp *Cadre_Choice_PM) *CadreChoicePMDeleteOne {
+	return c.DeleteOneID(ccp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CadreChoicePMClient) DeleteOneID(id int32) *CadreChoicePMDeleteOne {
+	builder := c.Delete().Where(cadre_choice_pm.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CadreChoicePMDeleteOne{builder}
+}
+
+// Query returns a query builder for Cadre_Choice_PM.
+func (c *CadreChoicePMClient) Query() *CadreChoicePMQuery {
+	return &CadreChoicePMQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCadreChoicePM},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Cadre_Choice_PM entity by its id.
+func (c *CadreChoicePMClient) Get(ctx context.Context, id int32) (*Cadre_Choice_PM, error) {
+	return c.Query().Where(cadre_choice_pm.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CadreChoicePMClient) GetX(ctx context.Context, id int32) *Cadre_Choice_PM {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CadreChoicePMClient) Hooks() []Hook {
+	return c.hooks.Cadre_Choice_PM
+}
+
+// Interceptors returns the client interceptors.
+func (c *CadreChoicePMClient) Interceptors() []Interceptor {
+	return c.inters.Cadre_Choice_PM
+}
+
+func (c *CadreChoicePMClient) mutate(ctx context.Context, m *CadreChoicePMMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CadreChoicePMCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CadreChoicePMUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CadreChoicePMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CadreChoicePMDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Cadre_Choice_PM mutation op: %q", m.Op())
+	}
+}
+
+// CadreChoicePSClient is a client for the Cadre_Choice_PS schema.
+type CadreChoicePSClient struct {
+	config
+}
+
+// NewCadreChoicePSClient returns a client for the Cadre_Choice_PS from the given config.
+func NewCadreChoicePSClient(c config) *CadreChoicePSClient {
+	return &CadreChoicePSClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cadre_choice_ps.Hooks(f(g(h())))`.
+func (c *CadreChoicePSClient) Use(hooks ...Hook) {
+	c.hooks.Cadre_Choice_PS = append(c.hooks.Cadre_Choice_PS, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cadre_choice_ps.Intercept(f(g(h())))`.
+func (c *CadreChoicePSClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Cadre_Choice_PS = append(c.inters.Cadre_Choice_PS, interceptors...)
+}
+
+// Create returns a builder for creating a Cadre_Choice_PS entity.
+func (c *CadreChoicePSClient) Create() *CadreChoicePSCreate {
+	mutation := newCadreChoicePSMutation(c.config, OpCreate)
+	return &CadreChoicePSCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Cadre_Choice_PS entities.
+func (c *CadreChoicePSClient) CreateBulk(builders ...*CadreChoicePSCreate) *CadreChoicePSCreateBulk {
+	return &CadreChoicePSCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Cadre_Choice_PS.
+func (c *CadreChoicePSClient) Update() *CadreChoicePSUpdate {
+	mutation := newCadreChoicePSMutation(c.config, OpUpdate)
+	return &CadreChoicePSUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CadreChoicePSClient) UpdateOne(ccp *Cadre_Choice_PS) *CadreChoicePSUpdateOne {
+	mutation := newCadreChoicePSMutation(c.config, OpUpdateOne, withCadre_Choice_PS(ccp))
+	return &CadreChoicePSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CadreChoicePSClient) UpdateOneID(id int32) *CadreChoicePSUpdateOne {
+	mutation := newCadreChoicePSMutation(c.config, OpUpdateOne, withCadre_Choice_PSID(id))
+	return &CadreChoicePSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Cadre_Choice_PS.
+func (c *CadreChoicePSClient) Delete() *CadreChoicePSDelete {
+	mutation := newCadreChoicePSMutation(c.config, OpDelete)
+	return &CadreChoicePSDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CadreChoicePSClient) DeleteOne(ccp *Cadre_Choice_PS) *CadreChoicePSDeleteOne {
+	return c.DeleteOneID(ccp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CadreChoicePSClient) DeleteOneID(id int32) *CadreChoicePSDeleteOne {
+	builder := c.Delete().Where(cadre_choice_ps.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CadreChoicePSDeleteOne{builder}
+}
+
+// Query returns a query builder for Cadre_Choice_PS.
+func (c *CadreChoicePSClient) Query() *CadreChoicePSQuery {
+	return &CadreChoicePSQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCadreChoicePS},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Cadre_Choice_PS entity by its id.
+func (c *CadreChoicePSClient) Get(ctx context.Context, id int32) (*Cadre_Choice_PS, error) {
+	return c.Query().Where(cadre_choice_ps.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CadreChoicePSClient) GetX(ctx context.Context, id int32) *Cadre_Choice_PS {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CadreChoicePSClient) Hooks() []Hook {
+	return c.hooks.Cadre_Choice_PS
+}
+
+// Interceptors returns the client interceptors.
+func (c *CadreChoicePSClient) Interceptors() []Interceptor {
+	return c.inters.Cadre_Choice_PS
+}
+
+func (c *CadreChoicePSClient) mutate(ctx context.Context, m *CadreChoicePSMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CadreChoicePSCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CadreChoicePSUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CadreChoicePSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CadreChoicePSDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Cadre_Choice_PS mutation op: %q", m.Op())
 	}
 }
 
@@ -973,6 +1775,140 @@ func (c *CircleMasterClient) mutate(ctx context.Context, m *CircleMasterMutation
 	}
 }
 
+// DirectorateUsersClient is a client for the DirectorateUsers schema.
+type DirectorateUsersClient struct {
+	config
+}
+
+// NewDirectorateUsersClient returns a client for the DirectorateUsers from the given config.
+func NewDirectorateUsersClient(c config) *DirectorateUsersClient {
+	return &DirectorateUsersClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `directorateusers.Hooks(f(g(h())))`.
+func (c *DirectorateUsersClient) Use(hooks ...Hook) {
+	c.hooks.DirectorateUsers = append(c.hooks.DirectorateUsers, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `directorateusers.Intercept(f(g(h())))`.
+func (c *DirectorateUsersClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DirectorateUsers = append(c.inters.DirectorateUsers, interceptors...)
+}
+
+// Create returns a builder for creating a DirectorateUsers entity.
+func (c *DirectorateUsersClient) Create() *DirectorateUsersCreate {
+	mutation := newDirectorateUsersMutation(c.config, OpCreate)
+	return &DirectorateUsersCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DirectorateUsers entities.
+func (c *DirectorateUsersClient) CreateBulk(builders ...*DirectorateUsersCreate) *DirectorateUsersCreateBulk {
+	return &DirectorateUsersCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DirectorateUsers.
+func (c *DirectorateUsersClient) Update() *DirectorateUsersUpdate {
+	mutation := newDirectorateUsersMutation(c.config, OpUpdate)
+	return &DirectorateUsersUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DirectorateUsersClient) UpdateOne(du *DirectorateUsers) *DirectorateUsersUpdateOne {
+	mutation := newDirectorateUsersMutation(c.config, OpUpdateOne, withDirectorateUsers(du))
+	return &DirectorateUsersUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DirectorateUsersClient) UpdateOneID(id int32) *DirectorateUsersUpdateOne {
+	mutation := newDirectorateUsersMutation(c.config, OpUpdateOne, withDirectorateUsersID(id))
+	return &DirectorateUsersUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DirectorateUsers.
+func (c *DirectorateUsersClient) Delete() *DirectorateUsersDelete {
+	mutation := newDirectorateUsersMutation(c.config, OpDelete)
+	return &DirectorateUsersDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DirectorateUsersClient) DeleteOne(du *DirectorateUsers) *DirectorateUsersDeleteOne {
+	return c.DeleteOneID(du.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DirectorateUsersClient) DeleteOneID(id int32) *DirectorateUsersDeleteOne {
+	builder := c.Delete().Where(directorateusers.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DirectorateUsersDeleteOne{builder}
+}
+
+// Query returns a query builder for DirectorateUsers.
+func (c *DirectorateUsersClient) Query() *DirectorateUsersQuery {
+	return &DirectorateUsersQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDirectorateUsers},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DirectorateUsers entity by its id.
+func (c *DirectorateUsersClient) Get(ctx context.Context, id int32) (*DirectorateUsers, error) {
+	return c.Query().Where(directorateusers.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DirectorateUsersClient) GetX(ctx context.Context, id int32) *DirectorateUsers {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryEmployeeUser queries the employee_user edge of a DirectorateUsers.
+func (c *DirectorateUsersClient) QueryEmployeeUser(du *DirectorateUsers) *EmployeesQuery {
+	query := (&EmployeesClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := du.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorateusers.Table, directorateusers.FieldID, id),
+			sqlgraph.To(employees.Table, employees.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, directorateusers.EmployeeUserTable, directorateusers.EmployeeUserColumn),
+		)
+		fromV = sqlgraph.Neighbors(du.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DirectorateUsersClient) Hooks() []Hook {
+	return c.hooks.DirectorateUsers
+}
+
+// Interceptors returns the client interceptors.
+func (c *DirectorateUsersClient) Interceptors() []Interceptor {
+	return c.inters.DirectorateUsers
+}
+
+func (c *DirectorateUsersClient) mutate(ctx context.Context, m *DirectorateUsersMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DirectorateUsersCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DirectorateUsersUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DirectorateUsersUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DirectorateUsersDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown DirectorateUsers mutation op: %q", m.Op())
+	}
+}
+
 // DisabilityClient is a client for the Disability schema.
 type DisabilityClient struct {
 	config
@@ -1064,6 +2000,22 @@ func (c *DisabilityClient) GetX(ctx context.Context, id int32) *Disability {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryDisRef queries the dis_ref edge of a Disability.
+func (c *DisabilityClient) QueryDisRef(d *Disability) *ExamPapersQuery {
+	query := (&ExamPapersClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(disability.Table, disability.FieldID, id),
+			sqlgraph.To(exampapers.Table, exampapers.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, disability.DisRefTable, disability.DisRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1200,6 +2152,22 @@ func (c *DivisionMasterClient) QueryRegions(dm *DivisionMaster) *RegionMasterQue
 	return query
 }
 
+// QueryDivisionsRef queries the divisions_ref edge of a DivisionMaster.
+func (c *DivisionMasterClient) QueryDivisionsRef(dm *DivisionMaster) *FacilityQuery {
+	query := (&FacilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := dm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(divisionmaster.Table, divisionmaster.FieldID, id),
+			sqlgraph.To(facility.Table, facility.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, divisionmaster.DivisionsRefTable, divisionmaster.DivisionsRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(dm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *DivisionMasterClient) Hooks() []Hook {
 	return c.hooks.DivisionMaster
@@ -1222,6 +2190,558 @@ func (c *DivisionMasterClient) mutate(ctx context.Context, m *DivisionMasterMuta
 		return (&DivisionMasterDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown DivisionMaster mutation op: %q", m.Op())
+	}
+}
+
+// DivisionChoicePAClient is a client for the Division_Choice_PA schema.
+type DivisionChoicePAClient struct {
+	config
+}
+
+// NewDivisionChoicePAClient returns a client for the Division_Choice_PA from the given config.
+func NewDivisionChoicePAClient(c config) *DivisionChoicePAClient {
+	return &DivisionChoicePAClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `division_choice_pa.Hooks(f(g(h())))`.
+func (c *DivisionChoicePAClient) Use(hooks ...Hook) {
+	c.hooks.Division_Choice_PA = append(c.hooks.Division_Choice_PA, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `division_choice_pa.Intercept(f(g(h())))`.
+func (c *DivisionChoicePAClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Division_Choice_PA = append(c.inters.Division_Choice_PA, interceptors...)
+}
+
+// Create returns a builder for creating a Division_Choice_PA entity.
+func (c *DivisionChoicePAClient) Create() *DivisionChoicePACreate {
+	mutation := newDivisionChoicePAMutation(c.config, OpCreate)
+	return &DivisionChoicePACreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Division_Choice_PA entities.
+func (c *DivisionChoicePAClient) CreateBulk(builders ...*DivisionChoicePACreate) *DivisionChoicePACreateBulk {
+	return &DivisionChoicePACreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Division_Choice_PA.
+func (c *DivisionChoicePAClient) Update() *DivisionChoicePAUpdate {
+	mutation := newDivisionChoicePAMutation(c.config, OpUpdate)
+	return &DivisionChoicePAUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DivisionChoicePAClient) UpdateOne(dcp *Division_Choice_PA) *DivisionChoicePAUpdateOne {
+	mutation := newDivisionChoicePAMutation(c.config, OpUpdateOne, withDivision_Choice_PA(dcp))
+	return &DivisionChoicePAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DivisionChoicePAClient) UpdateOneID(id int32) *DivisionChoicePAUpdateOne {
+	mutation := newDivisionChoicePAMutation(c.config, OpUpdateOne, withDivision_Choice_PAID(id))
+	return &DivisionChoicePAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Division_Choice_PA.
+func (c *DivisionChoicePAClient) Delete() *DivisionChoicePADelete {
+	mutation := newDivisionChoicePAMutation(c.config, OpDelete)
+	return &DivisionChoicePADelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DivisionChoicePAClient) DeleteOne(dcp *Division_Choice_PA) *DivisionChoicePADeleteOne {
+	return c.DeleteOneID(dcp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DivisionChoicePAClient) DeleteOneID(id int32) *DivisionChoicePADeleteOne {
+	builder := c.Delete().Where(division_choice_pa.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DivisionChoicePADeleteOne{builder}
+}
+
+// Query returns a query builder for Division_Choice_PA.
+func (c *DivisionChoicePAClient) Query() *DivisionChoicePAQuery {
+	return &DivisionChoicePAQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDivisionChoicePA},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Division_Choice_PA entity by its id.
+func (c *DivisionChoicePAClient) Get(ctx context.Context, id int32) (*Division_Choice_PA, error) {
+	return c.Query().Where(division_choice_pa.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DivisionChoicePAClient) GetX(ctx context.Context, id int32) *Division_Choice_PA {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DivisionChoicePAClient) Hooks() []Hook {
+	return c.hooks.Division_Choice_PA
+}
+
+// Interceptors returns the client interceptors.
+func (c *DivisionChoicePAClient) Interceptors() []Interceptor {
+	return c.inters.Division_Choice_PA
+}
+
+func (c *DivisionChoicePAClient) mutate(ctx context.Context, m *DivisionChoicePAMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DivisionChoicePACreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DivisionChoicePAUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DivisionChoicePAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DivisionChoicePADelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Division_Choice_PA mutation op: %q", m.Op())
+	}
+}
+
+// DivisionChoicePMClient is a client for the Division_Choice_PM schema.
+type DivisionChoicePMClient struct {
+	config
+}
+
+// NewDivisionChoicePMClient returns a client for the Division_Choice_PM from the given config.
+func NewDivisionChoicePMClient(c config) *DivisionChoicePMClient {
+	return &DivisionChoicePMClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `division_choice_pm.Hooks(f(g(h())))`.
+func (c *DivisionChoicePMClient) Use(hooks ...Hook) {
+	c.hooks.Division_Choice_PM = append(c.hooks.Division_Choice_PM, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `division_choice_pm.Intercept(f(g(h())))`.
+func (c *DivisionChoicePMClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Division_Choice_PM = append(c.inters.Division_Choice_PM, interceptors...)
+}
+
+// Create returns a builder for creating a Division_Choice_PM entity.
+func (c *DivisionChoicePMClient) Create() *DivisionChoicePMCreate {
+	mutation := newDivisionChoicePMMutation(c.config, OpCreate)
+	return &DivisionChoicePMCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Division_Choice_PM entities.
+func (c *DivisionChoicePMClient) CreateBulk(builders ...*DivisionChoicePMCreate) *DivisionChoicePMCreateBulk {
+	return &DivisionChoicePMCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Division_Choice_PM.
+func (c *DivisionChoicePMClient) Update() *DivisionChoicePMUpdate {
+	mutation := newDivisionChoicePMMutation(c.config, OpUpdate)
+	return &DivisionChoicePMUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DivisionChoicePMClient) UpdateOne(dcp *Division_Choice_PM) *DivisionChoicePMUpdateOne {
+	mutation := newDivisionChoicePMMutation(c.config, OpUpdateOne, withDivision_Choice_PM(dcp))
+	return &DivisionChoicePMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DivisionChoicePMClient) UpdateOneID(id int32) *DivisionChoicePMUpdateOne {
+	mutation := newDivisionChoicePMMutation(c.config, OpUpdateOne, withDivision_Choice_PMID(id))
+	return &DivisionChoicePMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Division_Choice_PM.
+func (c *DivisionChoicePMClient) Delete() *DivisionChoicePMDelete {
+	mutation := newDivisionChoicePMMutation(c.config, OpDelete)
+	return &DivisionChoicePMDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DivisionChoicePMClient) DeleteOne(dcp *Division_Choice_PM) *DivisionChoicePMDeleteOne {
+	return c.DeleteOneID(dcp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DivisionChoicePMClient) DeleteOneID(id int32) *DivisionChoicePMDeleteOne {
+	builder := c.Delete().Where(division_choice_pm.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DivisionChoicePMDeleteOne{builder}
+}
+
+// Query returns a query builder for Division_Choice_PM.
+func (c *DivisionChoicePMClient) Query() *DivisionChoicePMQuery {
+	return &DivisionChoicePMQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDivisionChoicePM},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Division_Choice_PM entity by its id.
+func (c *DivisionChoicePMClient) Get(ctx context.Context, id int32) (*Division_Choice_PM, error) {
+	return c.Query().Where(division_choice_pm.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DivisionChoicePMClient) GetX(ctx context.Context, id int32) *Division_Choice_PM {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DivisionChoicePMClient) Hooks() []Hook {
+	return c.hooks.Division_Choice_PM
+}
+
+// Interceptors returns the client interceptors.
+func (c *DivisionChoicePMClient) Interceptors() []Interceptor {
+	return c.inters.Division_Choice_PM
+}
+
+func (c *DivisionChoicePMClient) mutate(ctx context.Context, m *DivisionChoicePMMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DivisionChoicePMCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DivisionChoicePMUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DivisionChoicePMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DivisionChoicePMDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Division_Choice_PM mutation op: %q", m.Op())
+	}
+}
+
+// DivisionChoicePSClient is a client for the Division_Choice_PS schema.
+type DivisionChoicePSClient struct {
+	config
+}
+
+// NewDivisionChoicePSClient returns a client for the Division_Choice_PS from the given config.
+func NewDivisionChoicePSClient(c config) *DivisionChoicePSClient {
+	return &DivisionChoicePSClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `division_choice_ps.Hooks(f(g(h())))`.
+func (c *DivisionChoicePSClient) Use(hooks ...Hook) {
+	c.hooks.Division_Choice_PS = append(c.hooks.Division_Choice_PS, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `division_choice_ps.Intercept(f(g(h())))`.
+func (c *DivisionChoicePSClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Division_Choice_PS = append(c.inters.Division_Choice_PS, interceptors...)
+}
+
+// Create returns a builder for creating a Division_Choice_PS entity.
+func (c *DivisionChoicePSClient) Create() *DivisionChoicePSCreate {
+	mutation := newDivisionChoicePSMutation(c.config, OpCreate)
+	return &DivisionChoicePSCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Division_Choice_PS entities.
+func (c *DivisionChoicePSClient) CreateBulk(builders ...*DivisionChoicePSCreate) *DivisionChoicePSCreateBulk {
+	return &DivisionChoicePSCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Division_Choice_PS.
+func (c *DivisionChoicePSClient) Update() *DivisionChoicePSUpdate {
+	mutation := newDivisionChoicePSMutation(c.config, OpUpdate)
+	return &DivisionChoicePSUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DivisionChoicePSClient) UpdateOne(dcp *Division_Choice_PS) *DivisionChoicePSUpdateOne {
+	mutation := newDivisionChoicePSMutation(c.config, OpUpdateOne, withDivision_Choice_PS(dcp))
+	return &DivisionChoicePSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DivisionChoicePSClient) UpdateOneID(id int32) *DivisionChoicePSUpdateOne {
+	mutation := newDivisionChoicePSMutation(c.config, OpUpdateOne, withDivision_Choice_PSID(id))
+	return &DivisionChoicePSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Division_Choice_PS.
+func (c *DivisionChoicePSClient) Delete() *DivisionChoicePSDelete {
+	mutation := newDivisionChoicePSMutation(c.config, OpDelete)
+	return &DivisionChoicePSDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DivisionChoicePSClient) DeleteOne(dcp *Division_Choice_PS) *DivisionChoicePSDeleteOne {
+	return c.DeleteOneID(dcp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DivisionChoicePSClient) DeleteOneID(id int32) *DivisionChoicePSDeleteOne {
+	builder := c.Delete().Where(division_choice_ps.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DivisionChoicePSDeleteOne{builder}
+}
+
+// Query returns a query builder for Division_Choice_PS.
+func (c *DivisionChoicePSClient) Query() *DivisionChoicePSQuery {
+	return &DivisionChoicePSQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDivisionChoicePS},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Division_Choice_PS entity by its id.
+func (c *DivisionChoicePSClient) Get(ctx context.Context, id int32) (*Division_Choice_PS, error) {
+	return c.Query().Where(division_choice_ps.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DivisionChoicePSClient) GetX(ctx context.Context, id int32) *Division_Choice_PS {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DivisionChoicePSClient) Hooks() []Hook {
+	return c.hooks.Division_Choice_PS
+}
+
+// Interceptors returns the client interceptors.
+func (c *DivisionChoicePSClient) Interceptors() []Interceptor {
+	return c.inters.Division_Choice_PS
+}
+
+func (c *DivisionChoicePSClient) mutate(ctx context.Context, m *DivisionChoicePSMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DivisionChoicePSCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DivisionChoicePSUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DivisionChoicePSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DivisionChoicePSDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Division_Choice_PS mutation op: %q", m.Op())
+	}
+}
+
+// EligibilityMasterClient is a client for the EligibilityMaster schema.
+type EligibilityMasterClient struct {
+	config
+}
+
+// NewEligibilityMasterClient returns a client for the EligibilityMaster from the given config.
+func NewEligibilityMasterClient(c config) *EligibilityMasterClient {
+	return &EligibilityMasterClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `eligibilitymaster.Hooks(f(g(h())))`.
+func (c *EligibilityMasterClient) Use(hooks ...Hook) {
+	c.hooks.EligibilityMaster = append(c.hooks.EligibilityMaster, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `eligibilitymaster.Intercept(f(g(h())))`.
+func (c *EligibilityMasterClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EligibilityMaster = append(c.inters.EligibilityMaster, interceptors...)
+}
+
+// Create returns a builder for creating a EligibilityMaster entity.
+func (c *EligibilityMasterClient) Create() *EligibilityMasterCreate {
+	mutation := newEligibilityMasterMutation(c.config, OpCreate)
+	return &EligibilityMasterCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EligibilityMaster entities.
+func (c *EligibilityMasterClient) CreateBulk(builders ...*EligibilityMasterCreate) *EligibilityMasterCreateBulk {
+	return &EligibilityMasterCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EligibilityMaster.
+func (c *EligibilityMasterClient) Update() *EligibilityMasterUpdate {
+	mutation := newEligibilityMasterMutation(c.config, OpUpdate)
+	return &EligibilityMasterUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EligibilityMasterClient) UpdateOne(em *EligibilityMaster) *EligibilityMasterUpdateOne {
+	mutation := newEligibilityMasterMutation(c.config, OpUpdateOne, withEligibilityMaster(em))
+	return &EligibilityMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EligibilityMasterClient) UpdateOneID(id int32) *EligibilityMasterUpdateOne {
+	mutation := newEligibilityMasterMutation(c.config, OpUpdateOne, withEligibilityMasterID(id))
+	return &EligibilityMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EligibilityMaster.
+func (c *EligibilityMasterClient) Delete() *EligibilityMasterDelete {
+	mutation := newEligibilityMasterMutation(c.config, OpDelete)
+	return &EligibilityMasterDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EligibilityMasterClient) DeleteOne(em *EligibilityMaster) *EligibilityMasterDeleteOne {
+	return c.DeleteOneID(em.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EligibilityMasterClient) DeleteOneID(id int32) *EligibilityMasterDeleteOne {
+	builder := c.Delete().Where(eligibilitymaster.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EligibilityMasterDeleteOne{builder}
+}
+
+// Query returns a query builder for EligibilityMaster.
+func (c *EligibilityMasterClient) Query() *EligibilityMasterQuery {
+	return &EligibilityMasterQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEligibilityMaster},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EligibilityMaster entity by its id.
+func (c *EligibilityMasterClient) Get(ctx context.Context, id int32) (*EligibilityMaster, error) {
+	return c.Query().Where(eligibilitymaster.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EligibilityMasterClient) GetX(ctx context.Context, id int32) *EligibilityMaster {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryNotifications queries the Notifications edge of a EligibilityMaster.
+func (c *EligibilityMasterClient) QueryNotifications(em *EligibilityMaster) *NotificationQuery {
+	query := (&NotificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := em.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(eligibilitymaster.Table, eligibilitymaster.FieldID, id),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, eligibilitymaster.NotificationsTable, eligibilitymaster.NotificationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(em.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCategoryEligibility queries the CategoryEligibility edge of a EligibilityMaster.
+func (c *EligibilityMasterClient) QueryCategoryEligibility(em *EligibilityMaster) *EmployeeCategoryQuery {
+	query := (&EmployeeCategoryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := em.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(eligibilitymaster.Table, eligibilitymaster.FieldID, id),
+			sqlgraph.To(employeecategory.Table, employeecategory.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, eligibilitymaster.CategoryEligibilityTable, eligibilitymaster.CategoryEligibilityColumn),
+		)
+		fromV = sqlgraph.Neighbors(em.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPostEligibility queries the PostEligibility edge of a EligibilityMaster.
+func (c *EligibilityMasterClient) QueryPostEligibility(em *EligibilityMaster) *EmployeePostsQuery {
+	query := (&EmployeePostsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := em.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(eligibilitymaster.Table, eligibilitymaster.FieldID, id),
+			sqlgraph.To(employeeposts.Table, employeeposts.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, eligibilitymaster.PostEligibilityTable, eligibilitymaster.PostEligibilityColumn),
+		)
+		fromV = sqlgraph.Neighbors(em.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamPaperEligibility queries the ExamPaper_Eligibility edge of a EligibilityMaster.
+func (c *EligibilityMasterClient) QueryExamPaperEligibility(em *EligibilityMaster) *ExamPapersQuery {
+	query := (&ExamPapersClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := em.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(eligibilitymaster.Table, eligibilitymaster.FieldID, id),
+			sqlgraph.To(exampapers.Table, exampapers.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, eligibilitymaster.ExamPaperEligibilityTable, eligibilitymaster.ExamPaperEligibilityColumn),
+		)
+		fromV = sqlgraph.Neighbors(em.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamEligibility queries the Exam_Eligibility edge of a EligibilityMaster.
+func (c *EligibilityMasterClient) QueryExamEligibility(em *EligibilityMaster) *ExamQuery {
+	query := (&ExamClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := em.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(eligibilitymaster.Table, eligibilitymaster.FieldID, id),
+			sqlgraph.To(exam.Table, exam.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, eligibilitymaster.ExamEligibilityTable, eligibilitymaster.ExamEligibilityColumn),
+		)
+		fromV = sqlgraph.Neighbors(em.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EligibilityMasterClient) Hooks() []Hook {
+	return c.hooks.EligibilityMaster
+}
+
+// Interceptors returns the client interceptors.
+func (c *EligibilityMasterClient) Interceptors() []Interceptor {
+	return c.inters.EligibilityMaster
+}
+
+func (c *EligibilityMasterClient) mutate(ctx context.Context, m *EligibilityMasterMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EligibilityMasterCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EligibilityMasterUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EligibilityMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EligibilityMasterDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown EligibilityMaster mutation op: %q", m.Op())
 	}
 }
 
@@ -1579,6 +3099,156 @@ func (c *EmployeeDesignationClient) mutate(ctx context.Context, m *EmployeeDesig
 	}
 }
 
+// EmployeeMasterClient is a client for the EmployeeMaster schema.
+type EmployeeMasterClient struct {
+	config
+}
+
+// NewEmployeeMasterClient returns a client for the EmployeeMaster from the given config.
+func NewEmployeeMasterClient(c config) *EmployeeMasterClient {
+	return &EmployeeMasterClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `employeemaster.Hooks(f(g(h())))`.
+func (c *EmployeeMasterClient) Use(hooks ...Hook) {
+	c.hooks.EmployeeMaster = append(c.hooks.EmployeeMaster, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `employeemaster.Intercept(f(g(h())))`.
+func (c *EmployeeMasterClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EmployeeMaster = append(c.inters.EmployeeMaster, interceptors...)
+}
+
+// Create returns a builder for creating a EmployeeMaster entity.
+func (c *EmployeeMasterClient) Create() *EmployeeMasterCreate {
+	mutation := newEmployeeMasterMutation(c.config, OpCreate)
+	return &EmployeeMasterCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EmployeeMaster entities.
+func (c *EmployeeMasterClient) CreateBulk(builders ...*EmployeeMasterCreate) *EmployeeMasterCreateBulk {
+	return &EmployeeMasterCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EmployeeMaster.
+func (c *EmployeeMasterClient) Update() *EmployeeMasterUpdate {
+	mutation := newEmployeeMasterMutation(c.config, OpUpdate)
+	return &EmployeeMasterUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EmployeeMasterClient) UpdateOne(em *EmployeeMaster) *EmployeeMasterUpdateOne {
+	mutation := newEmployeeMasterMutation(c.config, OpUpdateOne, withEmployeeMaster(em))
+	return &EmployeeMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EmployeeMasterClient) UpdateOneID(id int64) *EmployeeMasterUpdateOne {
+	mutation := newEmployeeMasterMutation(c.config, OpUpdateOne, withEmployeeMasterID(id))
+	return &EmployeeMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EmployeeMaster.
+func (c *EmployeeMasterClient) Delete() *EmployeeMasterDelete {
+	mutation := newEmployeeMasterMutation(c.config, OpDelete)
+	return &EmployeeMasterDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EmployeeMasterClient) DeleteOne(em *EmployeeMaster) *EmployeeMasterDeleteOne {
+	return c.DeleteOneID(em.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EmployeeMasterClient) DeleteOneID(id int64) *EmployeeMasterDeleteOne {
+	builder := c.Delete().Where(employeemaster.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EmployeeMasterDeleteOne{builder}
+}
+
+// Query returns a query builder for EmployeeMaster.
+func (c *EmployeeMasterClient) Query() *EmployeeMasterQuery {
+	return &EmployeeMasterQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEmployeeMaster},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EmployeeMaster entity by its id.
+func (c *EmployeeMasterClient) Get(ctx context.Context, id int64) (*EmployeeMaster, error) {
+	return c.Query().Where(employeemaster.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EmployeeMasterClient) GetX(ctx context.Context, id int64) *EmployeeMaster {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUsermasterRef queries the UsermasterRef edge of a EmployeeMaster.
+func (c *EmployeeMasterClient) QueryUsermasterRef(em *EmployeeMaster) *UserMasterQuery {
+	query := (&UserMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := em.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(employeemaster.Table, employeemaster.FieldID, id),
+			sqlgraph.To(usermaster.Table, usermaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, employeemaster.UsermasterRefTable, employeemaster.UsermasterRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(em.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmpRef queries the Emp_Ref edge of a EmployeeMaster.
+func (c *EmployeeMasterClient) QueryEmpRef(em *EmployeeMaster) *ExamApplicationsPSQuery {
+	query := (&ExamApplicationsPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := em.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(employeemaster.Table, employeemaster.FieldID, id),
+			sqlgraph.To(exam_applications_ps.Table, exam_applications_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, employeemaster.EmpRefTable, employeemaster.EmpRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(em.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EmployeeMasterClient) Hooks() []Hook {
+	return c.hooks.EmployeeMaster
+}
+
+// Interceptors returns the client interceptors.
+func (c *EmployeeMasterClient) Interceptors() []Interceptor {
+	return c.inters.EmployeeMaster
+}
+
+func (c *EmployeeMasterClient) mutate(ctx context.Context, m *EmployeeMasterMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EmployeeMasterCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EmployeeMasterUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EmployeeMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EmployeeMasterDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown EmployeeMaster mutation op: %q", m.Op())
+	}
+}
+
 // EmployeePostsClient is a client for the EmployeePosts schema.
 type EmployeePostsClient struct {
 	config
@@ -1670,6 +3340,38 @@ func (c *EmployeePostsClient) GetX(ctx context.Context, id int32) *EmployeePosts
 		panic(err)
 	}
 	return obj
+}
+
+// QueryEmpPosts queries the emp_posts edge of a EmployeePosts.
+func (c *EmployeePostsClient) QueryEmpPosts(ep *EmployeePosts) *EmployeesQuery {
+	query := (&EmployeesClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(employeeposts.Table, employeeposts.FieldID, id),
+			sqlgraph.To(employees.Table, employees.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, employeeposts.EmpPostsTable, employeeposts.EmpPostsColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPostEligibility queries the PostEligibility edge of a EmployeePosts.
+func (c *EmployeePostsClient) QueryPostEligibility(ep *EmployeePosts) *EligibilityMasterQuery {
+	query := (&EligibilityMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(employeeposts.Table, employeeposts.FieldID, id),
+			sqlgraph.To(eligibilitymaster.Table, eligibilitymaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, employeeposts.PostEligibilityTable, employeeposts.PostEligibilityColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1972,6 +3674,38 @@ func (c *ExamClient) QueryPapers(e *Exam) *ExamPapersQuery {
 	return query
 }
 
+// QueryExamEligibility queries the ExamEligibility edge of a Exam.
+func (c *ExamClient) QueryExamEligibility(e *Exam) *EligibilityMasterQuery {
+	query := (&EligibilityMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam.Table, exam.FieldID, id),
+			sqlgraph.To(eligibilitymaster.Table, eligibilitymaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam.ExamEligibilityTable, exam.ExamEligibilityColumn),
+		)
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamsType queries the exams_type edge of a Exam.
+func (c *ExamClient) QueryExamsType(e *Exam) *ExamTypeQuery {
+	query := (&ExamTypeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam.Table, exam.FieldID, id),
+			sqlgraph.To(examtype.Table, examtype.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam.ExamsTypeTable, exam.ExamsTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ExamClient) Hooks() []Hook {
 	return c.hooks.Exam
@@ -2154,6 +3888,38 @@ func (c *ExamCalendarClient) QueryNotifyRef(ec *ExamCalendar) *NotificationQuery
 	return query
 }
 
+// QueryExamcalPsRef queries the examcal_ps_ref edge of a ExamCalendar.
+func (c *ExamCalendarClient) QueryExamcalPsRef(ec *ExamCalendar) *ExamPSQuery {
+	query := (&ExamPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ec.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(examcalendar.Table, examcalendar.FieldID, id),
+			sqlgraph.To(exam_ps.Table, exam_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, examcalendar.ExamcalPsRefTable, examcalendar.ExamcalPsRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ec.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamcalIPRef queries the examcal_ip_ref edge of a ExamCalendar.
+func (c *ExamCalendarClient) QueryExamcalIPRef(ec *ExamCalendar) *ExamIPQuery {
+	query := (&ExamIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ec.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(examcalendar.Table, examcalendar.FieldID, id),
+			sqlgraph.To(exam_ip.Table, exam_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, examcalendar.ExamcalIPRefTable, examcalendar.ExamcalIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ec.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ExamCalendarClient) Hooks() []Hook {
 	return c.hooks.ExamCalendar
@@ -2176,140 +3942,6 @@ func (c *ExamCalendarClient) mutate(ctx context.Context, m *ExamCalendarMutation
 		return (&ExamCalendarDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ExamCalendar mutation op: %q", m.Op())
-	}
-}
-
-// ExamEligibilityClient is a client for the ExamEligibility schema.
-type ExamEligibilityClient struct {
-	config
-}
-
-// NewExamEligibilityClient returns a client for the ExamEligibility from the given config.
-func NewExamEligibilityClient(c config) *ExamEligibilityClient {
-	return &ExamEligibilityClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `exameligibility.Hooks(f(g(h())))`.
-func (c *ExamEligibilityClient) Use(hooks ...Hook) {
-	c.hooks.ExamEligibility = append(c.hooks.ExamEligibility, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `exameligibility.Intercept(f(g(h())))`.
-func (c *ExamEligibilityClient) Intercept(interceptors ...Interceptor) {
-	c.inters.ExamEligibility = append(c.inters.ExamEligibility, interceptors...)
-}
-
-// Create returns a builder for creating a ExamEligibility entity.
-func (c *ExamEligibilityClient) Create() *ExamEligibilityCreate {
-	mutation := newExamEligibilityMutation(c.config, OpCreate)
-	return &ExamEligibilityCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of ExamEligibility entities.
-func (c *ExamEligibilityClient) CreateBulk(builders ...*ExamEligibilityCreate) *ExamEligibilityCreateBulk {
-	return &ExamEligibilityCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for ExamEligibility.
-func (c *ExamEligibilityClient) Update() *ExamEligibilityUpdate {
-	mutation := newExamEligibilityMutation(c.config, OpUpdate)
-	return &ExamEligibilityUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *ExamEligibilityClient) UpdateOne(ee *ExamEligibility) *ExamEligibilityUpdateOne {
-	mutation := newExamEligibilityMutation(c.config, OpUpdateOne, withExamEligibility(ee))
-	return &ExamEligibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *ExamEligibilityClient) UpdateOneID(id int32) *ExamEligibilityUpdateOne {
-	mutation := newExamEligibilityMutation(c.config, OpUpdateOne, withExamEligibilityID(id))
-	return &ExamEligibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for ExamEligibility.
-func (c *ExamEligibilityClient) Delete() *ExamEligibilityDelete {
-	mutation := newExamEligibilityMutation(c.config, OpDelete)
-	return &ExamEligibilityDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *ExamEligibilityClient) DeleteOne(ee *ExamEligibility) *ExamEligibilityDeleteOne {
-	return c.DeleteOneID(ee.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ExamEligibilityClient) DeleteOneID(id int32) *ExamEligibilityDeleteOne {
-	builder := c.Delete().Where(exameligibility.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &ExamEligibilityDeleteOne{builder}
-}
-
-// Query returns a query builder for ExamEligibility.
-func (c *ExamEligibilityClient) Query() *ExamEligibilityQuery {
-	return &ExamEligibilityQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeExamEligibility},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a ExamEligibility entity by its id.
-func (c *ExamEligibilityClient) Get(ctx context.Context, id int32) (*ExamEligibility, error) {
-	return c.Query().Where(exameligibility.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *ExamEligibilityClient) GetX(ctx context.Context, id int32) *ExamEligibility {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryAgeEligibilities queries the age_eligibilities edge of a ExamEligibility.
-func (c *ExamEligibilityClient) QueryAgeEligibilities(ee *ExamEligibility) *AgeEligibilityQuery {
-	query := (&AgeEligibilityClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ee.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(exameligibility.Table, exameligibility.FieldID, id),
-			sqlgraph.To(ageeligibility.Table, ageeligibility.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, exameligibility.AgeEligibilitiesTable, exameligibility.AgeEligibilitiesColumn),
-		)
-		fromV = sqlgraph.Neighbors(ee.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *ExamEligibilityClient) Hooks() []Hook {
-	return c.hooks.ExamEligibility
-}
-
-// Interceptors returns the client interceptors.
-func (c *ExamEligibilityClient) Interceptors() []Interceptor {
-	return c.inters.ExamEligibility
-}
-
-func (c *ExamEligibilityClient) mutate(ctx context.Context, m *ExamEligibilityMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&ExamEligibilityCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&ExamEligibilityUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&ExamEligibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&ExamEligibilityDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown ExamEligibility mutation op: %q", m.Op())
 	}
 }
 
@@ -2470,6 +4102,70 @@ func (c *ExamPapersClient) QueryPapersRef(ep *ExamPapers) *ExamCalendarQuery {
 	return query
 }
 
+// QueryExamPaperEligibility queries the ExamPaperEligibility edge of a ExamPapers.
+func (c *ExamPapersClient) QueryExamPaperEligibility(ep *ExamPapers) *EligibilityMasterQuery {
+	query := (&EligibilityMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exampapers.Table, exampapers.FieldID, id),
+			sqlgraph.To(eligibilitymaster.Table, eligibilitymaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.ExamPaperEligibilityTable, exampapers.ExamPaperEligibilityColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDisRef queries the dis_ref edge of a ExamPapers.
+func (c *ExamPapersClient) QueryDisRef(ep *ExamPapers) *DisabilityQuery {
+	query := (&DisabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exampapers.Table, exampapers.FieldID, id),
+			sqlgraph.To(disability.Table, disability.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.DisRefTable, exampapers.DisRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPapersPsRef queries the papers_ps_ref edge of a ExamPapers.
+func (c *ExamPapersClient) QueryPapersPsRef(ep *ExamPapers) *ExamPSQuery {
+	query := (&ExamPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exampapers.Table, exampapers.FieldID, id),
+			sqlgraph.To(exam_ps.Table, exam_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.PapersPsRefTable, exampapers.PapersPsRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPapersIPRef queries the papers_ip_ref edge of a ExamPapers.
+func (c *ExamPapersClient) QueryPapersIPRef(ep *ExamPapers) *ExamIPQuery {
+	query := (&ExamIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exampapers.Table, exampapers.FieldID, id),
+			sqlgraph.To(exam_ip.Table, exam_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.PapersIPRefTable, exampapers.PapersIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ExamPapersClient) Hooks() []Hook {
 	return c.hooks.ExamPapers
@@ -2492,6 +4188,1264 @@ func (c *ExamPapersClient) mutate(ctx context.Context, m *ExamPapersMutation) (V
 		return (&ExamPapersDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ExamPapers mutation op: %q", m.Op())
+	}
+}
+
+// ExamTypeClient is a client for the ExamType schema.
+type ExamTypeClient struct {
+	config
+}
+
+// NewExamTypeClient returns a client for the ExamType from the given config.
+func NewExamTypeClient(c config) *ExamTypeClient {
+	return &ExamTypeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `examtype.Hooks(f(g(h())))`.
+func (c *ExamTypeClient) Use(hooks ...Hook) {
+	c.hooks.ExamType = append(c.hooks.ExamType, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `examtype.Intercept(f(g(h())))`.
+func (c *ExamTypeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ExamType = append(c.inters.ExamType, interceptors...)
+}
+
+// Create returns a builder for creating a ExamType entity.
+func (c *ExamTypeClient) Create() *ExamTypeCreate {
+	mutation := newExamTypeMutation(c.config, OpCreate)
+	return &ExamTypeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ExamType entities.
+func (c *ExamTypeClient) CreateBulk(builders ...*ExamTypeCreate) *ExamTypeCreateBulk {
+	return &ExamTypeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ExamType.
+func (c *ExamTypeClient) Update() *ExamTypeUpdate {
+	mutation := newExamTypeMutation(c.config, OpUpdate)
+	return &ExamTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExamTypeClient) UpdateOne(et *ExamType) *ExamTypeUpdateOne {
+	mutation := newExamTypeMutation(c.config, OpUpdateOne, withExamType(et))
+	return &ExamTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExamTypeClient) UpdateOneID(id int32) *ExamTypeUpdateOne {
+	mutation := newExamTypeMutation(c.config, OpUpdateOne, withExamTypeID(id))
+	return &ExamTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ExamType.
+func (c *ExamTypeClient) Delete() *ExamTypeDelete {
+	mutation := newExamTypeMutation(c.config, OpDelete)
+	return &ExamTypeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExamTypeClient) DeleteOne(et *ExamType) *ExamTypeDeleteOne {
+	return c.DeleteOneID(et.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExamTypeClient) DeleteOneID(id int32) *ExamTypeDeleteOne {
+	builder := c.Delete().Where(examtype.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExamTypeDeleteOne{builder}
+}
+
+// Query returns a query builder for ExamType.
+func (c *ExamTypeClient) Query() *ExamTypeQuery {
+	return &ExamTypeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExamType},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ExamType entity by its id.
+func (c *ExamTypeClient) Get(ctx context.Context, id int32) (*ExamType, error) {
+	return c.Query().Where(examtype.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExamTypeClient) GetX(ctx context.Context, id int32) *ExamType {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryExam queries the exam edge of a ExamType.
+func (c *ExamTypeClient) QueryExam(et *ExamType) *ExamQuery {
+	query := (&ExamClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := et.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(examtype.Table, examtype.FieldID, id),
+			sqlgraph.To(exam.Table, exam.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, examtype.ExamTable, examtype.ExamColumn),
+		)
+		fromV = sqlgraph.Neighbors(et.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ExamTypeClient) Hooks() []Hook {
+	return c.hooks.ExamType
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExamTypeClient) Interceptors() []Interceptor {
+	return c.inters.ExamType
+}
+
+func (c *ExamTypeClient) mutate(ctx context.Context, m *ExamTypeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExamTypeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExamTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExamTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExamTypeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ExamType mutation op: %q", m.Op())
+	}
+}
+
+// ExamApplicationsIPClient is a client for the Exam_Applications_IP schema.
+type ExamApplicationsIPClient struct {
+	config
+}
+
+// NewExamApplicationsIPClient returns a client for the Exam_Applications_IP from the given config.
+func NewExamApplicationsIPClient(c config) *ExamApplicationsIPClient {
+	return &ExamApplicationsIPClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `exam_applications_ip.Hooks(f(g(h())))`.
+func (c *ExamApplicationsIPClient) Use(hooks ...Hook) {
+	c.hooks.Exam_Applications_IP = append(c.hooks.Exam_Applications_IP, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `exam_applications_ip.Intercept(f(g(h())))`.
+func (c *ExamApplicationsIPClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Exam_Applications_IP = append(c.inters.Exam_Applications_IP, interceptors...)
+}
+
+// Create returns a builder for creating a Exam_Applications_IP entity.
+func (c *ExamApplicationsIPClient) Create() *ExamApplicationsIPCreate {
+	mutation := newExamApplicationsIPMutation(c.config, OpCreate)
+	return &ExamApplicationsIPCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Exam_Applications_IP entities.
+func (c *ExamApplicationsIPClient) CreateBulk(builders ...*ExamApplicationsIPCreate) *ExamApplicationsIPCreateBulk {
+	return &ExamApplicationsIPCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) Update() *ExamApplicationsIPUpdate {
+	mutation := newExamApplicationsIPMutation(c.config, OpUpdate)
+	return &ExamApplicationsIPUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExamApplicationsIPClient) UpdateOne(eai *Exam_Applications_IP) *ExamApplicationsIPUpdateOne {
+	mutation := newExamApplicationsIPMutation(c.config, OpUpdateOne, withExam_Applications_IP(eai))
+	return &ExamApplicationsIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExamApplicationsIPClient) UpdateOneID(id int64) *ExamApplicationsIPUpdateOne {
+	mutation := newExamApplicationsIPMutation(c.config, OpUpdateOne, withExam_Applications_IPID(id))
+	return &ExamApplicationsIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) Delete() *ExamApplicationsIPDelete {
+	mutation := newExamApplicationsIPMutation(c.config, OpDelete)
+	return &ExamApplicationsIPDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExamApplicationsIPClient) DeleteOne(eai *Exam_Applications_IP) *ExamApplicationsIPDeleteOne {
+	return c.DeleteOneID(eai.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExamApplicationsIPClient) DeleteOneID(id int64) *ExamApplicationsIPDeleteOne {
+	builder := c.Delete().Where(exam_applications_ip.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExamApplicationsIPDeleteOne{builder}
+}
+
+// Query returns a query builder for Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) Query() *ExamApplicationsIPQuery {
+	return &ExamApplicationsIPQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExamApplicationsIP},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Exam_Applications_IP entity by its id.
+func (c *ExamApplicationsIPClient) Get(ctx context.Context, id int64) (*Exam_Applications_IP, error) {
+	return c.Query().Where(exam_applications_ip.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExamApplicationsIPClient) GetX(ctx context.Context, id int64) *Exam_Applications_IP {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUsersIPRef queries the UsersIPRef edge of a Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) QueryUsersIPRef(eai *Exam_Applications_IP) *UserMasterQuery {
+	query := (&UserMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eai.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ip.Table, exam_applications_ip.FieldID, id),
+			sqlgraph.To(usermaster.Table, usermaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ip.UsersIPRefTable, exam_applications_ip.UsersIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eai.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamApplnIPRef queries the ExamAppln_IP_Ref edge of a Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) QueryExamApplnIPRef(eai *Exam_Applications_IP) *ExamIPQuery {
+	query := (&ExamIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eai.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ip.Table, exam_applications_ip.FieldID, id),
+			sqlgraph.To(exam_ip.Table, exam_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ip.ExamApplnIPRefTable, exam_applications_ip.ExamApplnIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eai.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOfficeIPRef queries the Office_IP_Ref edge of a Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) QueryOfficeIPRef(eai *Exam_Applications_IP) *FacilityQuery {
+	query := (&FacilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eai.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ip.Table, exam_applications_ip.FieldID, id),
+			sqlgraph.To(facility.Table, facility.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ip.OfficeIPRefTable, exam_applications_ip.OfficeIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eai.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRoleusers queries the roleusers edge of a Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) QueryRoleusers(eai *Exam_Applications_IP) *RoleMasterQuery {
+	query := (&RoleMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eai.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ip.Table, exam_applications_ip.FieldID, id),
+			sqlgraph.To(rolemaster.Table, rolemaster.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, exam_applications_ip.RoleusersTable, exam_applications_ip.RoleusersColumn),
+		)
+		fromV = sqlgraph.Neighbors(eai.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCadrePrefRef queries the CadrePref_Ref edge of a Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) QueryCadrePrefRef(eai *Exam_Applications_IP) *CadreChoiceIPQuery {
+	query := (&CadreChoiceIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eai.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ip.Table, exam_applications_ip.FieldID, id),
+			sqlgraph.To(cadre_choice_ip.Table, cadre_choice_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ip.CadrePrefRefTable, exam_applications_ip.CadrePrefRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eai.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCirclePrefRef queries the CirclePrefRef edge of a Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) QueryCirclePrefRef(eai *Exam_Applications_IP) *PlaceOfPreferenceIPQuery {
+	query := (&PlaceOfPreferenceIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eai.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ip.Table, exam_applications_ip.FieldID, id),
+			sqlgraph.To(placeofpreferenceip.Table, placeofpreferenceip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ip.CirclePrefRefTable, exam_applications_ip.CirclePrefRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eai.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIPApplicationsRef queries the IPApplicationsRef edge of a Exam_Applications_IP.
+func (c *ExamApplicationsIPClient) QueryIPApplicationsRef(eai *Exam_Applications_IP) *RecommendationsIPApplicationsQuery {
+	query := (&RecommendationsIPApplicationsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eai.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ip.Table, exam_applications_ip.FieldID, id),
+			sqlgraph.To(recommendationsipapplications.Table, recommendationsipapplications.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ip.IPApplicationsRefTable, exam_applications_ip.IPApplicationsRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eai.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ExamApplicationsIPClient) Hooks() []Hook {
+	return c.hooks.Exam_Applications_IP
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExamApplicationsIPClient) Interceptors() []Interceptor {
+	return c.inters.Exam_Applications_IP
+}
+
+func (c *ExamApplicationsIPClient) mutate(ctx context.Context, m *ExamApplicationsIPMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExamApplicationsIPCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExamApplicationsIPUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExamApplicationsIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExamApplicationsIPDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Exam_Applications_IP mutation op: %q", m.Op())
+	}
+}
+
+// ExamApplicationsPSClient is a client for the Exam_Applications_PS schema.
+type ExamApplicationsPSClient struct {
+	config
+}
+
+// NewExamApplicationsPSClient returns a client for the Exam_Applications_PS from the given config.
+func NewExamApplicationsPSClient(c config) *ExamApplicationsPSClient {
+	return &ExamApplicationsPSClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `exam_applications_ps.Hooks(f(g(h())))`.
+func (c *ExamApplicationsPSClient) Use(hooks ...Hook) {
+	c.hooks.Exam_Applications_PS = append(c.hooks.Exam_Applications_PS, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `exam_applications_ps.Intercept(f(g(h())))`.
+func (c *ExamApplicationsPSClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Exam_Applications_PS = append(c.inters.Exam_Applications_PS, interceptors...)
+}
+
+// Create returns a builder for creating a Exam_Applications_PS entity.
+func (c *ExamApplicationsPSClient) Create() *ExamApplicationsPSCreate {
+	mutation := newExamApplicationsPSMutation(c.config, OpCreate)
+	return &ExamApplicationsPSCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Exam_Applications_PS entities.
+func (c *ExamApplicationsPSClient) CreateBulk(builders ...*ExamApplicationsPSCreate) *ExamApplicationsPSCreateBulk {
+	return &ExamApplicationsPSCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Exam_Applications_PS.
+func (c *ExamApplicationsPSClient) Update() *ExamApplicationsPSUpdate {
+	mutation := newExamApplicationsPSMutation(c.config, OpUpdate)
+	return &ExamApplicationsPSUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExamApplicationsPSClient) UpdateOne(eap *Exam_Applications_PS) *ExamApplicationsPSUpdateOne {
+	mutation := newExamApplicationsPSMutation(c.config, OpUpdateOne, withExam_Applications_PS(eap))
+	return &ExamApplicationsPSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExamApplicationsPSClient) UpdateOneID(id int64) *ExamApplicationsPSUpdateOne {
+	mutation := newExamApplicationsPSMutation(c.config, OpUpdateOne, withExam_Applications_PSID(id))
+	return &ExamApplicationsPSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Exam_Applications_PS.
+func (c *ExamApplicationsPSClient) Delete() *ExamApplicationsPSDelete {
+	mutation := newExamApplicationsPSMutation(c.config, OpDelete)
+	return &ExamApplicationsPSDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExamApplicationsPSClient) DeleteOne(eap *Exam_Applications_PS) *ExamApplicationsPSDeleteOne {
+	return c.DeleteOneID(eap.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExamApplicationsPSClient) DeleteOneID(id int64) *ExamApplicationsPSDeleteOne {
+	builder := c.Delete().Where(exam_applications_ps.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExamApplicationsPSDeleteOne{builder}
+}
+
+// Query returns a query builder for Exam_Applications_PS.
+func (c *ExamApplicationsPSClient) Query() *ExamApplicationsPSQuery {
+	return &ExamApplicationsPSQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExamApplicationsPS},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Exam_Applications_PS entity by its id.
+func (c *ExamApplicationsPSClient) Get(ctx context.Context, id int64) (*Exam_Applications_PS, error) {
+	return c.Query().Where(exam_applications_ps.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExamApplicationsPSClient) GetX(ctx context.Context, id int64) *Exam_Applications_PS {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUsersPSRef queries the UsersPSRef edge of a Exam_Applications_PS.
+func (c *ExamApplicationsPSClient) QueryUsersPSRef(eap *Exam_Applications_PS) *UserMasterQuery {
+	query := (&UserMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ps.Table, exam_applications_ps.FieldID, id),
+			sqlgraph.To(usermaster.Table, usermaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ps.UsersPSRefTable, exam_applications_ps.UsersPSRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamApplnPSRef queries the ExamAppln_PS_Ref edge of a Exam_Applications_PS.
+func (c *ExamApplicationsPSClient) QueryExamApplnPSRef(eap *Exam_Applications_PS) *ExamPSQuery {
+	query := (&ExamPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ps.Table, exam_applications_ps.FieldID, id),
+			sqlgraph.To(exam_ps.Table, exam_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ps.ExamApplnPSRefTable, exam_applications_ps.ExamApplnPSRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOfficePSRef queries the Office_PS_Ref edge of a Exam_Applications_PS.
+func (c *ExamApplicationsPSClient) QueryOfficePSRef(eap *Exam_Applications_PS) *FacilityQuery {
+	query := (&FacilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ps.Table, exam_applications_ps.FieldID, id),
+			sqlgraph.To(facility.Table, facility.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_applications_ps.OfficePSRefTable, exam_applications_ps.OfficePSRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(eap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRoleusers queries the roleusers edge of a Exam_Applications_PS.
+func (c *ExamApplicationsPSClient) QueryRoleusers(eap *Exam_Applications_PS) *RoleMasterQuery {
+	query := (&RoleMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := eap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_applications_ps.Table, exam_applications_ps.FieldID, id),
+			sqlgraph.To(rolemaster.Table, rolemaster.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, exam_applications_ps.RoleusersTable, exam_applications_ps.RoleusersColumn),
+		)
+		fromV = sqlgraph.Neighbors(eap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ExamApplicationsPSClient) Hooks() []Hook {
+	return c.hooks.Exam_Applications_PS
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExamApplicationsPSClient) Interceptors() []Interceptor {
+	return c.inters.Exam_Applications_PS
+}
+
+func (c *ExamApplicationsPSClient) mutate(ctx context.Context, m *ExamApplicationsPSMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExamApplicationsPSCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExamApplicationsPSUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExamApplicationsPSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExamApplicationsPSDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Exam_Applications_PS mutation op: %q", m.Op())
+	}
+}
+
+// ExamIPClient is a client for the Exam_IP schema.
+type ExamIPClient struct {
+	config
+}
+
+// NewExamIPClient returns a client for the Exam_IP from the given config.
+func NewExamIPClient(c config) *ExamIPClient {
+	return &ExamIPClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `exam_ip.Hooks(f(g(h())))`.
+func (c *ExamIPClient) Use(hooks ...Hook) {
+	c.hooks.Exam_IP = append(c.hooks.Exam_IP, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `exam_ip.Intercept(f(g(h())))`.
+func (c *ExamIPClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Exam_IP = append(c.inters.Exam_IP, interceptors...)
+}
+
+// Create returns a builder for creating a Exam_IP entity.
+func (c *ExamIPClient) Create() *ExamIPCreate {
+	mutation := newExamIPMutation(c.config, OpCreate)
+	return &ExamIPCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Exam_IP entities.
+func (c *ExamIPClient) CreateBulk(builders ...*ExamIPCreate) *ExamIPCreateBulk {
+	return &ExamIPCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Exam_IP.
+func (c *ExamIPClient) Update() *ExamIPUpdate {
+	mutation := newExamIPMutation(c.config, OpUpdate)
+	return &ExamIPUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExamIPClient) UpdateOne(ei *Exam_IP) *ExamIPUpdateOne {
+	mutation := newExamIPMutation(c.config, OpUpdateOne, withExam_IP(ei))
+	return &ExamIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExamIPClient) UpdateOneID(id int32) *ExamIPUpdateOne {
+	mutation := newExamIPMutation(c.config, OpUpdateOne, withExam_IPID(id))
+	return &ExamIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Exam_IP.
+func (c *ExamIPClient) Delete() *ExamIPDelete {
+	mutation := newExamIPMutation(c.config, OpDelete)
+	return &ExamIPDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExamIPClient) DeleteOne(ei *Exam_IP) *ExamIPDeleteOne {
+	return c.DeleteOneID(ei.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExamIPClient) DeleteOneID(id int32) *ExamIPDeleteOne {
+	builder := c.Delete().Where(exam_ip.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExamIPDeleteOne{builder}
+}
+
+// Query returns a query builder for Exam_IP.
+func (c *ExamIPClient) Query() *ExamIPQuery {
+	return &ExamIPQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExamIP},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Exam_IP entity by its id.
+func (c *ExamIPClient) Get(ctx context.Context, id int32) (*Exam_IP, error) {
+	return c.Query().Where(exam_ip.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExamIPClient) GetX(ctx context.Context, id int32) *Exam_IP {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryExamcalIPRef queries the examcal_ip_ref edge of a Exam_IP.
+func (c *ExamIPClient) QueryExamcalIPRef(ei *Exam_IP) *ExamCalendarQuery {
+	query := (&ExamCalendarClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ei.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ip.Table, exam_ip.FieldID, id),
+			sqlgraph.To(examcalendar.Table, examcalendar.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ip.ExamcalIPRefTable, exam_ip.ExamcalIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ei.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPapersIPRef queries the papers_ip_ref edge of a Exam_IP.
+func (c *ExamIPClient) QueryPapersIPRef(ei *Exam_IP) *ExamPapersQuery {
+	query := (&ExamPapersClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ei.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ip.Table, exam_ip.FieldID, id),
+			sqlgraph.To(exampapers.Table, exampapers.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ip.PapersIPRefTable, exam_ip.PapersIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ei.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsersIPType queries the users_ip_type edge of a Exam_IP.
+func (c *ExamIPClient) QueryUsersIPType(ei *Exam_IP) *UserMasterQuery {
+	query := (&UserMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ei.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ip.Table, exam_ip.FieldID, id),
+			sqlgraph.To(usermaster.Table, usermaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ip.UsersIPTypeTable, exam_ip.UsersIPTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(ei.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamApplnIPRef queries the ExamAppln_IP_Ref edge of a Exam_IP.
+func (c *ExamIPClient) QueryExamApplnIPRef(ei *Exam_IP) *ExamApplicationsIPQuery {
+	query := (&ExamApplicationsIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ei.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ip.Table, exam_ip.FieldID, id),
+			sqlgraph.To(exam_applications_ip.Table, exam_applications_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ip.ExamApplnIPRefTable, exam_ip.ExamApplnIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ei.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationsIP queries the notifications_ip edge of a Exam_IP.
+func (c *ExamIPClient) QueryNotificationsIP(ei *Exam_IP) *NotificationQuery {
+	query := (&NotificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ei.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ip.Table, exam_ip.FieldID, id),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ip.NotificationsIPTable, exam_ip.NotificationsIPColumn),
+		)
+		fromV = sqlgraph.Neighbors(ei.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ExamIPClient) Hooks() []Hook {
+	return c.hooks.Exam_IP
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExamIPClient) Interceptors() []Interceptor {
+	return c.inters.Exam_IP
+}
+
+func (c *ExamIPClient) mutate(ctx context.Context, m *ExamIPMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExamIPCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExamIPUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExamIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExamIPDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Exam_IP mutation op: %q", m.Op())
+	}
+}
+
+// ExamPAClient is a client for the Exam_PA schema.
+type ExamPAClient struct {
+	config
+}
+
+// NewExamPAClient returns a client for the Exam_PA from the given config.
+func NewExamPAClient(c config) *ExamPAClient {
+	return &ExamPAClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `exam_pa.Hooks(f(g(h())))`.
+func (c *ExamPAClient) Use(hooks ...Hook) {
+	c.hooks.Exam_PA = append(c.hooks.Exam_PA, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `exam_pa.Intercept(f(g(h())))`.
+func (c *ExamPAClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Exam_PA = append(c.inters.Exam_PA, interceptors...)
+}
+
+// Create returns a builder for creating a Exam_PA entity.
+func (c *ExamPAClient) Create() *ExamPACreate {
+	mutation := newExamPAMutation(c.config, OpCreate)
+	return &ExamPACreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Exam_PA entities.
+func (c *ExamPAClient) CreateBulk(builders ...*ExamPACreate) *ExamPACreateBulk {
+	return &ExamPACreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Exam_PA.
+func (c *ExamPAClient) Update() *ExamPAUpdate {
+	mutation := newExamPAMutation(c.config, OpUpdate)
+	return &ExamPAUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExamPAClient) UpdateOne(ep *Exam_PA) *ExamPAUpdateOne {
+	mutation := newExamPAMutation(c.config, OpUpdateOne, withExam_PA(ep))
+	return &ExamPAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExamPAClient) UpdateOneID(id int32) *ExamPAUpdateOne {
+	mutation := newExamPAMutation(c.config, OpUpdateOne, withExam_PAID(id))
+	return &ExamPAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Exam_PA.
+func (c *ExamPAClient) Delete() *ExamPADelete {
+	mutation := newExamPAMutation(c.config, OpDelete)
+	return &ExamPADelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExamPAClient) DeleteOne(ep *Exam_PA) *ExamPADeleteOne {
+	return c.DeleteOneID(ep.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExamPAClient) DeleteOneID(id int32) *ExamPADeleteOne {
+	builder := c.Delete().Where(exam_pa.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExamPADeleteOne{builder}
+}
+
+// Query returns a query builder for Exam_PA.
+func (c *ExamPAClient) Query() *ExamPAQuery {
+	return &ExamPAQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExamPA},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Exam_PA entity by its id.
+func (c *ExamPAClient) Get(ctx context.Context, id int32) (*Exam_PA, error) {
+	return c.Query().Where(exam_pa.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExamPAClient) GetX(ctx context.Context, id int32) *Exam_PA {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryExamcalPsRef queries the examcal_ps_ref edge of a Exam_PA.
+func (c *ExamPAClient) QueryExamcalPsRef(ep *Exam_PA) *ExamCalendarQuery {
+	query := (&ExamCalendarClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_pa.Table, exam_pa.FieldID, id),
+			sqlgraph.To(examcalendar.Table, examcalendar.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_pa.ExamcalPsRefTable, exam_pa.ExamcalPsRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPapersPsRef queries the papers_ps_ref edge of a Exam_PA.
+func (c *ExamPAClient) QueryPapersPsRef(ep *Exam_PA) *ExamPapersQuery {
+	query := (&ExamPapersClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_pa.Table, exam_pa.FieldID, id),
+			sqlgraph.To(exampapers.Table, exampapers.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_pa.PapersPsRefTable, exam_pa.PapersPsRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsersPsType queries the users_ps_type edge of a Exam_PA.
+func (c *ExamPAClient) QueryUsersPsType(ep *Exam_PA) *UserMasterQuery {
+	query := (&UserMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_pa.Table, exam_pa.FieldID, id),
+			sqlgraph.To(usermaster.Table, usermaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_pa.UsersPsTypeTable, exam_pa.UsersPsTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamApplnPSRef queries the ExamAppln_PS_Ref edge of a Exam_PA.
+func (c *ExamPAClient) QueryExamApplnPSRef(ep *Exam_PA) *ExamApplicationsPSQuery {
+	query := (&ExamApplicationsPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_pa.Table, exam_pa.FieldID, id),
+			sqlgraph.To(exam_applications_ps.Table, exam_applications_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_pa.ExamApplnPSRefTable, exam_pa.ExamApplnPSRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationsPs queries the notifications_ps edge of a Exam_PA.
+func (c *ExamPAClient) QueryNotificationsPs(ep *Exam_PA) *NotificationQuery {
+	query := (&NotificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_pa.Table, exam_pa.FieldID, id),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_pa.NotificationsPsTable, exam_pa.NotificationsPsColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ExamPAClient) Hooks() []Hook {
+	return c.hooks.Exam_PA
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExamPAClient) Interceptors() []Interceptor {
+	return c.inters.Exam_PA
+}
+
+func (c *ExamPAClient) mutate(ctx context.Context, m *ExamPAMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExamPACreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExamPAUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExamPAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExamPADelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Exam_PA mutation op: %q", m.Op())
+	}
+}
+
+// ExamPMClient is a client for the Exam_PM schema.
+type ExamPMClient struct {
+	config
+}
+
+// NewExamPMClient returns a client for the Exam_PM from the given config.
+func NewExamPMClient(c config) *ExamPMClient {
+	return &ExamPMClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `exam_pm.Hooks(f(g(h())))`.
+func (c *ExamPMClient) Use(hooks ...Hook) {
+	c.hooks.Exam_PM = append(c.hooks.Exam_PM, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `exam_pm.Intercept(f(g(h())))`.
+func (c *ExamPMClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Exam_PM = append(c.inters.Exam_PM, interceptors...)
+}
+
+// Create returns a builder for creating a Exam_PM entity.
+func (c *ExamPMClient) Create() *ExamPMCreate {
+	mutation := newExamPMMutation(c.config, OpCreate)
+	return &ExamPMCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Exam_PM entities.
+func (c *ExamPMClient) CreateBulk(builders ...*ExamPMCreate) *ExamPMCreateBulk {
+	return &ExamPMCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Exam_PM.
+func (c *ExamPMClient) Update() *ExamPMUpdate {
+	mutation := newExamPMMutation(c.config, OpUpdate)
+	return &ExamPMUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExamPMClient) UpdateOne(ep *Exam_PM) *ExamPMUpdateOne {
+	mutation := newExamPMMutation(c.config, OpUpdateOne, withExam_PM(ep))
+	return &ExamPMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExamPMClient) UpdateOneID(id int32) *ExamPMUpdateOne {
+	mutation := newExamPMMutation(c.config, OpUpdateOne, withExam_PMID(id))
+	return &ExamPMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Exam_PM.
+func (c *ExamPMClient) Delete() *ExamPMDelete {
+	mutation := newExamPMMutation(c.config, OpDelete)
+	return &ExamPMDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExamPMClient) DeleteOne(ep *Exam_PM) *ExamPMDeleteOne {
+	return c.DeleteOneID(ep.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExamPMClient) DeleteOneID(id int32) *ExamPMDeleteOne {
+	builder := c.Delete().Where(exam_pm.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExamPMDeleteOne{builder}
+}
+
+// Query returns a query builder for Exam_PM.
+func (c *ExamPMClient) Query() *ExamPMQuery {
+	return &ExamPMQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExamPM},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Exam_PM entity by its id.
+func (c *ExamPMClient) Get(ctx context.Context, id int32) (*Exam_PM, error) {
+	return c.Query().Where(exam_pm.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExamPMClient) GetX(ctx context.Context, id int32) *Exam_PM {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ExamPMClient) Hooks() []Hook {
+	return c.hooks.Exam_PM
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExamPMClient) Interceptors() []Interceptor {
+	return c.inters.Exam_PM
+}
+
+func (c *ExamPMClient) mutate(ctx context.Context, m *ExamPMMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExamPMCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExamPMUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExamPMUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExamPMDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Exam_PM mutation op: %q", m.Op())
+	}
+}
+
+// ExamPSClient is a client for the Exam_PS schema.
+type ExamPSClient struct {
+	config
+}
+
+// NewExamPSClient returns a client for the Exam_PS from the given config.
+func NewExamPSClient(c config) *ExamPSClient {
+	return &ExamPSClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `exam_ps.Hooks(f(g(h())))`.
+func (c *ExamPSClient) Use(hooks ...Hook) {
+	c.hooks.Exam_PS = append(c.hooks.Exam_PS, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `exam_ps.Intercept(f(g(h())))`.
+func (c *ExamPSClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Exam_PS = append(c.inters.Exam_PS, interceptors...)
+}
+
+// Create returns a builder for creating a Exam_PS entity.
+func (c *ExamPSClient) Create() *ExamPSCreate {
+	mutation := newExamPSMutation(c.config, OpCreate)
+	return &ExamPSCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Exam_PS entities.
+func (c *ExamPSClient) CreateBulk(builders ...*ExamPSCreate) *ExamPSCreateBulk {
+	return &ExamPSCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Exam_PS.
+func (c *ExamPSClient) Update() *ExamPSUpdate {
+	mutation := newExamPSMutation(c.config, OpUpdate)
+	return &ExamPSUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExamPSClient) UpdateOne(ep *Exam_PS) *ExamPSUpdateOne {
+	mutation := newExamPSMutation(c.config, OpUpdateOne, withExam_PS(ep))
+	return &ExamPSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExamPSClient) UpdateOneID(id int32) *ExamPSUpdateOne {
+	mutation := newExamPSMutation(c.config, OpUpdateOne, withExam_PSID(id))
+	return &ExamPSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Exam_PS.
+func (c *ExamPSClient) Delete() *ExamPSDelete {
+	mutation := newExamPSMutation(c.config, OpDelete)
+	return &ExamPSDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExamPSClient) DeleteOne(ep *Exam_PS) *ExamPSDeleteOne {
+	return c.DeleteOneID(ep.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExamPSClient) DeleteOneID(id int32) *ExamPSDeleteOne {
+	builder := c.Delete().Where(exam_ps.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExamPSDeleteOne{builder}
+}
+
+// Query returns a query builder for Exam_PS.
+func (c *ExamPSClient) Query() *ExamPSQuery {
+	return &ExamPSQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExamPS},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Exam_PS entity by its id.
+func (c *ExamPSClient) Get(ctx context.Context, id int32) (*Exam_PS, error) {
+	return c.Query().Where(exam_ps.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExamPSClient) GetX(ctx context.Context, id int32) *Exam_PS {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryExamcalPsRef queries the examcal_ps_ref edge of a Exam_PS.
+func (c *ExamPSClient) QueryExamcalPsRef(ep *Exam_PS) *ExamCalendarQuery {
+	query := (&ExamCalendarClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ps.Table, exam_ps.FieldID, id),
+			sqlgraph.To(examcalendar.Table, examcalendar.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ps.ExamcalPsRefTable, exam_ps.ExamcalPsRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPapersPsRef queries the papers_ps_ref edge of a Exam_PS.
+func (c *ExamPSClient) QueryPapersPsRef(ep *Exam_PS) *ExamPapersQuery {
+	query := (&ExamPapersClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ps.Table, exam_ps.FieldID, id),
+			sqlgraph.To(exampapers.Table, exampapers.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ps.PapersPsRefTable, exam_ps.PapersPsRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsersPsType queries the users_ps_type edge of a Exam_PS.
+func (c *ExamPSClient) QueryUsersPsType(ep *Exam_PS) *UserMasterQuery {
+	query := (&UserMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ps.Table, exam_ps.FieldID, id),
+			sqlgraph.To(usermaster.Table, usermaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ps.UsersPsTypeTable, exam_ps.UsersPsTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExamApplnPSRef queries the ExamAppln_PS_Ref edge of a Exam_PS.
+func (c *ExamPSClient) QueryExamApplnPSRef(ep *Exam_PS) *ExamApplicationsPSQuery {
+	query := (&ExamApplicationsPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ps.Table, exam_ps.FieldID, id),
+			sqlgraph.To(exam_applications_ps.Table, exam_applications_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ps.ExamApplnPSRefTable, exam_ps.ExamApplnPSRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationsPs queries the notifications_ps edge of a Exam_PS.
+func (c *ExamPSClient) QueryNotificationsPs(ep *Exam_PS) *NotificationQuery {
+	query := (&NotificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ep.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exam_ps.Table, exam_ps.FieldID, id),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exam_ps.NotificationsPsTable, exam_ps.NotificationsPsColumn),
+		)
+		fromV = sqlgraph.Neighbors(ep.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ExamPSClient) Hooks() []Hook {
+	return c.hooks.Exam_PS
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExamPSClient) Interceptors() []Interceptor {
+	return c.inters.Exam_PS
+}
+
+func (c *ExamPSClient) mutate(ctx context.Context, m *ExamPSMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExamPSCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExamPSUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExamPSUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExamPSDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Exam_PS mutation op: %q", m.Op())
 	}
 }
 
@@ -2588,15 +5542,47 @@ func (c *FacilityClient) GetX(ctx context.Context, id int32) *Facility {
 	return obj
 }
 
-// QueryRegionRef queries the region_ref edge of a Facility.
-func (c *FacilityClient) QueryRegionRef(f *Facility) *RegionMasterQuery {
+// QueryDivisions queries the divisions edge of a Facility.
+func (c *FacilityClient) QueryDivisions(f *Facility) *DivisionMasterQuery {
+	query := (&DivisionMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(facility.Table, facility.FieldID, id),
+			sqlgraph.To(divisionmaster.Table, divisionmaster.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, facility.DivisionsTable, facility.DivisionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegions queries the regions edge of a Facility.
+func (c *FacilityClient) QueryRegions(f *Facility) *RegionMasterQuery {
 	query := (&RegionMasterClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := f.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(facility.Table, facility.FieldID, id),
 			sqlgraph.To(regionmaster.Table, regionmaster.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, facility.RegionRefTable, facility.RegionRefColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, facility.RegionsTable, facility.RegionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCircles queries the circles edge of a Facility.
+func (c *FacilityClient) QueryCircles(f *Facility) *CircleMasterQuery {
+	query := (&CircleMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(facility.Table, facility.FieldID, id),
+			sqlgraph.To(circlemaster.Table, circlemaster.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, facility.CirclesTable, facility.CirclesColumn),
 		)
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
@@ -2613,6 +5599,38 @@ func (c *FacilityClient) QueryCircleRef(f *Facility) *CircleMasterQuery {
 			sqlgraph.From(facility.Table, facility.FieldID, id),
 			sqlgraph.To(circlemaster.Table, circlemaster.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, facility.CircleRefTable, facility.CircleRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOfficePSRef queries the Office_PS_Ref edge of a Facility.
+func (c *FacilityClient) QueryOfficePSRef(f *Facility) *ExamApplicationsPSQuery {
+	query := (&ExamApplicationsPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(facility.Table, facility.FieldID, id),
+			sqlgraph.To(exam_applications_ps.Table, exam_applications_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, facility.OfficePSRefTable, facility.OfficePSRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOfficeIPRef queries the Office_IP_Ref edge of a Facility.
+func (c *FacilityClient) QueryOfficeIPRef(f *Facility) *ExamApplicationsIPQuery {
+	query := (&ExamApplicationsIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(facility.Table, facility.FieldID, id),
+			sqlgraph.To(exam_applications_ip.Table, exam_applications_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, facility.OfficeIPRefTable, facility.OfficeIPRefColumn),
 		)
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
@@ -2642,6 +5660,124 @@ func (c *FacilityClient) mutate(ctx context.Context, m *FacilityMutation) (Value
 		return (&FacilityDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Facility mutation op: %q", m.Op())
+	}
+}
+
+// LoginClient is a client for the Login schema.
+type LoginClient struct {
+	config
+}
+
+// NewLoginClient returns a client for the Login from the given config.
+func NewLoginClient(c config) *LoginClient {
+	return &LoginClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `login.Hooks(f(g(h())))`.
+func (c *LoginClient) Use(hooks ...Hook) {
+	c.hooks.Login = append(c.hooks.Login, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `login.Intercept(f(g(h())))`.
+func (c *LoginClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Login = append(c.inters.Login, interceptors...)
+}
+
+// Create returns a builder for creating a Login entity.
+func (c *LoginClient) Create() *LoginCreate {
+	mutation := newLoginMutation(c.config, OpCreate)
+	return &LoginCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Login entities.
+func (c *LoginClient) CreateBulk(builders ...*LoginCreate) *LoginCreateBulk {
+	return &LoginCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Login.
+func (c *LoginClient) Update() *LoginUpdate {
+	mutation := newLoginMutation(c.config, OpUpdate)
+	return &LoginUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LoginClient) UpdateOne(l *Login) *LoginUpdateOne {
+	mutation := newLoginMutation(c.config, OpUpdateOne, withLogin(l))
+	return &LoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LoginClient) UpdateOneID(id int) *LoginUpdateOne {
+	mutation := newLoginMutation(c.config, OpUpdateOne, withLoginID(id))
+	return &LoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Login.
+func (c *LoginClient) Delete() *LoginDelete {
+	mutation := newLoginMutation(c.config, OpDelete)
+	return &LoginDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LoginClient) DeleteOne(l *Login) *LoginDeleteOne {
+	return c.DeleteOneID(l.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LoginClient) DeleteOneID(id int) *LoginDeleteOne {
+	builder := c.Delete().Where(login.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LoginDeleteOne{builder}
+}
+
+// Query returns a query builder for Login.
+func (c *LoginClient) Query() *LoginQuery {
+	return &LoginQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLogin},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Login entity by its id.
+func (c *LoginClient) Get(ctx context.Context, id int) (*Login, error) {
+	return c.Query().Where(login.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LoginClient) GetX(ctx context.Context, id int) *Login {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *LoginClient) Hooks() []Hook {
+	return c.hooks.Login
+}
+
+// Interceptors returns the client interceptors.
+func (c *LoginClient) Interceptors() []Interceptor {
+	return c.inters.Login
+}
+
+func (c *LoginClient) mutate(ctx context.Context, m *LoginMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LoginCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LoginUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LoginDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Login mutation op: %q", m.Op())
 	}
 }
 
@@ -3000,6 +6136,38 @@ func (c *NotificationClient) QueryNotifyRef(n *Notification) *NotificationQuery 
 	return query
 }
 
+// QueryNotificationsPs queries the notifications_ps edge of a Notification.
+func (c *NotificationClient) QueryNotificationsPs(n *Notification) *ExamPSQuery {
+	query := (&ExamPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, id),
+			sqlgraph.To(exam_ps.Table, exam_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, notification.NotificationsPsTable, notification.NotificationsPsColumn),
+		)
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationsIP queries the notifications_ip edge of a Notification.
+func (c *NotificationClient) QueryNotificationsIP(n *Notification) *ExamIPQuery {
+	query := (&ExamIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, id),
+			sqlgraph.To(exam_ip.Table, exam_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, notification.NotificationsIPTable, notification.NotificationsIPColumn),
+		)
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *NotificationClient) Hooks() []Hook {
 	return c.hooks.Notification
@@ -3156,6 +6324,274 @@ func (c *PaperTypesClient) mutate(ctx context.Context, m *PaperTypesMutation) (V
 		return (&PaperTypesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown PaperTypes mutation op: %q", m.Op())
+	}
+}
+
+// PlaceOfPreferenceIPClient is a client for the PlaceOfPreferenceIP schema.
+type PlaceOfPreferenceIPClient struct {
+	config
+}
+
+// NewPlaceOfPreferenceIPClient returns a client for the PlaceOfPreferenceIP from the given config.
+func NewPlaceOfPreferenceIPClient(c config) *PlaceOfPreferenceIPClient {
+	return &PlaceOfPreferenceIPClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `placeofpreferenceip.Hooks(f(g(h())))`.
+func (c *PlaceOfPreferenceIPClient) Use(hooks ...Hook) {
+	c.hooks.PlaceOfPreferenceIP = append(c.hooks.PlaceOfPreferenceIP, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `placeofpreferenceip.Intercept(f(g(h())))`.
+func (c *PlaceOfPreferenceIPClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PlaceOfPreferenceIP = append(c.inters.PlaceOfPreferenceIP, interceptors...)
+}
+
+// Create returns a builder for creating a PlaceOfPreferenceIP entity.
+func (c *PlaceOfPreferenceIPClient) Create() *PlaceOfPreferenceIPCreate {
+	mutation := newPlaceOfPreferenceIPMutation(c.config, OpCreate)
+	return &PlaceOfPreferenceIPCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PlaceOfPreferenceIP entities.
+func (c *PlaceOfPreferenceIPClient) CreateBulk(builders ...*PlaceOfPreferenceIPCreate) *PlaceOfPreferenceIPCreateBulk {
+	return &PlaceOfPreferenceIPCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PlaceOfPreferenceIP.
+func (c *PlaceOfPreferenceIPClient) Update() *PlaceOfPreferenceIPUpdate {
+	mutation := newPlaceOfPreferenceIPMutation(c.config, OpUpdate)
+	return &PlaceOfPreferenceIPUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PlaceOfPreferenceIPClient) UpdateOne(popi *PlaceOfPreferenceIP) *PlaceOfPreferenceIPUpdateOne {
+	mutation := newPlaceOfPreferenceIPMutation(c.config, OpUpdateOne, withPlaceOfPreferenceIP(popi))
+	return &PlaceOfPreferenceIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PlaceOfPreferenceIPClient) UpdateOneID(id int32) *PlaceOfPreferenceIPUpdateOne {
+	mutation := newPlaceOfPreferenceIPMutation(c.config, OpUpdateOne, withPlaceOfPreferenceIPID(id))
+	return &PlaceOfPreferenceIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PlaceOfPreferenceIP.
+func (c *PlaceOfPreferenceIPClient) Delete() *PlaceOfPreferenceIPDelete {
+	mutation := newPlaceOfPreferenceIPMutation(c.config, OpDelete)
+	return &PlaceOfPreferenceIPDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PlaceOfPreferenceIPClient) DeleteOne(popi *PlaceOfPreferenceIP) *PlaceOfPreferenceIPDeleteOne {
+	return c.DeleteOneID(popi.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PlaceOfPreferenceIPClient) DeleteOneID(id int32) *PlaceOfPreferenceIPDeleteOne {
+	builder := c.Delete().Where(placeofpreferenceip.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PlaceOfPreferenceIPDeleteOne{builder}
+}
+
+// Query returns a query builder for PlaceOfPreferenceIP.
+func (c *PlaceOfPreferenceIPClient) Query() *PlaceOfPreferenceIPQuery {
+	return &PlaceOfPreferenceIPQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePlaceOfPreferenceIP},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PlaceOfPreferenceIP entity by its id.
+func (c *PlaceOfPreferenceIPClient) Get(ctx context.Context, id int32) (*PlaceOfPreferenceIP, error) {
+	return c.Query().Where(placeofpreferenceip.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PlaceOfPreferenceIPClient) GetX(ctx context.Context, id int32) *PlaceOfPreferenceIP {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryApplnIPRef queries the ApplnIP_Ref edge of a PlaceOfPreferenceIP.
+func (c *PlaceOfPreferenceIPClient) QueryApplnIPRef(popi *PlaceOfPreferenceIP) *ExamApplicationsIPQuery {
+	query := (&ExamApplicationsIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := popi.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(placeofpreferenceip.Table, placeofpreferenceip.FieldID, id),
+			sqlgraph.To(exam_applications_ip.Table, exam_applications_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, placeofpreferenceip.ApplnIPRefTable, placeofpreferenceip.ApplnIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(popi.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PlaceOfPreferenceIPClient) Hooks() []Hook {
+	return c.hooks.PlaceOfPreferenceIP
+}
+
+// Interceptors returns the client interceptors.
+func (c *PlaceOfPreferenceIPClient) Interceptors() []Interceptor {
+	return c.inters.PlaceOfPreferenceIP
+}
+
+func (c *PlaceOfPreferenceIPClient) mutate(ctx context.Context, m *PlaceOfPreferenceIPMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PlaceOfPreferenceIPCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PlaceOfPreferenceIPUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PlaceOfPreferenceIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PlaceOfPreferenceIPDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown PlaceOfPreferenceIP mutation op: %q", m.Op())
+	}
+}
+
+// RecommendationsIPApplicationsClient is a client for the RecommendationsIPApplications schema.
+type RecommendationsIPApplicationsClient struct {
+	config
+}
+
+// NewRecommendationsIPApplicationsClient returns a client for the RecommendationsIPApplications from the given config.
+func NewRecommendationsIPApplicationsClient(c config) *RecommendationsIPApplicationsClient {
+	return &RecommendationsIPApplicationsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `recommendationsipapplications.Hooks(f(g(h())))`.
+func (c *RecommendationsIPApplicationsClient) Use(hooks ...Hook) {
+	c.hooks.RecommendationsIPApplications = append(c.hooks.RecommendationsIPApplications, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `recommendationsipapplications.Intercept(f(g(h())))`.
+func (c *RecommendationsIPApplicationsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.RecommendationsIPApplications = append(c.inters.RecommendationsIPApplications, interceptors...)
+}
+
+// Create returns a builder for creating a RecommendationsIPApplications entity.
+func (c *RecommendationsIPApplicationsClient) Create() *RecommendationsIPApplicationsCreate {
+	mutation := newRecommendationsIPApplicationsMutation(c.config, OpCreate)
+	return &RecommendationsIPApplicationsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of RecommendationsIPApplications entities.
+func (c *RecommendationsIPApplicationsClient) CreateBulk(builders ...*RecommendationsIPApplicationsCreate) *RecommendationsIPApplicationsCreateBulk {
+	return &RecommendationsIPApplicationsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for RecommendationsIPApplications.
+func (c *RecommendationsIPApplicationsClient) Update() *RecommendationsIPApplicationsUpdate {
+	mutation := newRecommendationsIPApplicationsMutation(c.config, OpUpdate)
+	return &RecommendationsIPApplicationsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *RecommendationsIPApplicationsClient) UpdateOne(ria *RecommendationsIPApplications) *RecommendationsIPApplicationsUpdateOne {
+	mutation := newRecommendationsIPApplicationsMutation(c.config, OpUpdateOne, withRecommendationsIPApplications(ria))
+	return &RecommendationsIPApplicationsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *RecommendationsIPApplicationsClient) UpdateOneID(id int64) *RecommendationsIPApplicationsUpdateOne {
+	mutation := newRecommendationsIPApplicationsMutation(c.config, OpUpdateOne, withRecommendationsIPApplicationsID(id))
+	return &RecommendationsIPApplicationsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for RecommendationsIPApplications.
+func (c *RecommendationsIPApplicationsClient) Delete() *RecommendationsIPApplicationsDelete {
+	mutation := newRecommendationsIPApplicationsMutation(c.config, OpDelete)
+	return &RecommendationsIPApplicationsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *RecommendationsIPApplicationsClient) DeleteOne(ria *RecommendationsIPApplications) *RecommendationsIPApplicationsDeleteOne {
+	return c.DeleteOneID(ria.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *RecommendationsIPApplicationsClient) DeleteOneID(id int64) *RecommendationsIPApplicationsDeleteOne {
+	builder := c.Delete().Where(recommendationsipapplications.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &RecommendationsIPApplicationsDeleteOne{builder}
+}
+
+// Query returns a query builder for RecommendationsIPApplications.
+func (c *RecommendationsIPApplicationsClient) Query() *RecommendationsIPApplicationsQuery {
+	return &RecommendationsIPApplicationsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeRecommendationsIPApplications},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a RecommendationsIPApplications entity by its id.
+func (c *RecommendationsIPApplicationsClient) Get(ctx context.Context, id int64) (*RecommendationsIPApplications, error) {
+	return c.Query().Where(recommendationsipapplications.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *RecommendationsIPApplicationsClient) GetX(ctx context.Context, id int64) *RecommendationsIPApplications {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryApplnRef queries the ApplnRef edge of a RecommendationsIPApplications.
+func (c *RecommendationsIPApplicationsClient) QueryApplnRef(ria *RecommendationsIPApplications) *ExamApplicationsIPQuery {
+	query := (&ExamApplicationsIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ria.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(recommendationsipapplications.Table, recommendationsipapplications.FieldID, id),
+			sqlgraph.To(exam_applications_ip.Table, exam_applications_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, recommendationsipapplications.ApplnRefTable, recommendationsipapplications.ApplnRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(ria.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *RecommendationsIPApplicationsClient) Hooks() []Hook {
+	return c.hooks.RecommendationsIPApplications
+}
+
+// Interceptors returns the client interceptors.
+func (c *RecommendationsIPApplicationsClient) Interceptors() []Interceptor {
+	return c.inters.RecommendationsIPApplications
+}
+
+func (c *RecommendationsIPApplicationsClient) mutate(ctx context.Context, m *RecommendationsIPApplicationsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&RecommendationsIPApplicationsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&RecommendationsIPApplicationsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&RecommendationsIPApplicationsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&RecommendationsIPApplicationsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown RecommendationsIPApplications mutation op: %q", m.Op())
 	}
 }
 
@@ -3325,6 +6761,306 @@ func (c *RegionMasterClient) mutate(ctx context.Context, m *RegionMasterMutation
 	}
 }
 
+// ReversalApplicationIPClient is a client for the Reversal_Application_IP schema.
+type ReversalApplicationIPClient struct {
+	config
+}
+
+// NewReversalApplicationIPClient returns a client for the Reversal_Application_IP from the given config.
+func NewReversalApplicationIPClient(c config) *ReversalApplicationIPClient {
+	return &ReversalApplicationIPClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `reversal_application_ip.Hooks(f(g(h())))`.
+func (c *ReversalApplicationIPClient) Use(hooks ...Hook) {
+	c.hooks.Reversal_Application_IP = append(c.hooks.Reversal_Application_IP, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `reversal_application_ip.Intercept(f(g(h())))`.
+func (c *ReversalApplicationIPClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Reversal_Application_IP = append(c.inters.Reversal_Application_IP, interceptors...)
+}
+
+// Create returns a builder for creating a Reversal_Application_IP entity.
+func (c *ReversalApplicationIPClient) Create() *ReversalApplicationIPCreate {
+	mutation := newReversalApplicationIPMutation(c.config, OpCreate)
+	return &ReversalApplicationIPCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Reversal_Application_IP entities.
+func (c *ReversalApplicationIPClient) CreateBulk(builders ...*ReversalApplicationIPCreate) *ReversalApplicationIPCreateBulk {
+	return &ReversalApplicationIPCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Reversal_Application_IP.
+func (c *ReversalApplicationIPClient) Update() *ReversalApplicationIPUpdate {
+	mutation := newReversalApplicationIPMutation(c.config, OpUpdate)
+	return &ReversalApplicationIPUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ReversalApplicationIPClient) UpdateOne(rai *Reversal_Application_IP) *ReversalApplicationIPUpdateOne {
+	mutation := newReversalApplicationIPMutation(c.config, OpUpdateOne, withReversal_Application_IP(rai))
+	return &ReversalApplicationIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ReversalApplicationIPClient) UpdateOneID(id int64) *ReversalApplicationIPUpdateOne {
+	mutation := newReversalApplicationIPMutation(c.config, OpUpdateOne, withReversal_Application_IPID(id))
+	return &ReversalApplicationIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Reversal_Application_IP.
+func (c *ReversalApplicationIPClient) Delete() *ReversalApplicationIPDelete {
+	mutation := newReversalApplicationIPMutation(c.config, OpDelete)
+	return &ReversalApplicationIPDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ReversalApplicationIPClient) DeleteOne(rai *Reversal_Application_IP) *ReversalApplicationIPDeleteOne {
+	return c.DeleteOneID(rai.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ReversalApplicationIPClient) DeleteOneID(id int64) *ReversalApplicationIPDeleteOne {
+	builder := c.Delete().Where(reversal_application_ip.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ReversalApplicationIPDeleteOne{builder}
+}
+
+// Query returns a query builder for Reversal_Application_IP.
+func (c *ReversalApplicationIPClient) Query() *ReversalApplicationIPQuery {
+	return &ReversalApplicationIPQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeReversalApplicationIP},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Reversal_Application_IP entity by its id.
+func (c *ReversalApplicationIPClient) Get(ctx context.Context, id int64) (*Reversal_Application_IP, error) {
+	return c.Query().Where(reversal_application_ip.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ReversalApplicationIPClient) GetX(ctx context.Context, id int64) *Reversal_Application_IP {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ReversalApplicationIPClient) Hooks() []Hook {
+	return c.hooks.Reversal_Application_IP
+}
+
+// Interceptors returns the client interceptors.
+func (c *ReversalApplicationIPClient) Interceptors() []Interceptor {
+	return c.inters.Reversal_Application_IP
+}
+
+func (c *ReversalApplicationIPClient) mutate(ctx context.Context, m *ReversalApplicationIPMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ReversalApplicationIPCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ReversalApplicationIPUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ReversalApplicationIPUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ReversalApplicationIPDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Reversal_Application_IP mutation op: %q", m.Op())
+	}
+}
+
+// RoleMasterClient is a client for the RoleMaster schema.
+type RoleMasterClient struct {
+	config
+}
+
+// NewRoleMasterClient returns a client for the RoleMaster from the given config.
+func NewRoleMasterClient(c config) *RoleMasterClient {
+	return &RoleMasterClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `rolemaster.Hooks(f(g(h())))`.
+func (c *RoleMasterClient) Use(hooks ...Hook) {
+	c.hooks.RoleMaster = append(c.hooks.RoleMaster, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `rolemaster.Intercept(f(g(h())))`.
+func (c *RoleMasterClient) Intercept(interceptors ...Interceptor) {
+	c.inters.RoleMaster = append(c.inters.RoleMaster, interceptors...)
+}
+
+// Create returns a builder for creating a RoleMaster entity.
+func (c *RoleMasterClient) Create() *RoleMasterCreate {
+	mutation := newRoleMasterMutation(c.config, OpCreate)
+	return &RoleMasterCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of RoleMaster entities.
+func (c *RoleMasterClient) CreateBulk(builders ...*RoleMasterCreate) *RoleMasterCreateBulk {
+	return &RoleMasterCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for RoleMaster.
+func (c *RoleMasterClient) Update() *RoleMasterUpdate {
+	mutation := newRoleMasterMutation(c.config, OpUpdate)
+	return &RoleMasterUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *RoleMasterClient) UpdateOne(rm *RoleMaster) *RoleMasterUpdateOne {
+	mutation := newRoleMasterMutation(c.config, OpUpdateOne, withRoleMaster(rm))
+	return &RoleMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *RoleMasterClient) UpdateOneID(id int32) *RoleMasterUpdateOne {
+	mutation := newRoleMasterMutation(c.config, OpUpdateOne, withRoleMasterID(id))
+	return &RoleMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for RoleMaster.
+func (c *RoleMasterClient) Delete() *RoleMasterDelete {
+	mutation := newRoleMasterMutation(c.config, OpDelete)
+	return &RoleMasterDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *RoleMasterClient) DeleteOne(rm *RoleMaster) *RoleMasterDeleteOne {
+	return c.DeleteOneID(rm.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *RoleMasterClient) DeleteOneID(id int32) *RoleMasterDeleteOne {
+	builder := c.Delete().Where(rolemaster.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &RoleMasterDeleteOne{builder}
+}
+
+// Query returns a query builder for RoleMaster.
+func (c *RoleMasterClient) Query() *RoleMasterQuery {
+	return &RoleMasterQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeRoleMaster},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a RoleMaster entity by its id.
+func (c *RoleMasterClient) Get(ctx context.Context, id int32) (*RoleMaster, error) {
+	return c.Query().Where(rolemaster.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *RoleMasterClient) GetX(ctx context.Context, id int32) *RoleMaster {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryRoles queries the roles edge of a RoleMaster.
+func (c *RoleMasterClient) QueryRoles(rm *RoleMaster) *AdminLoginQuery {
+	query := (&AdminLoginClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := rm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(rolemaster.Table, rolemaster.FieldID, id),
+			sqlgraph.To(adminlogin.Table, adminlogin.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, rolemaster.RolesTable, rolemaster.RolesColumn),
+		)
+		fromV = sqlgraph.Neighbors(rm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRolesRef queries the Roles_Ref edge of a RoleMaster.
+func (c *RoleMasterClient) QueryRolesRef(rm *RoleMaster) *UserMasterQuery {
+	query := (&UserMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := rm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(rolemaster.Table, rolemaster.FieldID, id),
+			sqlgraph.To(usermaster.Table, usermaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, rolemaster.RolesRefTable, rolemaster.RolesRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(rm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRolesPSRef queries the Roles_PS_Ref edge of a RoleMaster.
+func (c *RoleMasterClient) QueryRolesPSRef(rm *RoleMaster) *ExamApplicationsPSQuery {
+	query := (&ExamApplicationsPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := rm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(rolemaster.Table, rolemaster.FieldID, id),
+			sqlgraph.To(exam_applications_ps.Table, exam_applications_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, rolemaster.RolesPSRefTable, rolemaster.RolesPSRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(rm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRolesIPRef queries the Roles_IP_Ref edge of a RoleMaster.
+func (c *RoleMasterClient) QueryRolesIPRef(rm *RoleMaster) *ExamApplicationsIPQuery {
+	query := (&ExamApplicationsIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := rm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(rolemaster.Table, rolemaster.FieldID, id),
+			sqlgraph.To(exam_applications_ip.Table, exam_applications_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, rolemaster.RolesIPRefTable, rolemaster.RolesIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(rm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *RoleMasterClient) Hooks() []Hook {
+	return c.hooks.RoleMaster
+}
+
+// Interceptors returns the client interceptors.
+func (c *RoleMasterClient) Interceptors() []Interceptor {
+	return c.inters.RoleMaster
+}
+
+func (c *RoleMasterClient) mutate(ctx context.Context, m *RoleMasterMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&RoleMasterCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&RoleMasterUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&RoleMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&RoleMasterDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown RoleMaster mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -3440,6 +7176,220 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 		return (&UserDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown User mutation op: %q", m.Op())
+	}
+}
+
+// UserMasterClient is a client for the UserMaster schema.
+type UserMasterClient struct {
+	config
+}
+
+// NewUserMasterClient returns a client for the UserMaster from the given config.
+func NewUserMasterClient(c config) *UserMasterClient {
+	return &UserMasterClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `usermaster.Hooks(f(g(h())))`.
+func (c *UserMasterClient) Use(hooks ...Hook) {
+	c.hooks.UserMaster = append(c.hooks.UserMaster, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `usermaster.Intercept(f(g(h())))`.
+func (c *UserMasterClient) Intercept(interceptors ...Interceptor) {
+	c.inters.UserMaster = append(c.inters.UserMaster, interceptors...)
+}
+
+// Create returns a builder for creating a UserMaster entity.
+func (c *UserMasterClient) Create() *UserMasterCreate {
+	mutation := newUserMasterMutation(c.config, OpCreate)
+	return &UserMasterCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UserMaster entities.
+func (c *UserMasterClient) CreateBulk(builders ...*UserMasterCreate) *UserMasterCreateBulk {
+	return &UserMasterCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UserMaster.
+func (c *UserMasterClient) Update() *UserMasterUpdate {
+	mutation := newUserMasterMutation(c.config, OpUpdate)
+	return &UserMasterUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UserMasterClient) UpdateOne(um *UserMaster) *UserMasterUpdateOne {
+	mutation := newUserMasterMutation(c.config, OpUpdateOne, withUserMaster(um))
+	return &UserMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UserMasterClient) UpdateOneID(id int64) *UserMasterUpdateOne {
+	mutation := newUserMasterMutation(c.config, OpUpdateOne, withUserMasterID(id))
+	return &UserMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UserMaster.
+func (c *UserMasterClient) Delete() *UserMasterDelete {
+	mutation := newUserMasterMutation(c.config, OpDelete)
+	return &UserMasterDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UserMasterClient) DeleteOne(um *UserMaster) *UserMasterDeleteOne {
+	return c.DeleteOneID(um.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UserMasterClient) DeleteOneID(id int64) *UserMasterDeleteOne {
+	builder := c.Delete().Where(usermaster.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UserMasterDeleteOne{builder}
+}
+
+// Query returns a query builder for UserMaster.
+func (c *UserMasterClient) Query() *UserMasterQuery {
+	return &UserMasterQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUserMaster},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a UserMaster entity by its id.
+func (c *UserMasterClient) Get(ctx context.Context, id int64) (*UserMaster, error) {
+	return c.Query().Where(usermaster.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UserMasterClient) GetX(ctx context.Context, id int64) *UserMaster {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryRoles queries the roles edge of a UserMaster.
+func (c *UserMasterClient) QueryRoles(um *UserMaster) *RoleMasterQuery {
+	query := (&RoleMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := um.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermaster.Table, usermaster.FieldID, id),
+			sqlgraph.To(rolemaster.Table, rolemaster.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, usermaster.RolesTable, usermaster.RolesColumn),
+		)
+		fromV = sqlgraph.Neighbors(um.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsermasterRef queries the UsermasterRef edge of a UserMaster.
+func (c *UserMasterClient) QueryUsermasterRef(um *UserMaster) *EmployeeMasterQuery {
+	query := (&EmployeeMasterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := um.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermaster.Table, usermaster.FieldID, id),
+			sqlgraph.To(employeemaster.Table, employeemaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, usermaster.UsermasterRefTable, usermaster.UsermasterRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(um.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsersPSRef queries the UsersPSRef edge of a UserMaster.
+func (c *UserMasterClient) QueryUsersPSRef(um *UserMaster) *ExamApplicationsPSQuery {
+	query := (&ExamApplicationsPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := um.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermaster.Table, usermaster.FieldID, id),
+			sqlgraph.To(exam_applications_ps.Table, exam_applications_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, usermaster.UsersPSRefTable, usermaster.UsersPSRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(um.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsersIPRef queries the UsersIPRef edge of a UserMaster.
+func (c *UserMasterClient) QueryUsersIPRef(um *UserMaster) *ExamApplicationsIPQuery {
+	query := (&ExamApplicationsIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := um.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermaster.Table, usermaster.FieldID, id),
+			sqlgraph.To(exam_applications_ip.Table, exam_applications_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, usermaster.UsersIPRefTable, usermaster.UsersIPRefColumn),
+		)
+		fromV = sqlgraph.Neighbors(um.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsersPsType queries the users_ps_type edge of a UserMaster.
+func (c *UserMasterClient) QueryUsersPsType(um *UserMaster) *ExamPSQuery {
+	query := (&ExamPSClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := um.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermaster.Table, usermaster.FieldID, id),
+			sqlgraph.To(exam_ps.Table, exam_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, usermaster.UsersPsTypeTable, usermaster.UsersPsTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(um.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsersIPType queries the users_ip_type edge of a UserMaster.
+func (c *UserMasterClient) QueryUsersIPType(um *UserMaster) *ExamIPQuery {
+	query := (&ExamIPClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := um.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermaster.Table, usermaster.FieldID, id),
+			sqlgraph.To(exam_ip.Table, exam_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, usermaster.UsersIPTypeTable, usermaster.UsersIPTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(um.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *UserMasterClient) Hooks() []Hook {
+	return c.hooks.UserMaster
+}
+
+// Interceptors returns the client interceptors.
+func (c *UserMasterClient) Interceptors() []Interceptor {
+	return c.inters.UserMaster
+}
+
+func (c *UserMasterClient) mutate(ctx context.Context, m *UserMasterMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UserMasterCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UserMasterUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UserMasterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UserMasterDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown UserMaster mutation op: %q", m.Op())
 	}
 }
 
@@ -3596,15 +7546,27 @@ func (c *VacancyYearClient) mutate(ctx context.Context, m *VacancyYearMutation) 
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		AgeEligibility, Application, Center, CircleMaster, Disability, DivisionMaster,
-		EmployeeCadre, EmployeeCategory, EmployeeDesignation, EmployeePosts, Employees,
-		Exam, ExamCalendar, ExamEligibility, ExamPapers, Facility, NodalOfficer,
-		Notification, PaperTypes, RegionMaster, User, VacancyYear []ent.Hook
+		AdminLogin, AgeEligibility, Application, Cadre_Choice_IP, Cadre_Choice_PA,
+		Cadre_Choice_PM, Cadre_Choice_PS, Center, CircleMaster, DirectorateUsers,
+		Disability, DivisionMaster, Division_Choice_PA, Division_Choice_PM,
+		Division_Choice_PS, EligibilityMaster, EmployeeCadre, EmployeeCategory,
+		EmployeeDesignation, EmployeeMaster, EmployeePosts, Employees, Exam,
+		ExamCalendar, ExamPapers, ExamType, Exam_Applications_IP, Exam_Applications_PS,
+		Exam_IP, Exam_PA, Exam_PM, Exam_PS, Facility, Login, NodalOfficer,
+		Notification, PaperTypes, PlaceOfPreferenceIP, RecommendationsIPApplications,
+		RegionMaster, Reversal_Application_IP, RoleMaster, User, UserMaster,
+		VacancyYear []ent.Hook
 	}
 	inters struct {
-		AgeEligibility, Application, Center, CircleMaster, Disability, DivisionMaster,
-		EmployeeCadre, EmployeeCategory, EmployeeDesignation, EmployeePosts, Employees,
-		Exam, ExamCalendar, ExamEligibility, ExamPapers, Facility, NodalOfficer,
-		Notification, PaperTypes, RegionMaster, User, VacancyYear []ent.Interceptor
+		AdminLogin, AgeEligibility, Application, Cadre_Choice_IP, Cadre_Choice_PA,
+		Cadre_Choice_PM, Cadre_Choice_PS, Center, CircleMaster, DirectorateUsers,
+		Disability, DivisionMaster, Division_Choice_PA, Division_Choice_PM,
+		Division_Choice_PS, EligibilityMaster, EmployeeCadre, EmployeeCategory,
+		EmployeeDesignation, EmployeeMaster, EmployeePosts, Employees, Exam,
+		ExamCalendar, ExamPapers, ExamType, Exam_Applications_IP, Exam_Applications_PS,
+		Exam_IP, Exam_PA, Exam_PM, Exam_PS, Facility, Login, NodalOfficer,
+		Notification, PaperTypes, PlaceOfPreferenceIP, RecommendationsIPApplications,
+		RegionMaster, Reversal_Application_IP, RoleMaster, User, UserMaster,
+		VacancyYear []ent.Interceptor
 	}
 )

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/divisionmaster"
+	"recruit/ent/facility"
 	"recruit/ent/regionmaster"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -135,6 +136,21 @@ func (dmc *DivisionMasterCreate) AddRegions(r ...*RegionMaster) *DivisionMasterC
 	return dmc.AddRegionIDs(ids...)
 }
 
+// AddDivisionsRefIDs adds the "divisions_ref" edge to the Facility entity by IDs.
+func (dmc *DivisionMasterCreate) AddDivisionsRefIDs(ids ...int32) *DivisionMasterCreate {
+	dmc.mutation.AddDivisionsRefIDs(ids...)
+	return dmc
+}
+
+// AddDivisionsRef adds the "divisions_ref" edges to the Facility entity.
+func (dmc *DivisionMasterCreate) AddDivisionsRef(f ...*Facility) *DivisionMasterCreate {
+	ids := make([]int32, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return dmc.AddDivisionsRefIDs(ids...)
+}
+
 // Mutation returns the DivisionMasterMutation object of the builder.
 func (dmc *DivisionMasterCreate) Mutation() *DivisionMasterMutation {
 	return dmc.mutation
@@ -258,6 +274,22 @@ func (dmc *DivisionMasterCreate) createSpec() (*DivisionMaster, *sqlgraph.Create
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := dmc.mutation.DivisionsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   divisionmaster.DivisionsRefTable,
+			Columns: []string{divisionmaster.DivisionsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(facility.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {

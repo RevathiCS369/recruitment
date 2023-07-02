@@ -568,6 +568,9 @@ func (rmq *RegionMasterQuery) loadRegionRefRef(ctx context.Context, query *Facil
 		}
 	}
 	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(facility.FieldRegionID)
+	}
 	query.Where(predicate.Facility(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(regionmaster.RegionRefRefColumn), fks...))
 	}))
@@ -576,13 +579,10 @@ func (rmq *RegionMasterQuery) loadRegionRefRef(ctx context.Context, query *Facil
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.region_master_region_ref_ref
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "region_master_region_ref_ref" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.RegionID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "region_master_region_ref_ref" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "RegionID" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

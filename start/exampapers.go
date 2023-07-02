@@ -24,6 +24,7 @@ func CreatePapers(client *ent.Client, newPapers *ent.ExamPapers) (*ent.ExamPaper
 		SetLocalLanguageAllowedQuestionPaper(newPapers.LocalLanguageAllowedQuestionPaper).
 		SetOrderNumber(newPapers.OrderNumber).
 		SetCreatedDate(newPapers.CreatedDate).
+		SetDisabilityTypeID(newPapers.DisabilityTypeID).
 		Save(ctx)
 	if err != nil {
 		log.Println("error at Creating Exam Papers: ", newPapers)
@@ -66,9 +67,12 @@ func QueryExamPapersByExamCode(ctx context.Context, client *ent.Client, examcode
 
 	if err != nil {
 		log.Println("error at getting examid: ", err)
-		return nil, fmt.Errorf("failed querying exam: %w", err)
+		return nil, fmt.Errorf("failed querying exam papers: %w", err)
 	}
 	log.Println("exam returned: ", exam)
+	if len(exam) == 0 {
+		return nil, fmt.Errorf("no Exam Papers found with Exam Code: %d", examcode)
+	}
 	for _, paper := range exam {
 		fmt.Printf("ID: %d\n", paper.ID)
 		fmt.Printf("PaperDescription: %s\n", paper.PaperDescription)

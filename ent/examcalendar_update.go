@@ -7,6 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
 	"recruit/ent/notification"
@@ -204,6 +206,33 @@ func (ecu *ExamCalendarUpdate) ClearPaperCode() *ExamCalendarUpdate {
 	return ecu
 }
 
+// SetExamCodePS sets the "ExamCodePS" field.
+func (ecu *ExamCalendarUpdate) SetExamCodePS(i int32) *ExamCalendarUpdate {
+	ecu.mutation.ResetExamCodePS()
+	ecu.mutation.SetExamCodePS(i)
+	return ecu
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (ecu *ExamCalendarUpdate) SetNillableExamCodePS(i *int32) *ExamCalendarUpdate {
+	if i != nil {
+		ecu.SetExamCodePS(*i)
+	}
+	return ecu
+}
+
+// AddExamCodePS adds i to the "ExamCodePS" field.
+func (ecu *ExamCalendarUpdate) AddExamCodePS(i int32) *ExamCalendarUpdate {
+	ecu.mutation.AddExamCodePS(i)
+	return ecu
+}
+
+// ClearExamCodePS clears the value of the "ExamCodePS" field.
+func (ecu *ExamCalendarUpdate) ClearExamCodePS() *ExamCalendarUpdate {
+	ecu.mutation.ClearExamCodePS()
+	return ecu
+}
+
 // SetVcyYearsID sets the "vcy_years" edge to the VacancyYear entity by ID.
 func (ecu *ExamCalendarUpdate) SetVcyYearsID(id int32) *ExamCalendarUpdate {
 	ecu.mutation.SetVcyYearsID(id)
@@ -276,6 +305,36 @@ func (ecu *ExamCalendarUpdate) AddNotifyRef(n ...*Notification) *ExamCalendarUpd
 	return ecu.AddNotifyRefIDs(ids...)
 }
 
+// AddExamcalPsRefIDs adds the "examcal_ps_ref" edge to the Exam_PS entity by IDs.
+func (ecu *ExamCalendarUpdate) AddExamcalPsRefIDs(ids ...int32) *ExamCalendarUpdate {
+	ecu.mutation.AddExamcalPsRefIDs(ids...)
+	return ecu
+}
+
+// AddExamcalPsRef adds the "examcal_ps_ref" edges to the Exam_PS entity.
+func (ecu *ExamCalendarUpdate) AddExamcalPsRef(e ...*Exam_PS) *ExamCalendarUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecu.AddExamcalPsRefIDs(ids...)
+}
+
+// AddExamcalIPRefIDs adds the "examcal_ip_ref" edge to the Exam_IP entity by IDs.
+func (ecu *ExamCalendarUpdate) AddExamcalIPRefIDs(ids ...int32) *ExamCalendarUpdate {
+	ecu.mutation.AddExamcalIPRefIDs(ids...)
+	return ecu
+}
+
+// AddExamcalIPRef adds the "examcal_ip_ref" edges to the Exam_IP entity.
+func (ecu *ExamCalendarUpdate) AddExamcalIPRef(e ...*Exam_IP) *ExamCalendarUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecu.AddExamcalIPRefIDs(ids...)
+}
+
 // Mutation returns the ExamCalendarMutation object of the builder.
 func (ecu *ExamCalendarUpdate) Mutation() *ExamCalendarMutation {
 	return ecu.mutation
@@ -318,6 +377,48 @@ func (ecu *ExamCalendarUpdate) RemoveNotifyRef(n ...*Notification) *ExamCalendar
 		ids[i] = n[i].ID
 	}
 	return ecu.RemoveNotifyRefIDs(ids...)
+}
+
+// ClearExamcalPsRef clears all "examcal_ps_ref" edges to the Exam_PS entity.
+func (ecu *ExamCalendarUpdate) ClearExamcalPsRef() *ExamCalendarUpdate {
+	ecu.mutation.ClearExamcalPsRef()
+	return ecu
+}
+
+// RemoveExamcalPsRefIDs removes the "examcal_ps_ref" edge to Exam_PS entities by IDs.
+func (ecu *ExamCalendarUpdate) RemoveExamcalPsRefIDs(ids ...int32) *ExamCalendarUpdate {
+	ecu.mutation.RemoveExamcalPsRefIDs(ids...)
+	return ecu
+}
+
+// RemoveExamcalPsRef removes "examcal_ps_ref" edges to Exam_PS entities.
+func (ecu *ExamCalendarUpdate) RemoveExamcalPsRef(e ...*Exam_PS) *ExamCalendarUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecu.RemoveExamcalPsRefIDs(ids...)
+}
+
+// ClearExamcalIPRef clears all "examcal_ip_ref" edges to the Exam_IP entity.
+func (ecu *ExamCalendarUpdate) ClearExamcalIPRef() *ExamCalendarUpdate {
+	ecu.mutation.ClearExamcalIPRef()
+	return ecu
+}
+
+// RemoveExamcalIPRefIDs removes the "examcal_ip_ref" edge to Exam_IP entities by IDs.
+func (ecu *ExamCalendarUpdate) RemoveExamcalIPRefIDs(ids ...int32) *ExamCalendarUpdate {
+	ecu.mutation.RemoveExamcalIPRefIDs(ids...)
+	return ecu
+}
+
+// RemoveExamcalIPRef removes "examcal_ip_ref" edges to Exam_IP entities.
+func (ecu *ExamCalendarUpdate) RemoveExamcalIPRef(e ...*Exam_IP) *ExamCalendarUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecu.RemoveExamcalIPRefIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -423,6 +524,15 @@ func (ecu *ExamCalendarUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ecu.mutation.ExamPapersCleared() {
 		_spec.ClearField(examcalendar.FieldExamPapers, field.TypeJSON)
+	}
+	if value, ok := ecu.mutation.ExamCodePS(); ok {
+		_spec.SetField(examcalendar.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if value, ok := ecu.mutation.AddedExamCodePS(); ok {
+		_spec.AddField(examcalendar.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if ecu.mutation.ExamCodePSCleared() {
+		_spec.ClearField(examcalendar.FieldExamCodePS, field.TypeInt32)
 	}
 	if ecu.mutation.VcyYearsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -549,6 +659,96 @@ func (ecu *ExamCalendarUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ecu.mutation.ExamcalPsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalPsRefTable,
+			Columns: []string{examcalendar.ExamcalPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ecu.mutation.RemovedExamcalPsRefIDs(); len(nodes) > 0 && !ecu.mutation.ExamcalPsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalPsRefTable,
+			Columns: []string{examcalendar.ExamcalPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ecu.mutation.ExamcalPsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalPsRefTable,
+			Columns: []string{examcalendar.ExamcalPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ecu.mutation.ExamcalIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalIPRefTable,
+			Columns: []string{examcalendar.ExamcalIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ecu.mutation.RemovedExamcalIPRefIDs(); len(nodes) > 0 && !ecu.mutation.ExamcalIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalIPRefTable,
+			Columns: []string{examcalendar.ExamcalIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ecu.mutation.ExamcalIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalIPRefTable,
+			Columns: []string{examcalendar.ExamcalIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {
@@ -747,6 +947,33 @@ func (ecuo *ExamCalendarUpdateOne) ClearPaperCode() *ExamCalendarUpdateOne {
 	return ecuo
 }
 
+// SetExamCodePS sets the "ExamCodePS" field.
+func (ecuo *ExamCalendarUpdateOne) SetExamCodePS(i int32) *ExamCalendarUpdateOne {
+	ecuo.mutation.ResetExamCodePS()
+	ecuo.mutation.SetExamCodePS(i)
+	return ecuo
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (ecuo *ExamCalendarUpdateOne) SetNillableExamCodePS(i *int32) *ExamCalendarUpdateOne {
+	if i != nil {
+		ecuo.SetExamCodePS(*i)
+	}
+	return ecuo
+}
+
+// AddExamCodePS adds i to the "ExamCodePS" field.
+func (ecuo *ExamCalendarUpdateOne) AddExamCodePS(i int32) *ExamCalendarUpdateOne {
+	ecuo.mutation.AddExamCodePS(i)
+	return ecuo
+}
+
+// ClearExamCodePS clears the value of the "ExamCodePS" field.
+func (ecuo *ExamCalendarUpdateOne) ClearExamCodePS() *ExamCalendarUpdateOne {
+	ecuo.mutation.ClearExamCodePS()
+	return ecuo
+}
+
 // SetVcyYearsID sets the "vcy_years" edge to the VacancyYear entity by ID.
 func (ecuo *ExamCalendarUpdateOne) SetVcyYearsID(id int32) *ExamCalendarUpdateOne {
 	ecuo.mutation.SetVcyYearsID(id)
@@ -819,6 +1046,36 @@ func (ecuo *ExamCalendarUpdateOne) AddNotifyRef(n ...*Notification) *ExamCalenda
 	return ecuo.AddNotifyRefIDs(ids...)
 }
 
+// AddExamcalPsRefIDs adds the "examcal_ps_ref" edge to the Exam_PS entity by IDs.
+func (ecuo *ExamCalendarUpdateOne) AddExamcalPsRefIDs(ids ...int32) *ExamCalendarUpdateOne {
+	ecuo.mutation.AddExamcalPsRefIDs(ids...)
+	return ecuo
+}
+
+// AddExamcalPsRef adds the "examcal_ps_ref" edges to the Exam_PS entity.
+func (ecuo *ExamCalendarUpdateOne) AddExamcalPsRef(e ...*Exam_PS) *ExamCalendarUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecuo.AddExamcalPsRefIDs(ids...)
+}
+
+// AddExamcalIPRefIDs adds the "examcal_ip_ref" edge to the Exam_IP entity by IDs.
+func (ecuo *ExamCalendarUpdateOne) AddExamcalIPRefIDs(ids ...int32) *ExamCalendarUpdateOne {
+	ecuo.mutation.AddExamcalIPRefIDs(ids...)
+	return ecuo
+}
+
+// AddExamcalIPRef adds the "examcal_ip_ref" edges to the Exam_IP entity.
+func (ecuo *ExamCalendarUpdateOne) AddExamcalIPRef(e ...*Exam_IP) *ExamCalendarUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecuo.AddExamcalIPRefIDs(ids...)
+}
+
 // Mutation returns the ExamCalendarMutation object of the builder.
 func (ecuo *ExamCalendarUpdateOne) Mutation() *ExamCalendarMutation {
 	return ecuo.mutation
@@ -861,6 +1118,48 @@ func (ecuo *ExamCalendarUpdateOne) RemoveNotifyRef(n ...*Notification) *ExamCale
 		ids[i] = n[i].ID
 	}
 	return ecuo.RemoveNotifyRefIDs(ids...)
+}
+
+// ClearExamcalPsRef clears all "examcal_ps_ref" edges to the Exam_PS entity.
+func (ecuo *ExamCalendarUpdateOne) ClearExamcalPsRef() *ExamCalendarUpdateOne {
+	ecuo.mutation.ClearExamcalPsRef()
+	return ecuo
+}
+
+// RemoveExamcalPsRefIDs removes the "examcal_ps_ref" edge to Exam_PS entities by IDs.
+func (ecuo *ExamCalendarUpdateOne) RemoveExamcalPsRefIDs(ids ...int32) *ExamCalendarUpdateOne {
+	ecuo.mutation.RemoveExamcalPsRefIDs(ids...)
+	return ecuo
+}
+
+// RemoveExamcalPsRef removes "examcal_ps_ref" edges to Exam_PS entities.
+func (ecuo *ExamCalendarUpdateOne) RemoveExamcalPsRef(e ...*Exam_PS) *ExamCalendarUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecuo.RemoveExamcalPsRefIDs(ids...)
+}
+
+// ClearExamcalIPRef clears all "examcal_ip_ref" edges to the Exam_IP entity.
+func (ecuo *ExamCalendarUpdateOne) ClearExamcalIPRef() *ExamCalendarUpdateOne {
+	ecuo.mutation.ClearExamcalIPRef()
+	return ecuo
+}
+
+// RemoveExamcalIPRefIDs removes the "examcal_ip_ref" edge to Exam_IP entities by IDs.
+func (ecuo *ExamCalendarUpdateOne) RemoveExamcalIPRefIDs(ids ...int32) *ExamCalendarUpdateOne {
+	ecuo.mutation.RemoveExamcalIPRefIDs(ids...)
+	return ecuo
+}
+
+// RemoveExamcalIPRef removes "examcal_ip_ref" edges to Exam_IP entities.
+func (ecuo *ExamCalendarUpdateOne) RemoveExamcalIPRef(e ...*Exam_IP) *ExamCalendarUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ecuo.RemoveExamcalIPRefIDs(ids...)
 }
 
 // Where appends a list predicates to the ExamCalendarUpdate builder.
@@ -997,6 +1296,15 @@ func (ecuo *ExamCalendarUpdateOne) sqlSave(ctx context.Context) (_node *ExamCale
 	if ecuo.mutation.ExamPapersCleared() {
 		_spec.ClearField(examcalendar.FieldExamPapers, field.TypeJSON)
 	}
+	if value, ok := ecuo.mutation.ExamCodePS(); ok {
+		_spec.SetField(examcalendar.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if value, ok := ecuo.mutation.AddedExamCodePS(); ok {
+		_spec.AddField(examcalendar.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if ecuo.mutation.ExamCodePSCleared() {
+		_spec.ClearField(examcalendar.FieldExamCodePS, field.TypeInt32)
+	}
 	if ecuo.mutation.VcyYearsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1122,6 +1430,96 @@ func (ecuo *ExamCalendarUpdateOne) sqlSave(ctx context.Context) (_node *ExamCale
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ecuo.mutation.ExamcalPsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalPsRefTable,
+			Columns: []string{examcalendar.ExamcalPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ecuo.mutation.RemovedExamcalPsRefIDs(); len(nodes) > 0 && !ecuo.mutation.ExamcalPsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalPsRefTable,
+			Columns: []string{examcalendar.ExamcalPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ecuo.mutation.ExamcalPsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalPsRefTable,
+			Columns: []string{examcalendar.ExamcalPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ecuo.mutation.ExamcalIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalIPRefTable,
+			Columns: []string{examcalendar.ExamcalIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ecuo.mutation.RemovedExamcalIPRefIDs(); len(nodes) > 0 && !ecuo.mutation.ExamcalIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalIPRefTable,
+			Columns: []string{examcalendar.ExamcalIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ecuo.mutation.ExamcalIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   examcalendar.ExamcalIPRefTable,
+			Columns: []string{examcalendar.ExamcalIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {

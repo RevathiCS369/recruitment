@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 	"recruit/ent/divisionmaster"
+	"recruit/ent/facility"
 	"recruit/ent/predicate"
 	"recruit/ent/regionmaster"
 
@@ -19,12 +20,13 @@ import (
 // DivisionMasterQuery is the builder for querying DivisionMaster entities.
 type DivisionMasterQuery struct {
 	config
-	ctx         *QueryContext
-	order       []divisionmaster.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.DivisionMaster
-	withRegions *RegionMasterQuery
-	withFKs     bool
+	ctx              *QueryContext
+	order            []divisionmaster.OrderOption
+	inters           []Interceptor
+	predicates       []predicate.DivisionMaster
+	withRegions      *RegionMasterQuery
+	withDivisionsRef *FacilityQuery
+	withFKs          bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -76,6 +78,28 @@ func (dmq *DivisionMasterQuery) QueryRegions() *RegionMasterQuery {
 			sqlgraph.From(divisionmaster.Table, divisionmaster.FieldID, selector),
 			sqlgraph.To(regionmaster.Table, regionmaster.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, divisionmaster.RegionsTable, divisionmaster.RegionsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dmq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDivisionsRef chains the current query on the "divisions_ref" edge.
+func (dmq *DivisionMasterQuery) QueryDivisionsRef() *FacilityQuery {
+	query := (&FacilityClient{config: dmq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dmq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dmq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(divisionmaster.Table, divisionmaster.FieldID, selector),
+			sqlgraph.To(facility.Table, facility.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, divisionmaster.DivisionsRefTable, divisionmaster.DivisionsRefColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dmq.driver.Dialect(), step)
 		return fromU, nil
@@ -270,12 +294,13 @@ func (dmq *DivisionMasterQuery) Clone() *DivisionMasterQuery {
 		return nil
 	}
 	return &DivisionMasterQuery{
-		config:      dmq.config,
-		ctx:         dmq.ctx.Clone(),
-		order:       append([]divisionmaster.OrderOption{}, dmq.order...),
-		inters:      append([]Interceptor{}, dmq.inters...),
-		predicates:  append([]predicate.DivisionMaster{}, dmq.predicates...),
-		withRegions: dmq.withRegions.Clone(),
+		config:           dmq.config,
+		ctx:              dmq.ctx.Clone(),
+		order:            append([]divisionmaster.OrderOption{}, dmq.order...),
+		inters:           append([]Interceptor{}, dmq.inters...),
+		predicates:       append([]predicate.DivisionMaster{}, dmq.predicates...),
+		withRegions:      dmq.withRegions.Clone(),
+		withDivisionsRef: dmq.withDivisionsRef.Clone(),
 		// clone intermediate query.
 		sql:  dmq.sql.Clone(),
 		path: dmq.path,
@@ -290,6 +315,17 @@ func (dmq *DivisionMasterQuery) WithRegions(opts ...func(*RegionMasterQuery)) *D
 		opt(query)
 	}
 	dmq.withRegions = query
+	return dmq
+}
+
+// WithDivisionsRef tells the query-builder to eager-load the nodes that are connected to
+// the "divisions_ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (dmq *DivisionMasterQuery) WithDivisionsRef(opts ...func(*FacilityQuery)) *DivisionMasterQuery {
+	query := (&FacilityClient{config: dmq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dmq.withDivisionsRef = query
 	return dmq
 }
 
@@ -372,8 +408,9 @@ func (dmq *DivisionMasterQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		nodes       = []*DivisionMaster{}
 		withFKs     = dmq.withFKs
 		_spec       = dmq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			dmq.withRegions != nil,
+			dmq.withDivisionsRef != nil,
 		}
 	)
 	if withFKs {
@@ -401,6 +438,13 @@ func (dmq *DivisionMasterQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		if err := dmq.loadRegions(ctx, query, nodes,
 			func(n *DivisionMaster) { n.Edges.Regions = []*RegionMaster{} },
 			func(n *DivisionMaster, e *RegionMaster) { n.Edges.Regions = append(n.Edges.Regions, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := dmq.withDivisionsRef; query != nil {
+		if err := dmq.loadDivisionsRef(ctx, query, nodes,
+			func(n *DivisionMaster) { n.Edges.DivisionsRef = []*Facility{} },
+			func(n *DivisionMaster, e *Facility) { n.Edges.DivisionsRef = append(n.Edges.DivisionsRef, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -433,6 +477,37 @@ func (dmq *DivisionMasterQuery) loadRegions(ctx context.Context, query *RegionMa
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "division_master_regions" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (dmq *DivisionMasterQuery) loadDivisionsRef(ctx context.Context, query *FacilityQuery, nodes []*DivisionMaster, init func(*DivisionMaster), assign func(*DivisionMaster, *Facility)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*DivisionMaster)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(facility.FieldDivisionID)
+	}
+	query.Where(predicate.Facility(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(divisionmaster.DivisionsRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.DivisionID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "DivisionID" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

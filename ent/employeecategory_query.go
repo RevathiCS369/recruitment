@@ -21,6 +21,7 @@ type EmployeeCategoryQuery struct {
 	order      []employeecategory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.EmployeeCategory
+	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -331,9 +332,13 @@ func (ecq *EmployeeCategoryQuery) prepareQuery(ctx context.Context) error {
 
 func (ecq *EmployeeCategoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EmployeeCategory, error) {
 	var (
-		nodes = []*EmployeeCategory{}
-		_spec = ecq.querySpec()
+		nodes   = []*EmployeeCategory{}
+		withFKs = ecq.withFKs
+		_spec   = ecq.querySpec()
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, employeecategory.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*EmployeeCategory).scanValues(nil, columns)
 	}

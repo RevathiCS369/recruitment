@@ -32,8 +32,12 @@ const (
 	FieldRegionCode = "region_code"
 	// EdgeRegions holds the string denoting the regions edge name in mutations.
 	EdgeRegions = "regions"
+	// EdgeDivisionsRef holds the string denoting the divisions_ref edge name in mutations.
+	EdgeDivisionsRef = "divisions_ref"
 	// RegionMasterFieldID holds the string denoting the ID field of the RegionMaster.
 	RegionMasterFieldID = "RegionID"
+	// FacilityFieldID holds the string denoting the ID field of the Facility.
+	FacilityFieldID = "FacilityID"
 	// Table holds the table name of the divisionmaster in the database.
 	Table = "DivisionMaster"
 	// RegionsTable is the table that holds the regions relation/edge.
@@ -43,6 +47,13 @@ const (
 	RegionsInverseTable = "RegionMaster"
 	// RegionsColumn is the table column denoting the regions relation/edge.
 	RegionsColumn = "division_master_regions"
+	// DivisionsRefTable is the table that holds the divisions_ref relation/edge.
+	DivisionsRefTable = "Facility"
+	// DivisionsRefInverseTable is the table name for the Facility entity.
+	// It exists in this package in order to avoid circular dependency with the "facility" package.
+	DivisionsRefInverseTable = "Facility"
+	// DivisionsRefColumn is the table column denoting the divisions_ref relation/edge.
+	DivisionsRefColumn = "division_id"
 )
 
 // Columns holds all SQL columns for divisionmaster fields.
@@ -146,10 +157,31 @@ func ByRegions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRegionsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByDivisionsRefCount orders the results by divisions_ref count.
+func ByDivisionsRefCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDivisionsRefStep(), opts...)
+	}
+}
+
+// ByDivisionsRef orders the results by divisions_ref terms.
+func ByDivisionsRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDivisionsRefStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newRegionsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RegionsInverseTable, RegionMasterFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, RegionsTable, RegionsColumn),
+	)
+}
+func newDivisionsRefStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DivisionsRefInverseTable, FacilityFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DivisionsRefTable, DivisionsRefColumn),
 	)
 }

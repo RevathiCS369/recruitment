@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
+	//"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -15,11 +15,12 @@ type AgeEligibility struct {
 }
 
 func (AgeEligibility) Fields() []ent.Field {
-	return []ent.Field{field.Int32("id").StorageKey("AgeElibilityCode"), field.Int32("EligibilityCode").Optional(), field.Int32("Age").Optional(), field.Int32("CategoryID").Optional()}
+	return []ent.Field{field.Int32("id").StorageKey("AgeElibilityCode"),
+	 field.Int32("EligibillityCode").Optional(), field.Int32("Age").Optional(), field.Int32("CategoryID").Optional()}
 }
 func (AgeEligibility) Edges() []ent.Edge {
-	return []ent.Edge{edge.From("exam_eligibility", ExamEligibility.Type).Ref("age_eligibilities").Unique().Field("EligibilityCode")}
-}
+	return nil}
+
 func (AgeEligibility) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "AgeEligibility"}}
 }

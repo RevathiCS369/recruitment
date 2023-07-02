@@ -3,18 +3,144 @@
 package ent
 
 import (
+	"recruit/ent/cadre_choice_ip"
+	"recruit/ent/cadre_choice_pa"
+	"recruit/ent/cadre_choice_pm"
+	"recruit/ent/cadre_choice_ps"
+	"recruit/ent/directorateusers"
+	"recruit/ent/division_choice_pa"
+	"recruit/ent/division_choice_pm"
+	"recruit/ent/division_choice_ps"
+	"recruit/ent/eligibilitymaster"
+	"recruit/ent/employeemaster"
 	"recruit/ent/employees"
+	"recruit/ent/exam"
+	"recruit/ent/exam_applications_ip"
+	"recruit/ent/exam_applications_ps"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_pa"
+	"recruit/ent/exam_pm"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
+	"recruit/ent/login"
 	"recruit/ent/papertypes"
+	"recruit/ent/placeofpreferenceip"
+	"recruit/ent/recommendationsipapplications"
+	"recruit/ent/reversal_application_ip"
+	"recruit/ent/rolemaster"
 	"recruit/ent/schema"
 	"recruit/ent/user"
+	"recruit/ent/usermaster"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	cadre_choice_ipFields := schema.Cadre_Choice_IP{}.Fields()
+	_ = cadre_choice_ipFields
+	// cadre_choice_ipDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	cadre_choice_ipDescUpdatedAt := cadre_choice_ipFields[5].Descriptor()
+	// cadre_choice_ip.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	cadre_choice_ip.DefaultUpdatedAt = cadre_choice_ipDescUpdatedAt.Default.(func() time.Time)
+	// cadre_choice_ipDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	cadre_choice_ipDescUpdatedBy := cadre_choice_ipFields[6].Descriptor()
+	// cadre_choice_ip.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	cadre_choice_ip.DefaultUpdatedBy = cadre_choice_ipDescUpdatedBy.Default.(string)
+	cadre_choice_paFields := schema.Cadre_Choice_PA{}.Fields()
+	_ = cadre_choice_paFields
+	// cadre_choice_paDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	cadre_choice_paDescUpdatedAt := cadre_choice_paFields[5].Descriptor()
+	// cadre_choice_pa.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	cadre_choice_pa.DefaultUpdatedAt = cadre_choice_paDescUpdatedAt.Default.(func() time.Time)
+	// cadre_choice_paDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	cadre_choice_paDescUpdatedBy := cadre_choice_paFields[6].Descriptor()
+	// cadre_choice_pa.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	cadre_choice_pa.DefaultUpdatedBy = cadre_choice_paDescUpdatedBy.Default.(string)
+	cadre_choice_pmFields := schema.Cadre_Choice_PM{}.Fields()
+	_ = cadre_choice_pmFields
+	// cadre_choice_pmDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	cadre_choice_pmDescUpdatedAt := cadre_choice_pmFields[5].Descriptor()
+	// cadre_choice_pm.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	cadre_choice_pm.DefaultUpdatedAt = cadre_choice_pmDescUpdatedAt.Default.(func() time.Time)
+	// cadre_choice_pmDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	cadre_choice_pmDescUpdatedBy := cadre_choice_pmFields[6].Descriptor()
+	// cadre_choice_pm.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	cadre_choice_pm.DefaultUpdatedBy = cadre_choice_pmDescUpdatedBy.Default.(string)
+	cadre_choice_psFields := schema.Cadre_Choice_PS{}.Fields()
+	_ = cadre_choice_psFields
+	// cadre_choice_psDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	cadre_choice_psDescUpdatedAt := cadre_choice_psFields[5].Descriptor()
+	// cadre_choice_ps.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	cadre_choice_ps.DefaultUpdatedAt = cadre_choice_psDescUpdatedAt.Default.(func() time.Time)
+	// cadre_choice_psDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	cadre_choice_psDescUpdatedBy := cadre_choice_psFields[6].Descriptor()
+	// cadre_choice_ps.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	cadre_choice_ps.DefaultUpdatedBy = cadre_choice_psDescUpdatedBy.Default.(string)
+	directorateusersFields := schema.DirectorateUsers{}.Fields()
+	_ = directorateusersFields
+	// directorateusersDescStatus is the schema descriptor for Status field.
+	directorateusersDescStatus := directorateusersFields[7].Descriptor()
+	// directorateusers.DefaultStatus holds the default value on creation for the Status field.
+	directorateusers.DefaultStatus = directorateusersDescStatus.Default.(string)
+	division_choice_paFields := schema.Division_Choice_PA{}.Fields()
+	_ = division_choice_paFields
+	// division_choice_paDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	division_choice_paDescUpdatedAt := division_choice_paFields[5].Descriptor()
+	// division_choice_pa.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	division_choice_pa.DefaultUpdatedAt = division_choice_paDescUpdatedAt.Default.(func() time.Time)
+	// division_choice_paDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	division_choice_paDescUpdatedBy := division_choice_paFields[6].Descriptor()
+	// division_choice_pa.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	division_choice_pa.DefaultUpdatedBy = division_choice_paDescUpdatedBy.Default.(string)
+	division_choice_pmFields := schema.Division_Choice_PM{}.Fields()
+	_ = division_choice_pmFields
+	// division_choice_pmDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	division_choice_pmDescUpdatedAt := division_choice_pmFields[5].Descriptor()
+	// division_choice_pm.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	division_choice_pm.DefaultUpdatedAt = division_choice_pmDescUpdatedAt.Default.(func() time.Time)
+	// division_choice_pmDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	division_choice_pmDescUpdatedBy := division_choice_pmFields[6].Descriptor()
+	// division_choice_pm.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	division_choice_pm.DefaultUpdatedBy = division_choice_pmDescUpdatedBy.Default.(string)
+	division_choice_psFields := schema.Division_Choice_PS{}.Fields()
+	_ = division_choice_psFields
+	// division_choice_psDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	division_choice_psDescUpdatedAt := division_choice_psFields[5].Descriptor()
+	// division_choice_ps.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	division_choice_ps.DefaultUpdatedAt = division_choice_psDescUpdatedAt.Default.(func() time.Time)
+	// division_choice_psDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	division_choice_psDescUpdatedBy := division_choice_psFields[6].Descriptor()
+	// division_choice_ps.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	division_choice_ps.DefaultUpdatedBy = division_choice_psDescUpdatedBy.Default.(string)
+	eligibilitymasterFields := schema.EligibilityMaster{}.Fields()
+	_ = eligibilitymasterFields
+	// eligibilitymasterDescGdsService is the schema descriptor for gdsService field.
+	eligibilitymasterDescGdsService := eligibilitymasterFields[4].Descriptor()
+	// eligibilitymaster.DefaultGdsService holds the default value on creation for the gdsService field.
+	eligibilitymaster.DefaultGdsService = eligibilitymasterDescGdsService.Default.(bool)
+	// eligibilitymasterDescDrivingLicenseCriteria is the schema descriptor for DrivingLicenseCriteria field.
+	eligibilitymasterDescDrivingLicenseCriteria := eligibilitymasterFields[7].Descriptor()
+	// eligibilitymaster.DefaultDrivingLicenseCriteria holds the default value on creation for the DrivingLicenseCriteria field.
+	eligibilitymaster.DefaultDrivingLicenseCriteria = eligibilitymasterDescDrivingLicenseCriteria.Default.(bool)
+	// eligibilitymasterDescComputerKnowledge is the schema descriptor for ComputerKnowledge field.
+	eligibilitymasterDescComputerKnowledge := eligibilitymasterFields[8].Descriptor()
+	// eligibilitymaster.DefaultComputerKnowledge holds the default value on creation for the ComputerKnowledge field.
+	eligibilitymaster.DefaultComputerKnowledge = eligibilitymasterDescComputerKnowledge.Default.(bool)
+	// eligibilitymasterDescLevelOfPayMatrixEligibility is the schema descriptor for LevelOfPayMatrixEligibility field.
+	eligibilitymasterDescLevelOfPayMatrixEligibility := eligibilitymasterFields[9].Descriptor()
+	// eligibilitymaster.DefaultLevelOfPayMatrixEligibility holds the default value on creation for the LevelOfPayMatrixEligibility field.
+	eligibilitymaster.DefaultLevelOfPayMatrixEligibility = eligibilitymasterDescLevelOfPayMatrixEligibility.Default.(bool)
+	employeemasterFields := schema.EmployeeMaster{}.Fields()
+	_ = employeemasterFields
+	// employeemasterDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	employeemasterDescUpdatedBy := employeemasterFields[15].Descriptor()
+	// employeemaster.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	employeemaster.DefaultUpdatedBy = employeemasterDescUpdatedBy.Default.(string)
 	employeesFields := schema.Employees{}.Fields()
 	_ = employeesFields
 	// employeesDescIDVerified is the schema descriptor for IDVerified field.
@@ -57,138 +183,172 @@ func init() {
 	employeesDescGenderRemStatus := employeesFields[19].Descriptor()
 	// employees.DefaultGenderRemStatus holds the default value on creation for the genderRemStatus field.
 	employees.DefaultGenderRemStatus = employeesDescGenderRemStatus.Default.(bool)
+	// employeesDescMobileNumberVerified is the schema descriptor for MobileNumberVerified field.
+	employeesDescMobileNumberVerified := employeesFields[22].Descriptor()
+	// employees.DefaultMobileNumberVerified holds the default value on creation for the MobileNumberVerified field.
+	employees.DefaultMobileNumberVerified = employeesDescMobileNumberVerified.Default.(bool)
+	// employeesDescMobileNumberRemStatus is the schema descriptor for MobileNumberRemStatus field.
+	employeesDescMobileNumberRemStatus := employeesFields[23].Descriptor()
+	// employees.DefaultMobileNumberRemStatus holds the default value on creation for the MobileNumberRemStatus field.
+	employees.DefaultMobileNumberRemStatus = employeesDescMobileNumberRemStatus.Default.(bool)
+	// employeesDescEmailIDVerified is the schema descriptor for EmailIDVerified field.
+	employeesDescEmailIDVerified := employeesFields[26].Descriptor()
+	// employees.DefaultEmailIDVerified holds the default value on creation for the EmailIDVerified field.
+	employees.DefaultEmailIDVerified = employeesDescEmailIDVerified.Default.(bool)
+	// employeesDescEmailIDRemStatus is the schema descriptor for EmailIDRemStatus field.
+	employeesDescEmailIDRemStatus := employeesFields[27].Descriptor()
+	// employees.DefaultEmailIDRemStatus holds the default value on creation for the EmailIDRemStatus field.
+	employees.DefaultEmailIDRemStatus = employeesDescEmailIDRemStatus.Default.(bool)
 	// employeesDescEmployeeCategoryCodeVerified is the schema descriptor for EmployeeCategoryCodeVerified field.
-	employeesDescEmployeeCategoryCodeVerified := employeesFields[26].Descriptor()
+	employeesDescEmployeeCategoryCodeVerified := employeesFields[32].Descriptor()
 	// employees.DefaultEmployeeCategoryCodeVerified holds the default value on creation for the EmployeeCategoryCodeVerified field.
 	employees.DefaultEmployeeCategoryCodeVerified = employeesDescEmployeeCategoryCodeVerified.Default.(bool)
 	// employeesDescEmployeeCategoryCodeRemStatus is the schema descriptor for EmployeeCategoryCodeRemStatus field.
-	employeesDescEmployeeCategoryCodeRemStatus := employeesFields[27].Descriptor()
+	employeesDescEmployeeCategoryCodeRemStatus := employeesFields[33].Descriptor()
 	// employees.DefaultEmployeeCategoryCodeRemStatus holds the default value on creation for the EmployeeCategoryCodeRemStatus field.
 	employees.DefaultEmployeeCategoryCodeRemStatus = employeesDescEmployeeCategoryCodeRemStatus.Default.(bool)
 	// employeesDescWithDisabilityVerified is the schema descriptor for WithDisabilityVerified field.
-	employeesDescWithDisabilityVerified := employeesFields[30].Descriptor()
+	employeesDescWithDisabilityVerified := employeesFields[36].Descriptor()
 	// employees.DefaultWithDisabilityVerified holds the default value on creation for the WithDisabilityVerified field.
 	employees.DefaultWithDisabilityVerified = employeesDescWithDisabilityVerified.Default.(bool)
 	// employeesDescWithDisabilityRemStatus is the schema descriptor for WithDisabilityRemStatus field.
-	employeesDescWithDisabilityRemStatus := employeesFields[31].Descriptor()
+	employeesDescWithDisabilityRemStatus := employeesFields[37].Descriptor()
 	// employees.DefaultWithDisabilityRemStatus holds the default value on creation for the WithDisabilityRemStatus field.
 	employees.DefaultWithDisabilityRemStatus = employeesDescWithDisabilityRemStatus.Default.(bool)
 	// employeesDescDisabilityTypeVerified is the schema descriptor for DisabilityTypeVerified field.
-	employeesDescDisabilityTypeVerified := employeesFields[34].Descriptor()
+	employeesDescDisabilityTypeVerified := employeesFields[40].Descriptor()
 	// employees.DefaultDisabilityTypeVerified holds the default value on creation for the DisabilityTypeVerified field.
 	employees.DefaultDisabilityTypeVerified = employeesDescDisabilityTypeVerified.Default.(bool)
 	// employeesDescDisabilityTypeRemStatus is the schema descriptor for DisabilityTypeRemStatus field.
-	employeesDescDisabilityTypeRemStatus := employeesFields[35].Descriptor()
+	employeesDescDisabilityTypeRemStatus := employeesFields[41].Descriptor()
 	// employees.DefaultDisabilityTypeRemStatus holds the default value on creation for the DisabilityTypeRemStatus field.
 	employees.DefaultDisabilityTypeRemStatus = employeesDescDisabilityTypeRemStatus.Default.(bool)
 	// employeesDescDisabilityPercentageVerified is the schema descriptor for DisabilityPercentageVerified field.
-	employeesDescDisabilityPercentageVerified := employeesFields[38].Descriptor()
+	employeesDescDisabilityPercentageVerified := employeesFields[44].Descriptor()
 	// employees.DefaultDisabilityPercentageVerified holds the default value on creation for the DisabilityPercentageVerified field.
 	employees.DefaultDisabilityPercentageVerified = employeesDescDisabilityPercentageVerified.Default.(bool)
 	// employeesDescDisabilityPercentageRemStatus is the schema descriptor for DisabilityPercentageRemStatus field.
-	employeesDescDisabilityPercentageRemStatus := employeesFields[39].Descriptor()
+	employeesDescDisabilityPercentageRemStatus := employeesFields[45].Descriptor()
 	// employees.DefaultDisabilityPercentageRemStatus holds the default value on creation for the DisabilityPercentageRemStatus field.
 	employees.DefaultDisabilityPercentageRemStatus = employeesDescDisabilityPercentageRemStatus.Default.(bool)
 	// employeesDescSignatureVerified is the schema descriptor for SignatureVerified field.
-	employeesDescSignatureVerified := employeesFields[42].Descriptor()
+	employeesDescSignatureVerified := employeesFields[48].Descriptor()
 	// employees.DefaultSignatureVerified holds the default value on creation for the SignatureVerified field.
 	employees.DefaultSignatureVerified = employeesDescSignatureVerified.Default.(bool)
 	// employeesDescSignatureRemStatus is the schema descriptor for SignatureRemStatus field.
-	employeesDescSignatureRemStatus := employeesFields[43].Descriptor()
+	employeesDescSignatureRemStatus := employeesFields[49].Descriptor()
 	// employees.DefaultSignatureRemStatus holds the default value on creation for the SignatureRemStatus field.
 	employees.DefaultSignatureRemStatus = employeesDescSignatureRemStatus.Default.(bool)
 	// employeesDescPhotoVerified is the schema descriptor for PhotoVerified field.
-	employeesDescPhotoVerified := employeesFields[46].Descriptor()
+	employeesDescPhotoVerified := employeesFields[52].Descriptor()
 	// employees.DefaultPhotoVerified holds the default value on creation for the PhotoVerified field.
 	employees.DefaultPhotoVerified = employeesDescPhotoVerified.Default.(bool)
 	// employeesDescPhotoRemStatus is the schema descriptor for PhotoRemStatus field.
-	employeesDescPhotoRemStatus := employeesFields[47].Descriptor()
+	employeesDescPhotoRemStatus := employeesFields[53].Descriptor()
 	// employees.DefaultPhotoRemStatus holds the default value on creation for the PhotoRemStatus field.
 	employees.DefaultPhotoRemStatus = employeesDescPhotoRemStatus.Default.(bool)
-	// employeesDescEmployeeCadreVerified is the schema descriptor for EmployeeCadreVerified field.
-	employeesDescEmployeeCadreVerified := employeesFields[51].Descriptor()
-	// employees.DefaultEmployeeCadreVerified holds the default value on creation for the EmployeeCadreVerified field.
-	employees.DefaultEmployeeCadreVerified = employeesDescEmployeeCadreVerified.Default.(bool)
-	// employeesDescEmployeeCadreRemStatus is the schema descriptor for EmployeeCadreRemStatus field.
-	employeesDescEmployeeCadreRemStatus := employeesFields[52].Descriptor()
-	// employees.DefaultEmployeeCadreRemStatus holds the default value on creation for the EmployeeCadreRemStatus field.
-	employees.DefaultEmployeeCadreRemStatus = employeesDescEmployeeCadreRemStatus.Default.(bool)
+	// employeesDescEmployeePostVerified is the schema descriptor for EmployeePostVerified field.
+	employeesDescEmployeePostVerified := employeesFields[58].Descriptor()
+	// employees.DefaultEmployeePostVerified holds the default value on creation for the EmployeePostVerified field.
+	employees.DefaultEmployeePostVerified = employeesDescEmployeePostVerified.Default.(bool)
+	// employeesDescEmployeePostRemStatus is the schema descriptor for EmployeePostRemStatus field.
+	employeesDescEmployeePostRemStatus := employeesFields[59].Descriptor()
+	// employees.DefaultEmployeePostRemStatus holds the default value on creation for the EmployeePostRemStatus field.
+	employees.DefaultEmployeePostRemStatus = employeesDescEmployeePostRemStatus.Default.(bool)
 	// employeesDescEmployeeDesignationVerified is the schema descriptor for EmployeeDesignationVerified field.
-	employeesDescEmployeeDesignationVerified := employeesFields[56].Descriptor()
+	employeesDescEmployeeDesignationVerified := employeesFields[63].Descriptor()
 	// employees.DefaultEmployeeDesignationVerified holds the default value on creation for the EmployeeDesignationVerified field.
 	employees.DefaultEmployeeDesignationVerified = employeesDescEmployeeDesignationVerified.Default.(bool)
 	// employeesDescEmployeeDesignationRemStatus is the schema descriptor for EmployeeDesignationRemStatus field.
-	employeesDescEmployeeDesignationRemStatus := employeesFields[57].Descriptor()
+	employeesDescEmployeeDesignationRemStatus := employeesFields[64].Descriptor()
 	// employees.DefaultEmployeeDesignationRemStatus holds the default value on creation for the EmployeeDesignationRemStatus field.
 	employees.DefaultEmployeeDesignationRemStatus = employeesDescEmployeeDesignationRemStatus.Default.(bool)
 	// employeesDescCircleVerified is the schema descriptor for CircleVerified field.
-	employeesDescCircleVerified := employeesFields[61].Descriptor()
+	employeesDescCircleVerified := employeesFields[68].Descriptor()
 	// employees.DefaultCircleVerified holds the default value on creation for the CircleVerified field.
 	employees.DefaultCircleVerified = employeesDescCircleVerified.Default.(bool)
 	// employeesDescCircleRemStatus is the schema descriptor for CircleRemStatus field.
-	employeesDescCircleRemStatus := employeesFields[62].Descriptor()
+	employeesDescCircleRemStatus := employeesFields[69].Descriptor()
 	// employees.DefaultCircleRemStatus holds the default value on creation for the CircleRemStatus field.
 	employees.DefaultCircleRemStatus = employeesDescCircleRemStatus.Default.(bool)
 	// employeesDescRegionVerified is the schema descriptor for RegionVerified field.
-	employeesDescRegionVerified := employeesFields[66].Descriptor()
+	employeesDescRegionVerified := employeesFields[73].Descriptor()
 	// employees.DefaultRegionVerified holds the default value on creation for the RegionVerified field.
 	employees.DefaultRegionVerified = employeesDescRegionVerified.Default.(bool)
 	// employeesDescRegionRemStatus is the schema descriptor for RegionRemStatus field.
-	employeesDescRegionRemStatus := employeesFields[67].Descriptor()
+	employeesDescRegionRemStatus := employeesFields[74].Descriptor()
 	// employees.DefaultRegionRemStatus holds the default value on creation for the RegionRemStatus field.
 	employees.DefaultRegionRemStatus = employeesDescRegionRemStatus.Default.(bool)
 	// employeesDescDivisionVerified is the schema descriptor for DivisionVerified field.
-	employeesDescDivisionVerified := employeesFields[71].Descriptor()
+	employeesDescDivisionVerified := employeesFields[78].Descriptor()
 	// employees.DefaultDivisionVerified holds the default value on creation for the DivisionVerified field.
 	employees.DefaultDivisionVerified = employeesDescDivisionVerified.Default.(bool)
 	// employeesDescDivisionRemStatus is the schema descriptor for DivisionRemStatus field.
-	employeesDescDivisionRemStatus := employeesFields[72].Descriptor()
+	employeesDescDivisionRemStatus := employeesFields[79].Descriptor()
 	// employees.DefaultDivisionRemStatus holds the default value on creation for the DivisionRemStatus field.
 	employees.DefaultDivisionRemStatus = employeesDescDivisionRemStatus.Default.(bool)
 	// employeesDescOfficeVerified is the schema descriptor for OfficeVerified field.
-	employeesDescOfficeVerified := employeesFields[76].Descriptor()
+	employeesDescOfficeVerified := employeesFields[83].Descriptor()
 	// employees.DefaultOfficeVerified holds the default value on creation for the OfficeVerified field.
 	employees.DefaultOfficeVerified = employeesDescOfficeVerified.Default.(bool)
 	// employeesDescOfficeRemStatus is the schema descriptor for OfficeRemStatus field.
-	employeesDescOfficeRemStatus := employeesFields[77].Descriptor()
+	employeesDescOfficeRemStatus := employeesFields[84].Descriptor()
 	// employees.DefaultOfficeRemStatus holds the default value on creation for the OfficeRemStatus field.
 	employees.DefaultOfficeRemStatus = employeesDescOfficeRemStatus.Default.(bool)
 	// employeesDescRoleVerified is the schema descriptor for RoleVerified field.
-	employeesDescRoleVerified := employeesFields[80].Descriptor()
+	employeesDescRoleVerified := employeesFields[87].Descriptor()
 	// employees.DefaultRoleVerified holds the default value on creation for the RoleVerified field.
 	employees.DefaultRoleVerified = employeesDescRoleVerified.Default.(bool)
 	// employeesDescRoleRemStatus is the schema descriptor for RoleRemStatus field.
-	employeesDescRoleRemStatus := employeesFields[81].Descriptor()
+	employeesDescRoleRemStatus := employeesFields[88].Descriptor()
 	// employees.DefaultRoleRemStatus holds the default value on creation for the RoleRemStatus field.
 	employees.DefaultRoleRemStatus = employeesDescRoleRemStatus.Default.(bool)
 	// employeesDescDCCSVerified is the schema descriptor for DCCSVerified field.
-	employeesDescDCCSVerified := employeesFields[84].Descriptor()
+	employeesDescDCCSVerified := employeesFields[91].Descriptor()
 	// employees.DefaultDCCSVerified holds the default value on creation for the DCCSVerified field.
 	employees.DefaultDCCSVerified = employeesDescDCCSVerified.Default.(bool)
 	// employeesDescDCCSRemStatus is the schema descriptor for DCCSRemStatus field.
-	employeesDescDCCSRemStatus := employeesFields[85].Descriptor()
+	employeesDescDCCSRemStatus := employeesFields[92].Descriptor()
 	// employees.DefaultDCCSRemStatus holds the default value on creation for the DCCSRemStatus field.
 	employees.DefaultDCCSRemStatus = employeesDescDCCSRemStatus.Default.(bool)
 	// employeesDescDCInPresentCadreVerified is the schema descriptor for DCInPresentCadreVerified field.
-	employeesDescDCInPresentCadreVerified := employeesFields[88].Descriptor()
+	employeesDescDCInPresentCadreVerified := employeesFields[95].Descriptor()
 	// employees.DefaultDCInPresentCadreVerified holds the default value on creation for the DCInPresentCadreVerified field.
 	employees.DefaultDCInPresentCadreVerified = employeesDescDCInPresentCadreVerified.Default.(bool)
 	// employeesDescDCInPresentCadreRemStatus is the schema descriptor for DCInPresentCadreRemStatus field.
-	employeesDescDCInPresentCadreRemStatus := employeesFields[89].Descriptor()
+	employeesDescDCInPresentCadreRemStatus := employeesFields[96].Descriptor()
 	// employees.DefaultDCInPresentCadreRemStatus holds the default value on creation for the DCInPresentCadreRemStatus field.
 	employees.DefaultDCInPresentCadreRemStatus = employeesDescDCInPresentCadreRemStatus.Default.(bool)
 	// employeesDescAPSWorkingVerified is the schema descriptor for APSWorkingVerified field.
-	employeesDescAPSWorkingVerified := employeesFields[92].Descriptor()
+	employeesDescAPSWorkingVerified := employeesFields[99].Descriptor()
 	// employees.DefaultAPSWorkingVerified holds the default value on creation for the APSWorkingVerified field.
 	employees.DefaultAPSWorkingVerified = employeesDescAPSWorkingVerified.Default.(bool)
 	// employeesDescAPSWorkingRemStatus is the schema descriptor for APSWorkingRemStatus field.
-	employeesDescAPSWorkingRemStatus := employeesFields[93].Descriptor()
+	employeesDescAPSWorkingRemStatus := employeesFields[100].Descriptor()
 	// employees.DefaultAPSWorkingRemStatus holds the default value on creation for the APSWorkingRemStatus field.
 	employees.DefaultAPSWorkingRemStatus = employeesDescAPSWorkingRemStatus.Default.(bool)
 	// employeesDescProfilestatus is the schema descriptor for profilestatus field.
-	employeesDescProfilestatus := employeesFields[95].Descriptor()
+	employeesDescProfilestatus := employeesFields[102].Descriptor()
 	// employees.DefaultProfilestatus holds the default value on creation for the profilestatus field.
 	employees.DefaultProfilestatus = employeesDescProfilestatus.Default.(bool)
+	examFields := schema.Exam{}.Fields()
+	_ = examFields
+	// examDescTentativeNotificationMandatoryDate is the schema descriptor for TentativeNotificationMandatoryDate field.
+	examDescTentativeNotificationMandatoryDate := examFields[9].Descriptor()
+	// exam.DefaultTentativeNotificationMandatoryDate holds the default value on creation for the TentativeNotificationMandatoryDate field.
+	exam.DefaultTentativeNotificationMandatoryDate = examDescTentativeNotificationMandatoryDate.Default.(bool)
+	// examDescLocalLanguage is the schema descriptor for LocalLanguage field.
+	examDescLocalLanguage := examFields[10].Descriptor()
+	// exam.DefaultLocalLanguage holds the default value on creation for the LocalLanguage field.
+	exam.DefaultLocalLanguage = examDescLocalLanguage.Default.(bool)
+	// examDescOptionForPost is the schema descriptor for OptionForPost field.
+	examDescOptionForPost := examFields[11].Descriptor()
+	// exam.DefaultOptionForPost holds the default value on creation for the OptionForPost field.
+	exam.DefaultOptionForPost = examDescOptionForPost.Default.(bool)
+	// examDescOptionToWriteExamOtherThanParent is the schema descriptor for OptionToWriteExamOtherThanParent field.
+	examDescOptionToWriteExamOtherThanParent := examFields[12].Descriptor()
+	// exam.DefaultOptionToWriteExamOtherThanParent holds the default value on creation for the OptionToWriteExamOtherThanParent field.
+	exam.DefaultOptionToWriteExamOtherThanParent = examDescOptionToWriteExamOtherThanParent.Default.(bool)
 	examcalendarFields := schema.ExamCalendar{}.Fields()
 	_ = examcalendarFields
 	// examcalendarDescExamName is the schema descriptor for ExamName field.
@@ -215,14 +375,14 @@ func init() {
 			return nil
 		}
 	}()
-	// exampapersDescCompetitiveQualifying is the schema descriptor for competitiveQualifying field.
+	// exampapersDescCompetitiveQualifying is the schema descriptor for CompetitiveQualifying field.
 	exampapersDescCompetitiveQualifying := exampapersFields[3].Descriptor()
-	// exampapers.CompetitiveQualifyingValidator is a validator for the "competitiveQualifying" field. It is called by the builders before save.
-	exampapers.CompetitiveQualifyingValidator = exampapersDescCompetitiveQualifying.Validators[0].(func(string) error)
-	// exampapersDescExceptionForDisability is the schema descriptor for exceptionForDisability field.
+	// exampapers.DefaultCompetitiveQualifying holds the default value on creation for the CompetitiveQualifying field.
+	exampapers.DefaultCompetitiveQualifying = exampapersDescCompetitiveQualifying.Default.(bool)
+	// exampapersDescExceptionForDisability is the schema descriptor for ExceptionForDisability field.
 	exampapersDescExceptionForDisability := exampapersFields[4].Descriptor()
-	// exampapers.ExceptionForDisabilityValidator is a validator for the "exceptionForDisability" field. It is called by the builders before save.
-	exampapers.ExceptionForDisabilityValidator = exampapersDescExceptionForDisability.Validators[0].(func(string) error)
+	// exampapers.DefaultExceptionForDisability holds the default value on creation for the ExceptionForDisability field.
+	exampapers.DefaultExceptionForDisability = exampapersDescExceptionForDisability.Default.(bool)
 	// exampapersDescMaximumMarks is the schema descriptor for MaximumMarks field.
 	exampapersDescMaximumMarks := exampapersFields[5].Descriptor()
 	// exampapers.MaximumMarksValidator is a validator for the "MaximumMarks" field. It is called by the builders before save.
@@ -261,6 +421,84 @@ func init() {
 			return nil
 		}
 	}()
+	exam_applications_ipFields := schema.Exam_Applications_IP{}.Fields()
+	_ = exam_applications_ipFields
+	// exam_applications_ipDescApplnSubmittedDate is the schema descriptor for ApplnSubmittedDate field.
+	exam_applications_ipDescApplnSubmittedDate := exam_applications_ipFields[36].Descriptor()
+	// exam_applications_ip.DefaultApplnSubmittedDate holds the default value on creation for the ApplnSubmittedDate field.
+	exam_applications_ip.DefaultApplnSubmittedDate = exam_applications_ipDescApplnSubmittedDate.Default.(func() time.Time)
+	// exam_applications_ipDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	exam_applications_ipDescUpdatedAt := exam_applications_ipFields[50].Descriptor()
+	// exam_applications_ip.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	exam_applications_ip.DefaultUpdatedAt = exam_applications_ipDescUpdatedAt.Default.(func() time.Time)
+	// exam_applications_ipDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	exam_applications_ipDescUpdatedBy := exam_applications_ipFields[51].Descriptor()
+	// exam_applications_ip.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	exam_applications_ip.DefaultUpdatedBy = exam_applications_ipDescUpdatedBy.Default.(string)
+	exam_applications_psFields := schema.Exam_Applications_PS{}.Fields()
+	_ = exam_applications_psFields
+	// exam_applications_psDescApplnSubmittedDate is the schema descriptor for ApplnSubmittedDate field.
+	exam_applications_psDescApplnSubmittedDate := exam_applications_psFields[25].Descriptor()
+	// exam_applications_ps.DefaultApplnSubmittedDate holds the default value on creation for the ApplnSubmittedDate field.
+	exam_applications_ps.DefaultApplnSubmittedDate = exam_applications_psDescApplnSubmittedDate.Default.(func() time.Time)
+	// exam_applications_psDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	exam_applications_psDescUpdatedAt := exam_applications_psFields[40].Descriptor()
+	// exam_applications_ps.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	exam_applications_ps.DefaultUpdatedAt = exam_applications_psDescUpdatedAt.Default.(func() time.Time)
+	// exam_applications_psDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	exam_applications_psDescUpdatedBy := exam_applications_psFields[41].Descriptor()
+	// exam_applications_ps.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	exam_applications_ps.DefaultUpdatedBy = exam_applications_psDescUpdatedBy.Default.(string)
+	exam_ipFields := schema.Exam_IP{}.Fields()
+	_ = exam_ipFields
+	// exam_ipDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	exam_ipDescUpdatedAt := exam_ipFields[37].Descriptor()
+	// exam_ip.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	exam_ip.DefaultUpdatedAt = exam_ipDescUpdatedAt.Default.(func() time.Time)
+	// exam_ipDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	exam_ipDescUpdatedBy := exam_ipFields[38].Descriptor()
+	// exam_ip.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	exam_ip.DefaultUpdatedBy = exam_ipDescUpdatedBy.Default.(string)
+	exam_paFields := schema.Exam_PA{}.Fields()
+	_ = exam_paFields
+	// exam_paDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	exam_paDescUpdatedAt := exam_paFields[37].Descriptor()
+	// exam_pa.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	exam_pa.DefaultUpdatedAt = exam_paDescUpdatedAt.Default.(func() time.Time)
+	// exam_paDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	exam_paDescUpdatedBy := exam_paFields[38].Descriptor()
+	// exam_pa.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	exam_pa.DefaultUpdatedBy = exam_paDescUpdatedBy.Default.(string)
+	exam_pmFields := schema.Exam_PM{}.Fields()
+	_ = exam_pmFields
+	// exam_pmDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	exam_pmDescUpdatedAt := exam_pmFields[37].Descriptor()
+	// exam_pm.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	exam_pm.DefaultUpdatedAt = exam_pmDescUpdatedAt.Default.(func() time.Time)
+	// exam_pmDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	exam_pmDescUpdatedBy := exam_pmFields[38].Descriptor()
+	// exam_pm.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	exam_pm.DefaultUpdatedBy = exam_pmDescUpdatedBy.Default.(string)
+	exam_psFields := schema.Exam_PS{}.Fields()
+	_ = exam_psFields
+	// exam_psDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	exam_psDescUpdatedAt := exam_psFields[37].Descriptor()
+	// exam_ps.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	exam_ps.DefaultUpdatedAt = exam_psDescUpdatedAt.Default.(func() time.Time)
+	// exam_psDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	exam_psDescUpdatedBy := exam_psFields[38].Descriptor()
+	// exam_ps.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	exam_ps.DefaultUpdatedBy = exam_psDescUpdatedBy.Default.(string)
+	loginFields := schema.Login{}.Fields()
+	_ = loginFields
+	// loginDescLoginID is the schema descriptor for loginID field.
+	loginDescLoginID := loginFields[0].Descriptor()
+	// login.DefaultLoginID holds the default value on creation for the loginID field.
+	login.DefaultLoginID = loginDescLoginID.Default.(func() uuid.UUID)
+	// loginDescUsername is the schema descriptor for username field.
+	loginDescUsername := loginFields[1].Descriptor()
+	// login.UsernameValidator is a validator for the "username" field. It is called by the builders before save.
+	login.UsernameValidator = loginDescUsername.Validators[0].(func(string) error)
 	papertypesFields := schema.PaperTypes{}.Fields()
 	_ = papertypesFields
 	// papertypesDescPaperTypeDescription is the schema descriptor for PaperTypeDescription field.
@@ -285,6 +523,38 @@ func init() {
 	papertypesDescOrderNumber := papertypesFields[3].Descriptor()
 	// papertypes.OrderNumberValidator is a validator for the "OrderNumber" field. It is called by the builders before save.
 	papertypes.OrderNumberValidator = papertypesDescOrderNumber.Validators[0].(func(string) error)
+	placeofpreferenceipFields := schema.PlaceOfPreferenceIP{}.Fields()
+	_ = placeofpreferenceipFields
+	// placeofpreferenceipDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	placeofpreferenceipDescUpdatedBy := placeofpreferenceipFields[6].Descriptor()
+	// placeofpreferenceip.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	placeofpreferenceip.DefaultUpdatedBy = placeofpreferenceipDescUpdatedBy.Default.(string)
+	recommendationsipapplicationsFields := schema.RecommendationsIPApplications{}.Fields()
+	_ = recommendationsipapplicationsFields
+	// recommendationsipapplicationsDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	recommendationsipapplicationsDescUpdatedAt := recommendationsipapplicationsFields[15].Descriptor()
+	// recommendationsipapplications.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	recommendationsipapplications.DefaultUpdatedAt = recommendationsipapplicationsDescUpdatedAt.Default.(func() time.Time)
+	// recommendationsipapplicationsDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	recommendationsipapplicationsDescUpdatedBy := recommendationsipapplicationsFields[16].Descriptor()
+	// recommendationsipapplications.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	recommendationsipapplications.DefaultUpdatedBy = recommendationsipapplicationsDescUpdatedBy.Default.(string)
+	reversal_application_ipFields := schema.Reversal_Application_IP{}.Fields()
+	_ = reversal_application_ipFields
+	// reversal_application_ipDescUpdatedAt is the schema descriptor for UpdatedAt field.
+	reversal_application_ipDescUpdatedAt := reversal_application_ipFields[31].Descriptor()
+	// reversal_application_ip.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
+	reversal_application_ip.DefaultUpdatedAt = reversal_application_ipDescUpdatedAt.Default.(func() time.Time)
+	// reversal_application_ipDescUpdatedBy is the schema descriptor for UpdatedBy field.
+	reversal_application_ipDescUpdatedBy := reversal_application_ipFields[32].Descriptor()
+	// reversal_application_ip.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
+	reversal_application_ip.DefaultUpdatedBy = reversal_application_ipDescUpdatedBy.Default.(string)
+	rolemasterFields := schema.RoleMaster{}.Fields()
+	_ = rolemasterFields
+	// rolemasterDescStatus is the schema descriptor for Status field.
+	rolemasterDescStatus := rolemasterFields[3].Descriptor()
+	// rolemaster.DefaultStatus holds the default value on creation for the Status field.
+	rolemaster.DefaultStatus = rolemasterDescStatus.Default.(bool)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescIDVerified is the schema descriptor for IDVerified field.
@@ -363,4 +633,18 @@ func init() {
 	userDescProfilestatus := userFields[36].Descriptor()
 	// user.DefaultProfilestatus holds the default value on creation for the profilestatus field.
 	user.DefaultProfilestatus = userDescProfilestatus.Default.(bool)
+	usermasterFields := schema.UserMaster{}.Fields()
+	_ = usermasterFields
+	// usermasterDescStatus is the schema descriptor for Status field.
+	usermasterDescStatus := usermasterFields[14].Descriptor()
+	// usermaster.DefaultStatus holds the default value on creation for the Status field.
+	usermaster.DefaultStatus = usermasterDescStatus.Default.(bool)
+	// usermasterDescOTPTriggeredTime is the schema descriptor for OTPTriggeredTime field.
+	usermasterDescOTPTriggeredTime := usermasterFields[17].Descriptor()
+	// usermaster.DefaultOTPTriggeredTime holds the default value on creation for the OTPTriggeredTime field.
+	usermaster.DefaultOTPTriggeredTime = usermasterDescOTPTriggeredTime.Default.(func() time.Time)
+	// usermasterDescCreatedBy is the schema descriptor for CreatedBy field.
+	usermasterDescCreatedBy := usermasterFields[18].Descriptor()
+	// usermaster.DefaultCreatedBy holds the default value on creation for the CreatedBy field.
+	usermaster.DefaultCreatedBy = usermasterDescCreatedBy.Default.(string)
 }

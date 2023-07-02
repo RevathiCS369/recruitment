@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"math"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
 	"recruit/ent/notification"
@@ -22,14 +24,17 @@ import (
 // ExamCalendarQuery is the builder for querying ExamCalendar entities.
 type ExamCalendarQuery struct {
 	config
-	ctx           *QueryContext
-	order         []examcalendar.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.ExamCalendar
-	withVcyYears  *VacancyYearQuery
-	withExams     *ExamQuery
-	withPapers    *ExamPapersQuery
-	withNotifyRef *NotificationQuery
+	ctx              *QueryContext
+	order            []examcalendar.OrderOption
+	inters           []Interceptor
+	predicates       []predicate.ExamCalendar
+	withVcyYears     *VacancyYearQuery
+	withExams        *ExamQuery
+	withPapers       *ExamPapersQuery
+	withNotifyRef    *NotificationQuery
+	withExamcalPsRef *ExamPSQuery
+	withExamcalIPRef *ExamIPQuery
+	withFKs          bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -147,6 +152,50 @@ func (ecq *ExamCalendarQuery) QueryNotifyRef() *NotificationQuery {
 			sqlgraph.From(examcalendar.Table, examcalendar.FieldID, selector),
 			sqlgraph.To(notification.Table, notification.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, examcalendar.NotifyRefTable, examcalendar.NotifyRefColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(ecq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryExamcalPsRef chains the current query on the "examcal_ps_ref" edge.
+func (ecq *ExamCalendarQuery) QueryExamcalPsRef() *ExamPSQuery {
+	query := (&ExamPSClient{config: ecq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ecq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ecq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(examcalendar.Table, examcalendar.FieldID, selector),
+			sqlgraph.To(exam_ps.Table, exam_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, examcalendar.ExamcalPsRefTable, examcalendar.ExamcalPsRefColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(ecq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryExamcalIPRef chains the current query on the "examcal_ip_ref" edge.
+func (ecq *ExamCalendarQuery) QueryExamcalIPRef() *ExamIPQuery {
+	query := (&ExamIPClient{config: ecq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ecq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ecq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(examcalendar.Table, examcalendar.FieldID, selector),
+			sqlgraph.To(exam_ip.Table, exam_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, examcalendar.ExamcalIPRefTable, examcalendar.ExamcalIPRefColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(ecq.driver.Dialect(), step)
 		return fromU, nil
@@ -341,15 +390,17 @@ func (ecq *ExamCalendarQuery) Clone() *ExamCalendarQuery {
 		return nil
 	}
 	return &ExamCalendarQuery{
-		config:        ecq.config,
-		ctx:           ecq.ctx.Clone(),
-		order:         append([]examcalendar.OrderOption{}, ecq.order...),
-		inters:        append([]Interceptor{}, ecq.inters...),
-		predicates:    append([]predicate.ExamCalendar{}, ecq.predicates...),
-		withVcyYears:  ecq.withVcyYears.Clone(),
-		withExams:     ecq.withExams.Clone(),
-		withPapers:    ecq.withPapers.Clone(),
-		withNotifyRef: ecq.withNotifyRef.Clone(),
+		config:           ecq.config,
+		ctx:              ecq.ctx.Clone(),
+		order:            append([]examcalendar.OrderOption{}, ecq.order...),
+		inters:           append([]Interceptor{}, ecq.inters...),
+		predicates:       append([]predicate.ExamCalendar{}, ecq.predicates...),
+		withVcyYears:     ecq.withVcyYears.Clone(),
+		withExams:        ecq.withExams.Clone(),
+		withPapers:       ecq.withPapers.Clone(),
+		withNotifyRef:    ecq.withNotifyRef.Clone(),
+		withExamcalPsRef: ecq.withExamcalPsRef.Clone(),
+		withExamcalIPRef: ecq.withExamcalIPRef.Clone(),
 		// clone intermediate query.
 		sql:  ecq.sql.Clone(),
 		path: ecq.path,
@@ -397,6 +448,28 @@ func (ecq *ExamCalendarQuery) WithNotifyRef(opts ...func(*NotificationQuery)) *E
 		opt(query)
 	}
 	ecq.withNotifyRef = query
+	return ecq
+}
+
+// WithExamcalPsRef tells the query-builder to eager-load the nodes that are connected to
+// the "examcal_ps_ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (ecq *ExamCalendarQuery) WithExamcalPsRef(opts ...func(*ExamPSQuery)) *ExamCalendarQuery {
+	query := (&ExamPSClient{config: ecq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ecq.withExamcalPsRef = query
+	return ecq
+}
+
+// WithExamcalIPRef tells the query-builder to eager-load the nodes that are connected to
+// the "examcal_ip_ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (ecq *ExamCalendarQuery) WithExamcalIPRef(opts ...func(*ExamIPQuery)) *ExamCalendarQuery {
+	query := (&ExamIPClient{config: ecq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ecq.withExamcalIPRef = query
 	return ecq
 }
 
@@ -477,14 +550,20 @@ func (ecq *ExamCalendarQuery) prepareQuery(ctx context.Context) error {
 func (ecq *ExamCalendarQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ExamCalendar, error) {
 	var (
 		nodes       = []*ExamCalendar{}
+		withFKs     = ecq.withFKs
 		_spec       = ecq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
 			ecq.withVcyYears != nil,
 			ecq.withExams != nil,
 			ecq.withPapers != nil,
 			ecq.withNotifyRef != nil,
+			ecq.withExamcalPsRef != nil,
+			ecq.withExamcalIPRef != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, examcalendar.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ExamCalendar).scanValues(nil, columns)
 	}
@@ -525,6 +604,20 @@ func (ecq *ExamCalendarQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		if err := ecq.loadNotifyRef(ctx, query, nodes,
 			func(n *ExamCalendar) { n.Edges.NotifyRef = []*Notification{} },
 			func(n *ExamCalendar, e *Notification) { n.Edges.NotifyRef = append(n.Edges.NotifyRef, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ecq.withExamcalPsRef; query != nil {
+		if err := ecq.loadExamcalPsRef(ctx, query, nodes,
+			func(n *ExamCalendar) { n.Edges.ExamcalPsRef = []*Exam_PS{} },
+			func(n *ExamCalendar, e *Exam_PS) { n.Edges.ExamcalPsRef = append(n.Edges.ExamcalPsRef, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ecq.withExamcalIPRef; query != nil {
+		if err := ecq.loadExamcalIPRef(ctx, query, nodes,
+			func(n *ExamCalendar) { n.Edges.ExamcalIPRef = []*Exam_IP{} },
+			func(n *ExamCalendar, e *Exam_IP) { n.Edges.ExamcalIPRef = append(n.Edges.ExamcalIPRef, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -644,6 +737,68 @@ func (ecq *ExamCalendarQuery) loadNotifyRef(ctx context.Context, query *Notifica
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "exam_calendar_notify_ref" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (ecq *ExamCalendarQuery) loadExamcalPsRef(ctx context.Context, query *ExamPSQuery, nodes []*ExamCalendar, init func(*ExamCalendar), assign func(*ExamCalendar, *Exam_PS)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*ExamCalendar)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Exam_PS(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(examcalendar.ExamcalPsRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.exam_calendar_examcal_ps_ref
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "exam_calendar_examcal_ps_ref" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "exam_calendar_examcal_ps_ref" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (ecq *ExamCalendarQuery) loadExamcalIPRef(ctx context.Context, query *ExamIPQuery, nodes []*ExamCalendar, init func(*ExamCalendar), assign func(*ExamCalendar, *Exam_IP)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*ExamCalendar)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Exam_IP(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(examcalendar.ExamcalIPRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.exam_calendar_examcal_ip_ref
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "exam_calendar_examcal_ip_ref" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "exam_calendar_examcal_ip_ref" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

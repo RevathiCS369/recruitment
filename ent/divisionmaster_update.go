@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/divisionmaster"
+	"recruit/ent/facility"
 	"recruit/ent/predicate"
 	"recruit/ent/regionmaster"
 
@@ -188,6 +189,21 @@ func (dmu *DivisionMasterUpdate) AddRegions(r ...*RegionMaster) *DivisionMasterU
 	return dmu.AddRegionIDs(ids...)
 }
 
+// AddDivisionsRefIDs adds the "divisions_ref" edge to the Facility entity by IDs.
+func (dmu *DivisionMasterUpdate) AddDivisionsRefIDs(ids ...int32) *DivisionMasterUpdate {
+	dmu.mutation.AddDivisionsRefIDs(ids...)
+	return dmu
+}
+
+// AddDivisionsRef adds the "divisions_ref" edges to the Facility entity.
+func (dmu *DivisionMasterUpdate) AddDivisionsRef(f ...*Facility) *DivisionMasterUpdate {
+	ids := make([]int32, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return dmu.AddDivisionsRefIDs(ids...)
+}
+
 // Mutation returns the DivisionMasterMutation object of the builder.
 func (dmu *DivisionMasterUpdate) Mutation() *DivisionMasterMutation {
 	return dmu.mutation
@@ -212,6 +228,27 @@ func (dmu *DivisionMasterUpdate) RemoveRegions(r ...*RegionMaster) *DivisionMast
 		ids[i] = r[i].ID
 	}
 	return dmu.RemoveRegionIDs(ids...)
+}
+
+// ClearDivisionsRef clears all "divisions_ref" edges to the Facility entity.
+func (dmu *DivisionMasterUpdate) ClearDivisionsRef() *DivisionMasterUpdate {
+	dmu.mutation.ClearDivisionsRef()
+	return dmu
+}
+
+// RemoveDivisionsRefIDs removes the "divisions_ref" edge to Facility entities by IDs.
+func (dmu *DivisionMasterUpdate) RemoveDivisionsRefIDs(ids ...int32) *DivisionMasterUpdate {
+	dmu.mutation.RemoveDivisionsRefIDs(ids...)
+	return dmu
+}
+
+// RemoveDivisionsRef removes "divisions_ref" edges to Facility entities.
+func (dmu *DivisionMasterUpdate) RemoveDivisionsRef(f ...*Facility) *DivisionMasterUpdate {
+	ids := make([]int32, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return dmu.RemoveDivisionsRefIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -339,6 +376,51 @@ func (dmu *DivisionMasterUpdate) sqlSave(ctx context.Context) (n int, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if dmu.mutation.DivisionsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   divisionmaster.DivisionsRefTable,
+			Columns: []string{divisionmaster.DivisionsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(facility.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := dmu.mutation.RemovedDivisionsRefIDs(); len(nodes) > 0 && !dmu.mutation.DivisionsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   divisionmaster.DivisionsRefTable,
+			Columns: []string{divisionmaster.DivisionsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(facility.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := dmu.mutation.DivisionsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   divisionmaster.DivisionsRefTable,
+			Columns: []string{divisionmaster.DivisionsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(facility.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {
@@ -526,6 +608,21 @@ func (dmuo *DivisionMasterUpdateOne) AddRegions(r ...*RegionMaster) *DivisionMas
 	return dmuo.AddRegionIDs(ids...)
 }
 
+// AddDivisionsRefIDs adds the "divisions_ref" edge to the Facility entity by IDs.
+func (dmuo *DivisionMasterUpdateOne) AddDivisionsRefIDs(ids ...int32) *DivisionMasterUpdateOne {
+	dmuo.mutation.AddDivisionsRefIDs(ids...)
+	return dmuo
+}
+
+// AddDivisionsRef adds the "divisions_ref" edges to the Facility entity.
+func (dmuo *DivisionMasterUpdateOne) AddDivisionsRef(f ...*Facility) *DivisionMasterUpdateOne {
+	ids := make([]int32, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return dmuo.AddDivisionsRefIDs(ids...)
+}
+
 // Mutation returns the DivisionMasterMutation object of the builder.
 func (dmuo *DivisionMasterUpdateOne) Mutation() *DivisionMasterMutation {
 	return dmuo.mutation
@@ -550,6 +647,27 @@ func (dmuo *DivisionMasterUpdateOne) RemoveRegions(r ...*RegionMaster) *Division
 		ids[i] = r[i].ID
 	}
 	return dmuo.RemoveRegionIDs(ids...)
+}
+
+// ClearDivisionsRef clears all "divisions_ref" edges to the Facility entity.
+func (dmuo *DivisionMasterUpdateOne) ClearDivisionsRef() *DivisionMasterUpdateOne {
+	dmuo.mutation.ClearDivisionsRef()
+	return dmuo
+}
+
+// RemoveDivisionsRefIDs removes the "divisions_ref" edge to Facility entities by IDs.
+func (dmuo *DivisionMasterUpdateOne) RemoveDivisionsRefIDs(ids ...int32) *DivisionMasterUpdateOne {
+	dmuo.mutation.RemoveDivisionsRefIDs(ids...)
+	return dmuo
+}
+
+// RemoveDivisionsRef removes "divisions_ref" edges to Facility entities.
+func (dmuo *DivisionMasterUpdateOne) RemoveDivisionsRef(f ...*Facility) *DivisionMasterUpdateOne {
+	ids := make([]int32, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return dmuo.RemoveDivisionsRefIDs(ids...)
 }
 
 // Where appends a list predicates to the DivisionMasterUpdate builder.
@@ -707,6 +825,51 @@ func (dmuo *DivisionMasterUpdateOne) sqlSave(ctx context.Context) (_node *Divisi
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if dmuo.mutation.DivisionsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   divisionmaster.DivisionsRefTable,
+			Columns: []string{divisionmaster.DivisionsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(facility.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := dmuo.mutation.RemovedDivisionsRefIDs(); len(nodes) > 0 && !dmuo.mutation.DivisionsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   divisionmaster.DivisionsRefTable,
+			Columns: []string{divisionmaster.DivisionsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(facility.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := dmuo.mutation.DivisionsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   divisionmaster.DivisionsRefTable,
+			Columns: []string{divisionmaster.DivisionsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(facility.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {

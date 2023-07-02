@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/exam"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
+	"recruit/ent/examtype"
 	"recruit/ent/nodalofficer"
 	"recruit/ent/notification"
 
@@ -48,15 +50,15 @@ func (ec *ExamCreate) SetConductedBy(s string) *ExamCreate {
 }
 
 // SetNodalOfficerLevel sets the "NodalOfficerLevel" field.
-func (ec *ExamCreate) SetNodalOfficerLevel(i int32) *ExamCreate {
-	ec.mutation.SetNodalOfficerLevel(i)
+func (ec *ExamCreate) SetNodalOfficerLevel(s string) *ExamCreate {
+	ec.mutation.SetNodalOfficerLevel(s)
 	return ec
 }
 
 // SetNillableNodalOfficerLevel sets the "NodalOfficerLevel" field if the given value is not nil.
-func (ec *ExamCreate) SetNillableNodalOfficerLevel(i *int32) *ExamCreate {
-	if i != nil {
-		ec.SetNodalOfficerLevel(*i)
+func (ec *ExamCreate) SetNillableNodalOfficerLevel(s *string) *ExamCreate {
+	if s != nil {
+		ec.SetNodalOfficerLevel(*s)
 	}
 	return ec
 }
@@ -85,6 +87,102 @@ func (ec *ExamCreate) SetPaperCode(i int32) *ExamCreate {
 func (ec *ExamCreate) SetNillablePaperCode(i *int32) *ExamCreate {
 	if i != nil {
 		ec.SetPaperCode(*i)
+	}
+	return ec
+}
+
+// SetExamType sets the "ExamType" field.
+func (ec *ExamCreate) SetExamType(s string) *ExamCreate {
+	ec.mutation.SetExamType(s)
+	return ec
+}
+
+// SetTentativeNotificationMandatoryDate sets the "TentativeNotificationMandatoryDate" field.
+func (ec *ExamCreate) SetTentativeNotificationMandatoryDate(b bool) *ExamCreate {
+	ec.mutation.SetTentativeNotificationMandatoryDate(b)
+	return ec
+}
+
+// SetNillableTentativeNotificationMandatoryDate sets the "TentativeNotificationMandatoryDate" field if the given value is not nil.
+func (ec *ExamCreate) SetNillableTentativeNotificationMandatoryDate(b *bool) *ExamCreate {
+	if b != nil {
+		ec.SetTentativeNotificationMandatoryDate(*b)
+	}
+	return ec
+}
+
+// SetLocalLanguage sets the "LocalLanguage" field.
+func (ec *ExamCreate) SetLocalLanguage(b bool) *ExamCreate {
+	ec.mutation.SetLocalLanguage(b)
+	return ec
+}
+
+// SetNillableLocalLanguage sets the "LocalLanguage" field if the given value is not nil.
+func (ec *ExamCreate) SetNillableLocalLanguage(b *bool) *ExamCreate {
+	if b != nil {
+		ec.SetLocalLanguage(*b)
+	}
+	return ec
+}
+
+// SetOptionForPost sets the "OptionForPost" field.
+func (ec *ExamCreate) SetOptionForPost(b bool) *ExamCreate {
+	ec.mutation.SetOptionForPost(b)
+	return ec
+}
+
+// SetNillableOptionForPost sets the "OptionForPost" field if the given value is not nil.
+func (ec *ExamCreate) SetNillableOptionForPost(b *bool) *ExamCreate {
+	if b != nil {
+		ec.SetOptionForPost(*b)
+	}
+	return ec
+}
+
+// SetOptionToWriteExamOtherThanParent sets the "OptionToWriteExamOtherThanParent" field.
+func (ec *ExamCreate) SetOptionToWriteExamOtherThanParent(b bool) *ExamCreate {
+	ec.mutation.SetOptionToWriteExamOtherThanParent(b)
+	return ec
+}
+
+// SetNillableOptionToWriteExamOtherThanParent sets the "OptionToWriteExamOtherThanParent" field if the given value is not nil.
+func (ec *ExamCreate) SetNillableOptionToWriteExamOtherThanParent(b *bool) *ExamCreate {
+	if b != nil {
+		ec.SetOptionToWriteExamOtherThanParent(*b)
+	}
+	return ec
+}
+
+// SetOrderNumber sets the "OrderNumber" field.
+func (ec *ExamCreate) SetOrderNumber(s string) *ExamCreate {
+	ec.mutation.SetOrderNumber(s)
+	return ec
+}
+
+// SetNillableOrderNumber sets the "OrderNumber" field if the given value is not nil.
+func (ec *ExamCreate) SetNillableOrderNumber(s *string) *ExamCreate {
+	if s != nil {
+		ec.SetOrderNumber(*s)
+	}
+	return ec
+}
+
+// SetStatus sets the "Status" field.
+func (ec *ExamCreate) SetStatus(s string) *ExamCreate {
+	ec.mutation.SetStatus(s)
+	return ec
+}
+
+// SetExamTypeCode sets the "ExamTypeCode" field.
+func (ec *ExamCreate) SetExamTypeCode(i int32) *ExamCreate {
+	ec.mutation.SetExamTypeCode(i)
+	return ec
+}
+
+// SetNillableExamTypeCode sets the "ExamTypeCode" field if the given value is not nil.
+func (ec *ExamCreate) SetNillableExamTypeCode(i *int32) *ExamCreate {
+	if i != nil {
+		ec.SetExamTypeCode(*i)
 	}
 	return ec
 }
@@ -155,6 +253,36 @@ func (ec *ExamCreate) AddPapers(e ...*ExamPapers) *ExamCreate {
 	return ec.AddPaperIDs(ids...)
 }
 
+// AddExamEligibilityIDs adds the "ExamEligibility" edge to the EligibilityMaster entity by IDs.
+func (ec *ExamCreate) AddExamEligibilityIDs(ids ...int32) *ExamCreate {
+	ec.mutation.AddExamEligibilityIDs(ids...)
+	return ec
+}
+
+// AddExamEligibility adds the "ExamEligibility" edges to the EligibilityMaster entity.
+func (ec *ExamCreate) AddExamEligibility(e ...*EligibilityMaster) *ExamCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ec.AddExamEligibilityIDs(ids...)
+}
+
+// AddExamsTypeIDs adds the "exams_type" edge to the ExamType entity by IDs.
+func (ec *ExamCreate) AddExamsTypeIDs(ids ...int32) *ExamCreate {
+	ec.mutation.AddExamsTypeIDs(ids...)
+	return ec
+}
+
+// AddExamsType adds the "exams_type" edges to the ExamType entity.
+func (ec *ExamCreate) AddExamsType(e ...*ExamType) *ExamCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ec.AddExamsTypeIDs(ids...)
+}
+
 // Mutation returns the ExamMutation object of the builder.
 func (ec *ExamCreate) Mutation() *ExamMutation {
 	return ec.mutation
@@ -162,6 +290,7 @@ func (ec *ExamCreate) Mutation() *ExamMutation {
 
 // Save creates the Exam in the database.
 func (ec *ExamCreate) Save(ctx context.Context) (*Exam, error) {
+	ec.defaults()
 	return withHooks(ctx, ec.sqlSave, ec.mutation, ec.hooks)
 }
 
@@ -187,6 +316,26 @@ func (ec *ExamCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ec *ExamCreate) defaults() {
+	if _, ok := ec.mutation.TentativeNotificationMandatoryDate(); !ok {
+		v := exam.DefaultTentativeNotificationMandatoryDate
+		ec.mutation.SetTentativeNotificationMandatoryDate(v)
+	}
+	if _, ok := ec.mutation.LocalLanguage(); !ok {
+		v := exam.DefaultLocalLanguage
+		ec.mutation.SetLocalLanguage(v)
+	}
+	if _, ok := ec.mutation.OptionForPost(); !ok {
+		v := exam.DefaultOptionForPost
+		ec.mutation.SetOptionForPost(v)
+	}
+	if _, ok := ec.mutation.OptionToWriteExamOtherThanParent(); !ok {
+		v := exam.DefaultOptionToWriteExamOtherThanParent
+		ec.mutation.SetOptionToWriteExamOtherThanParent(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (ec *ExamCreate) check() error {
 	if _, ok := ec.mutation.ExamName(); !ok {
@@ -200,6 +349,24 @@ func (ec *ExamCreate) check() error {
 	}
 	if _, ok := ec.mutation.ConductedBy(); !ok {
 		return &ValidationError{Name: "ConductedBy", err: errors.New(`ent: missing required field "Exam.ConductedBy"`)}
+	}
+	if _, ok := ec.mutation.ExamType(); !ok {
+		return &ValidationError{Name: "ExamType", err: errors.New(`ent: missing required field "Exam.ExamType"`)}
+	}
+	if _, ok := ec.mutation.TentativeNotificationMandatoryDate(); !ok {
+		return &ValidationError{Name: "TentativeNotificationMandatoryDate", err: errors.New(`ent: missing required field "Exam.TentativeNotificationMandatoryDate"`)}
+	}
+	if _, ok := ec.mutation.LocalLanguage(); !ok {
+		return &ValidationError{Name: "LocalLanguage", err: errors.New(`ent: missing required field "Exam.LocalLanguage"`)}
+	}
+	if _, ok := ec.mutation.OptionForPost(); !ok {
+		return &ValidationError{Name: "OptionForPost", err: errors.New(`ent: missing required field "Exam.OptionForPost"`)}
+	}
+	if _, ok := ec.mutation.OptionToWriteExamOtherThanParent(); !ok {
+		return &ValidationError{Name: "OptionToWriteExamOtherThanParent", err: errors.New(`ent: missing required field "Exam.OptionToWriteExamOtherThanParent"`)}
+	}
+	if _, ok := ec.mutation.Status(); !ok {
+		return &ValidationError{Name: "Status", err: errors.New(`ent: missing required field "Exam.Status"`)}
 	}
 	return nil
 }
@@ -250,7 +417,7 @@ func (ec *ExamCreate) createSpec() (*Exam, *sqlgraph.CreateSpec) {
 		_node.ConductedBy = value
 	}
 	if value, ok := ec.mutation.NodalOfficerLevel(); ok {
-		_spec.SetField(exam.FieldNodalOfficerLevel, field.TypeInt32, value)
+		_spec.SetField(exam.FieldNodalOfficerLevel, field.TypeString, value)
 		_node.NodalOfficerLevel = value
 	}
 	if value, ok := ec.mutation.CalendarCode(); ok {
@@ -260,6 +427,38 @@ func (ec *ExamCreate) createSpec() (*Exam, *sqlgraph.CreateSpec) {
 	if value, ok := ec.mutation.PaperCode(); ok {
 		_spec.SetField(exam.FieldPaperCode, field.TypeInt32, value)
 		_node.PaperCode = value
+	}
+	if value, ok := ec.mutation.ExamType(); ok {
+		_spec.SetField(exam.FieldExamType, field.TypeString, value)
+		_node.ExamType = value
+	}
+	if value, ok := ec.mutation.TentativeNotificationMandatoryDate(); ok {
+		_spec.SetField(exam.FieldTentativeNotificationMandatoryDate, field.TypeBool, value)
+		_node.TentativeNotificationMandatoryDate = value
+	}
+	if value, ok := ec.mutation.LocalLanguage(); ok {
+		_spec.SetField(exam.FieldLocalLanguage, field.TypeBool, value)
+		_node.LocalLanguage = value
+	}
+	if value, ok := ec.mutation.OptionForPost(); ok {
+		_spec.SetField(exam.FieldOptionForPost, field.TypeBool, value)
+		_node.OptionForPost = value
+	}
+	if value, ok := ec.mutation.OptionToWriteExamOtherThanParent(); ok {
+		_spec.SetField(exam.FieldOptionToWriteExamOtherThanParent, field.TypeBool, value)
+		_node.OptionToWriteExamOtherThanParent = value
+	}
+	if value, ok := ec.mutation.OrderNumber(); ok {
+		_spec.SetField(exam.FieldOrderNumber, field.TypeString, value)
+		_node.OrderNumber = value
+	}
+	if value, ok := ec.mutation.Status(); ok {
+		_spec.SetField(exam.FieldStatus, field.TypeString, value)
+		_node.Status = value
+	}
+	if value, ok := ec.mutation.ExamTypeCode(); ok {
+		_spec.SetField(exam.FieldExamTypeCode, field.TypeInt32, value)
+		_node.ExamTypeCode = value
 	}
 	if nodes := ec.mutation.NodalOfficersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -325,6 +524,38 @@ func (ec *ExamCreate) createSpec() (*Exam, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := ec.mutation.ExamEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamEligibilityTable,
+			Columns: []string{exam.ExamEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ec.mutation.ExamsTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamsTypeTable,
+			Columns: []string{exam.ExamsTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(examtype.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -342,6 +573,7 @@ func (ecb *ExamCreateBulk) Save(ctx context.Context) ([]*Exam, error) {
 	for i := range ecb.builders {
 		func(i int, root context.Context) {
 			builder := ecb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ExamMutation)
 				if !ok {

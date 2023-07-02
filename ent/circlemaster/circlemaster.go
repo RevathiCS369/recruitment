@@ -47,7 +47,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "facility" package.
 	CircleRefInverseTable = "Facility"
 	// CircleRefColumn is the table column denoting the circle_ref relation/edge.
-	CircleRefColumn = "circle_master_circle_ref"
+	CircleRefColumn = "circle_id"
 )
 
 // Columns holds all SQL columns for circlemaster fields.

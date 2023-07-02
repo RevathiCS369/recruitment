@@ -24,7 +24,29 @@ type Disability struct {
 	DisabilityPercentage int32 `json:"DisabilityPercentage,omitempty"`
 	// DisabilityFlag holds the value of the "DisabilityFlag" field.
 	DisabilityFlag disability.DisabilityFlag `json:"DisabilityFlag,omitempty"`
-	selectValues   sql.SelectValues
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the DisabilityQuery when eager-loading is set.
+	Edges               DisabilityEdges `json:"edges"`
+	exam_papers_dis_ref *int32
+	selectValues        sql.SelectValues
+}
+
+// DisabilityEdges holds the relations/edges for other nodes in the graph.
+type DisabilityEdges struct {
+	// DisRef holds the value of the dis_ref edge.
+	DisRef []*ExamPapers `json:"dis_ref,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// DisRefOrErr returns the DisRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e DisabilityEdges) DisRefOrErr() ([]*ExamPapers, error) {
+	if e.loadedTypes[0] {
+		return e.DisRef, nil
+	}
+	return nil, &NotLoadedError{edge: "dis_ref"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -36,6 +58,8 @@ func (*Disability) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case disability.FieldDisabilityTypeCode, disability.FieldDisabilityTypeDescription, disability.FieldDisabilityFlag:
 			values[i] = new(sql.NullString)
+		case disability.ForeignKeys[0]: // exam_papers_dis_ref
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -81,6 +105,13 @@ func (d *Disability) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				d.DisabilityFlag = disability.DisabilityFlag(value.String)
 			}
+		case disability.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_papers_dis_ref", value)
+			} else if value.Valid {
+				d.exam_papers_dis_ref = new(int32)
+				*d.exam_papers_dis_ref = int32(value.Int64)
+			}
 		default:
 			d.selectValues.Set(columns[i], values[i])
 		}
@@ -92,6 +123,11 @@ func (d *Disability) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (d *Disability) Value(name string) (ent.Value, error) {
 	return d.selectValues.Get(name)
+}
+
+// QueryDisRef queries the "dis_ref" edge of the Disability entity.
+func (d *Disability) QueryDisRef() *ExamPapersQuery {
+	return NewDisabilityClient(d.config).QueryDisRef(d)
 }
 
 // Update returns a builder for updating this Disability.

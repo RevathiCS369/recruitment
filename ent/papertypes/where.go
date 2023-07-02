@@ -280,6 +280,16 @@ func SequenceNumberLTE(v int32) predicate.PaperTypes {
 	return predicate.PaperTypes(sql.FieldLTE(FieldSequenceNumber, v))
 }
 
+// SequenceNumberIsNil applies the IsNil predicate on the "SequenceNumber" field.
+func SequenceNumberIsNil() predicate.PaperTypes {
+	return predicate.PaperTypes(sql.FieldIsNull(FieldSequenceNumber))
+}
+
+// SequenceNumberNotNil applies the NotNil predicate on the "SequenceNumber" field.
+func SequenceNumberNotNil() predicate.PaperTypes {
+	return predicate.PaperTypes(sql.FieldNotNull(FieldSequenceNumber))
+}
+
 // CreatedDateEQ applies the EQ predicate on the "CreatedDate" field.
 func CreatedDateEQ(v time.Time) predicate.PaperTypes {
 	return predicate.PaperTypes(sql.FieldEQ(FieldCreatedDate, v))
@@ -318,6 +328,16 @@ func CreatedDateLT(v time.Time) predicate.PaperTypes {
 // CreatedDateLTE applies the LTE predicate on the "CreatedDate" field.
 func CreatedDateLTE(v time.Time) predicate.PaperTypes {
 	return predicate.PaperTypes(sql.FieldLTE(FieldCreatedDate, v))
+}
+
+// CreatedDateIsNil applies the IsNil predicate on the "CreatedDate" field.
+func CreatedDateIsNil() predicate.PaperTypes {
+	return predicate.PaperTypes(sql.FieldIsNull(FieldCreatedDate))
+}
+
+// CreatedDateNotNil applies the NotNil predicate on the "CreatedDate" field.
+func CreatedDateNotNil() predicate.PaperTypes {
+	return predicate.PaperTypes(sql.FieldNotNull(FieldCreatedDate))
 }
 
 // HasPapercode applies the HasEdge predicate on the "papercode" edge.

@@ -9,6 +9,8 @@ import (
 	"recruit/ent/application"
 	"recruit/ent/center"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/nodalofficer"
 	"recruit/ent/notification"
 	"recruit/ent/predicate"
@@ -182,6 +184,33 @@ func (nu *NotificationUpdate) ClearVacanciesFile() *NotificationUpdate {
 	return nu
 }
 
+// SetExamCodePS sets the "ExamCodePS" field.
+func (nu *NotificationUpdate) SetExamCodePS(i int32) *NotificationUpdate {
+	nu.mutation.ResetExamCodePS()
+	nu.mutation.SetExamCodePS(i)
+	return nu
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (nu *NotificationUpdate) SetNillableExamCodePS(i *int32) *NotificationUpdate {
+	if i != nil {
+		nu.SetExamCodePS(*i)
+	}
+	return nu
+}
+
+// AddExamCodePS adds i to the "ExamCodePS" field.
+func (nu *NotificationUpdate) AddExamCodePS(i int32) *NotificationUpdate {
+	nu.mutation.AddExamCodePS(i)
+	return nu
+}
+
+// ClearExamCodePS clears the value of the "ExamCodePS" field.
+func (nu *NotificationUpdate) ClearExamCodePS() *NotificationUpdate {
+	nu.mutation.ClearExamCodePS()
+	return nu
+}
+
 // AddApplicationIDs adds the "applications" edge to the Application entity by IDs.
 func (nu *NotificationUpdate) AddApplicationIDs(ids ...int32) *NotificationUpdate {
 	nu.mutation.AddApplicationIDs(ids...)
@@ -274,6 +303,36 @@ func (nu *NotificationUpdate) AddNotifyRef(n ...*Notification) *NotificationUpda
 		ids[i] = n[i].ID
 	}
 	return nu.AddNotifyRefIDs(ids...)
+}
+
+// AddNotificationsPIDs adds the "notifications_ps" edge to the Exam_PS entity by IDs.
+func (nu *NotificationUpdate) AddNotificationsPIDs(ids ...int32) *NotificationUpdate {
+	nu.mutation.AddNotificationsPIDs(ids...)
+	return nu
+}
+
+// AddNotificationsPs adds the "notifications_ps" edges to the Exam_PS entity.
+func (nu *NotificationUpdate) AddNotificationsPs(e ...*Exam_PS) *NotificationUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nu.AddNotificationsPIDs(ids...)
+}
+
+// AddNotificationsIPIDs adds the "notifications_ip" edge to the Exam_IP entity by IDs.
+func (nu *NotificationUpdate) AddNotificationsIPIDs(ids ...int32) *NotificationUpdate {
+	nu.mutation.AddNotificationsIPIDs(ids...)
+	return nu
+}
+
+// AddNotificationsIP adds the "notifications_ip" edges to the Exam_IP entity.
+func (nu *NotificationUpdate) AddNotificationsIP(e ...*Exam_IP) *NotificationUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nu.AddNotificationsIPIDs(ids...)
 }
 
 // Mutation returns the NotificationMutation object of the builder.
@@ -392,6 +451,48 @@ func (nu *NotificationUpdate) RemoveNotifyRef(n ...*Notification) *NotificationU
 	return nu.RemoveNotifyRefIDs(ids...)
 }
 
+// ClearNotificationsPs clears all "notifications_ps" edges to the Exam_PS entity.
+func (nu *NotificationUpdate) ClearNotificationsPs() *NotificationUpdate {
+	nu.mutation.ClearNotificationsPs()
+	return nu
+}
+
+// RemoveNotificationsPIDs removes the "notifications_ps" edge to Exam_PS entities by IDs.
+func (nu *NotificationUpdate) RemoveNotificationsPIDs(ids ...int32) *NotificationUpdate {
+	nu.mutation.RemoveNotificationsPIDs(ids...)
+	return nu
+}
+
+// RemoveNotificationsPs removes "notifications_ps" edges to Exam_PS entities.
+func (nu *NotificationUpdate) RemoveNotificationsPs(e ...*Exam_PS) *NotificationUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nu.RemoveNotificationsPIDs(ids...)
+}
+
+// ClearNotificationsIP clears all "notifications_ip" edges to the Exam_IP entity.
+func (nu *NotificationUpdate) ClearNotificationsIP() *NotificationUpdate {
+	nu.mutation.ClearNotificationsIP()
+	return nu
+}
+
+// RemoveNotificationsIPIDs removes the "notifications_ip" edge to Exam_IP entities by IDs.
+func (nu *NotificationUpdate) RemoveNotificationsIPIDs(ids ...int32) *NotificationUpdate {
+	nu.mutation.RemoveNotificationsIPIDs(ids...)
+	return nu
+}
+
+// RemoveNotificationsIP removes "notifications_ip" edges to Exam_IP entities.
+func (nu *NotificationUpdate) RemoveNotificationsIP(e ...*Exam_IP) *NotificationUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nu.RemoveNotificationsIPIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (nu *NotificationUpdate) Save(ctx context.Context) (int, error) {
 	return withHooks(ctx, nu.sqlSave, nu.mutation, nu.hooks)
@@ -475,6 +576,15 @@ func (nu *NotificationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nu.mutation.VacanciesFileCleared() {
 		_spec.ClearField(notification.FieldVacanciesFile, field.TypeString)
+	}
+	if value, ok := nu.mutation.ExamCodePS(); ok {
+		_spec.SetField(notification.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if value, ok := nu.mutation.AddedExamCodePS(); ok {
+		_spec.AddField(notification.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if nu.mutation.ExamCodePSCleared() {
+		_spec.ClearField(notification.FieldExamCodePS, field.TypeInt32)
 	}
 	if nu.mutation.ApplicationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -730,6 +840,96 @@ func (nu *NotificationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if nu.mutation.NotificationsPsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsPsTable,
+			Columns: []string{notification.NotificationsPsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedNotificationsPsIDs(); len(nodes) > 0 && !nu.mutation.NotificationsPsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsPsTable,
+			Columns: []string{notification.NotificationsPsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.NotificationsPsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsPsTable,
+			Columns: []string{notification.NotificationsPsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nu.mutation.NotificationsIPCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsIPTable,
+			Columns: []string{notification.NotificationsIPColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedNotificationsIPIDs(); len(nodes) > 0 && !nu.mutation.NotificationsIPCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsIPTable,
+			Columns: []string{notification.NotificationsIPColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.NotificationsIPIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsIPTable,
+			Columns: []string{notification.NotificationsIPColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, nu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{notification.Label}
@@ -899,6 +1099,33 @@ func (nuo *NotificationUpdateOne) ClearVacanciesFile() *NotificationUpdateOne {
 	return nuo
 }
 
+// SetExamCodePS sets the "ExamCodePS" field.
+func (nuo *NotificationUpdateOne) SetExamCodePS(i int32) *NotificationUpdateOne {
+	nuo.mutation.ResetExamCodePS()
+	nuo.mutation.SetExamCodePS(i)
+	return nuo
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (nuo *NotificationUpdateOne) SetNillableExamCodePS(i *int32) *NotificationUpdateOne {
+	if i != nil {
+		nuo.SetExamCodePS(*i)
+	}
+	return nuo
+}
+
+// AddExamCodePS adds i to the "ExamCodePS" field.
+func (nuo *NotificationUpdateOne) AddExamCodePS(i int32) *NotificationUpdateOne {
+	nuo.mutation.AddExamCodePS(i)
+	return nuo
+}
+
+// ClearExamCodePS clears the value of the "ExamCodePS" field.
+func (nuo *NotificationUpdateOne) ClearExamCodePS() *NotificationUpdateOne {
+	nuo.mutation.ClearExamCodePS()
+	return nuo
+}
+
 // AddApplicationIDs adds the "applications" edge to the Application entity by IDs.
 func (nuo *NotificationUpdateOne) AddApplicationIDs(ids ...int32) *NotificationUpdateOne {
 	nuo.mutation.AddApplicationIDs(ids...)
@@ -991,6 +1218,36 @@ func (nuo *NotificationUpdateOne) AddNotifyRef(n ...*Notification) *Notification
 		ids[i] = n[i].ID
 	}
 	return nuo.AddNotifyRefIDs(ids...)
+}
+
+// AddNotificationsPIDs adds the "notifications_ps" edge to the Exam_PS entity by IDs.
+func (nuo *NotificationUpdateOne) AddNotificationsPIDs(ids ...int32) *NotificationUpdateOne {
+	nuo.mutation.AddNotificationsPIDs(ids...)
+	return nuo
+}
+
+// AddNotificationsPs adds the "notifications_ps" edges to the Exam_PS entity.
+func (nuo *NotificationUpdateOne) AddNotificationsPs(e ...*Exam_PS) *NotificationUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nuo.AddNotificationsPIDs(ids...)
+}
+
+// AddNotificationsIPIDs adds the "notifications_ip" edge to the Exam_IP entity by IDs.
+func (nuo *NotificationUpdateOne) AddNotificationsIPIDs(ids ...int32) *NotificationUpdateOne {
+	nuo.mutation.AddNotificationsIPIDs(ids...)
+	return nuo
+}
+
+// AddNotificationsIP adds the "notifications_ip" edges to the Exam_IP entity.
+func (nuo *NotificationUpdateOne) AddNotificationsIP(e ...*Exam_IP) *NotificationUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nuo.AddNotificationsIPIDs(ids...)
 }
 
 // Mutation returns the NotificationMutation object of the builder.
@@ -1109,6 +1366,48 @@ func (nuo *NotificationUpdateOne) RemoveNotifyRef(n ...*Notification) *Notificat
 	return nuo.RemoveNotifyRefIDs(ids...)
 }
 
+// ClearNotificationsPs clears all "notifications_ps" edges to the Exam_PS entity.
+func (nuo *NotificationUpdateOne) ClearNotificationsPs() *NotificationUpdateOne {
+	nuo.mutation.ClearNotificationsPs()
+	return nuo
+}
+
+// RemoveNotificationsPIDs removes the "notifications_ps" edge to Exam_PS entities by IDs.
+func (nuo *NotificationUpdateOne) RemoveNotificationsPIDs(ids ...int32) *NotificationUpdateOne {
+	nuo.mutation.RemoveNotificationsPIDs(ids...)
+	return nuo
+}
+
+// RemoveNotificationsPs removes "notifications_ps" edges to Exam_PS entities.
+func (nuo *NotificationUpdateOne) RemoveNotificationsPs(e ...*Exam_PS) *NotificationUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nuo.RemoveNotificationsPIDs(ids...)
+}
+
+// ClearNotificationsIP clears all "notifications_ip" edges to the Exam_IP entity.
+func (nuo *NotificationUpdateOne) ClearNotificationsIP() *NotificationUpdateOne {
+	nuo.mutation.ClearNotificationsIP()
+	return nuo
+}
+
+// RemoveNotificationsIPIDs removes the "notifications_ip" edge to Exam_IP entities by IDs.
+func (nuo *NotificationUpdateOne) RemoveNotificationsIPIDs(ids ...int32) *NotificationUpdateOne {
+	nuo.mutation.RemoveNotificationsIPIDs(ids...)
+	return nuo
+}
+
+// RemoveNotificationsIP removes "notifications_ip" edges to Exam_IP entities.
+func (nuo *NotificationUpdateOne) RemoveNotificationsIP(e ...*Exam_IP) *NotificationUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nuo.RemoveNotificationsIPIDs(ids...)
+}
+
 // Where appends a list predicates to the NotificationUpdate builder.
 func (nuo *NotificationUpdateOne) Where(ps ...predicate.Notification) *NotificationUpdateOne {
 	nuo.mutation.Where(ps...)
@@ -1222,6 +1521,15 @@ func (nuo *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificat
 	}
 	if nuo.mutation.VacanciesFileCleared() {
 		_spec.ClearField(notification.FieldVacanciesFile, field.TypeString)
+	}
+	if value, ok := nuo.mutation.ExamCodePS(); ok {
+		_spec.SetField(notification.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if value, ok := nuo.mutation.AddedExamCodePS(); ok {
+		_spec.AddField(notification.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if nuo.mutation.ExamCodePSCleared() {
+		_spec.ClearField(notification.FieldExamCodePS, field.TypeInt32)
 	}
 	if nuo.mutation.ApplicationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1470,6 +1778,96 @@ func (nuo *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificat
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.NotificationsPsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsPsTable,
+			Columns: []string{notification.NotificationsPsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedNotificationsPsIDs(); len(nodes) > 0 && !nuo.mutation.NotificationsPsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsPsTable,
+			Columns: []string{notification.NotificationsPsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.NotificationsPsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsPsTable,
+			Columns: []string{notification.NotificationsPsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.NotificationsIPCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsIPTable,
+			Columns: []string{notification.NotificationsIPColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedNotificationsIPIDs(); len(nodes) > 0 && !nuo.mutation.NotificationsIPCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsIPTable,
+			Columns: []string{notification.NotificationsIPColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.NotificationsIPIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsIPTable,
+			Columns: []string{notification.NotificationsIPColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {

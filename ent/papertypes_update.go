@@ -68,15 +68,43 @@ func (ptu *PaperTypesUpdate) SetSequenceNumber(i int32) *PaperTypesUpdate {
 	return ptu
 }
 
+// SetNillableSequenceNumber sets the "SequenceNumber" field if the given value is not nil.
+func (ptu *PaperTypesUpdate) SetNillableSequenceNumber(i *int32) *PaperTypesUpdate {
+	if i != nil {
+		ptu.SetSequenceNumber(*i)
+	}
+	return ptu
+}
+
 // AddSequenceNumber adds i to the "SequenceNumber" field.
 func (ptu *PaperTypesUpdate) AddSequenceNumber(i int32) *PaperTypesUpdate {
 	ptu.mutation.AddSequenceNumber(i)
 	return ptu
 }
 
+// ClearSequenceNumber clears the value of the "SequenceNumber" field.
+func (ptu *PaperTypesUpdate) ClearSequenceNumber() *PaperTypesUpdate {
+	ptu.mutation.ClearSequenceNumber()
+	return ptu
+}
+
 // SetCreatedDate sets the "CreatedDate" field.
 func (ptu *PaperTypesUpdate) SetCreatedDate(t time.Time) *PaperTypesUpdate {
 	ptu.mutation.SetCreatedDate(t)
+	return ptu
+}
+
+// SetNillableCreatedDate sets the "CreatedDate" field if the given value is not nil.
+func (ptu *PaperTypesUpdate) SetNillableCreatedDate(t *time.Time) *PaperTypesUpdate {
+	if t != nil {
+		ptu.SetCreatedDate(*t)
+	}
+	return ptu
+}
+
+// ClearCreatedDate clears the value of the "CreatedDate" field.
+func (ptu *PaperTypesUpdate) ClearCreatedDate() *PaperTypesUpdate {
+	ptu.mutation.ClearCreatedDate()
 	return ptu
 }
 
@@ -176,8 +204,14 @@ func (ptu *PaperTypesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ptu.mutation.AddedSequenceNumber(); ok {
 		_spec.AddField(papertypes.FieldSequenceNumber, field.TypeInt32, value)
 	}
+	if ptu.mutation.SequenceNumberCleared() {
+		_spec.ClearField(papertypes.FieldSequenceNumber, field.TypeInt32)
+	}
 	if value, ok := ptu.mutation.CreatedDate(); ok {
 		_spec.SetField(papertypes.FieldCreatedDate, field.TypeTime, value)
+	}
+	if ptu.mutation.CreatedDateCleared() {
+		_spec.ClearField(papertypes.FieldCreatedDate, field.TypeTime)
 	}
 	if ptu.mutation.PapercodeCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -267,15 +301,43 @@ func (ptuo *PaperTypesUpdateOne) SetSequenceNumber(i int32) *PaperTypesUpdateOne
 	return ptuo
 }
 
+// SetNillableSequenceNumber sets the "SequenceNumber" field if the given value is not nil.
+func (ptuo *PaperTypesUpdateOne) SetNillableSequenceNumber(i *int32) *PaperTypesUpdateOne {
+	if i != nil {
+		ptuo.SetSequenceNumber(*i)
+	}
+	return ptuo
+}
+
 // AddSequenceNumber adds i to the "SequenceNumber" field.
 func (ptuo *PaperTypesUpdateOne) AddSequenceNumber(i int32) *PaperTypesUpdateOne {
 	ptuo.mutation.AddSequenceNumber(i)
 	return ptuo
 }
 
+// ClearSequenceNumber clears the value of the "SequenceNumber" field.
+func (ptuo *PaperTypesUpdateOne) ClearSequenceNumber() *PaperTypesUpdateOne {
+	ptuo.mutation.ClearSequenceNumber()
+	return ptuo
+}
+
 // SetCreatedDate sets the "CreatedDate" field.
 func (ptuo *PaperTypesUpdateOne) SetCreatedDate(t time.Time) *PaperTypesUpdateOne {
 	ptuo.mutation.SetCreatedDate(t)
+	return ptuo
+}
+
+// SetNillableCreatedDate sets the "CreatedDate" field if the given value is not nil.
+func (ptuo *PaperTypesUpdateOne) SetNillableCreatedDate(t *time.Time) *PaperTypesUpdateOne {
+	if t != nil {
+		ptuo.SetCreatedDate(*t)
+	}
+	return ptuo
+}
+
+// ClearCreatedDate clears the value of the "CreatedDate" field.
+func (ptuo *PaperTypesUpdateOne) ClearCreatedDate() *PaperTypesUpdateOne {
+	ptuo.mutation.ClearCreatedDate()
 	return ptuo
 }
 
@@ -405,8 +467,14 @@ func (ptuo *PaperTypesUpdateOne) sqlSave(ctx context.Context) (_node *PaperTypes
 	if value, ok := ptuo.mutation.AddedSequenceNumber(); ok {
 		_spec.AddField(papertypes.FieldSequenceNumber, field.TypeInt32, value)
 	}
+	if ptuo.mutation.SequenceNumberCleared() {
+		_spec.ClearField(papertypes.FieldSequenceNumber, field.TypeInt32)
+	}
 	if value, ok := ptuo.mutation.CreatedDate(); ok {
 		_spec.SetField(papertypes.FieldCreatedDate, field.TypeTime, value)
+	}
+	if ptuo.mutation.CreatedDateCleared() {
+		_spec.ClearField(papertypes.FieldCreatedDate, field.TypeTime)
 	}
 	if ptuo.mutation.PapercodeCleared() {
 		edge := &sqlgraph.EdgeSpec{

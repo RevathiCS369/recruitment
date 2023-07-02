@@ -55,8 +55,20 @@ const (
 	FieldGenderRemarks = "gender_remarks"
 	// FieldMobileNumber holds the string denoting the mobilenumber field in the database.
 	FieldMobileNumber = "mobile_number"
+	// FieldMobileNumberVerified holds the string denoting the mobilenumberverified field in the database.
+	FieldMobileNumberVerified = "mobile_number_verified"
+	// FieldMobileNumberRemStatus holds the string denoting the mobilenumberremstatus field in the database.
+	FieldMobileNumberRemStatus = "mobile_number_rem_status"
+	// FieldMobileNumberRemarks holds the string denoting the mobilenumberremarks field in the database.
+	FieldMobileNumberRemarks = "mobile_number_remarks"
 	// FieldEmailID holds the string denoting the emailid field in the database.
 	FieldEmailID = "email_id"
+	// FieldEmailIDVerified holds the string denoting the emailidverified field in the database.
+	FieldEmailIDVerified = "email_id_verified"
+	// FieldEmailIDRemStatus holds the string denoting the emailidremstatus field in the database.
+	FieldEmailIDRemStatus = "email_id_rem_status"
+	// FieldEmailIDRemarks holds the string denoting the emailidremarks field in the database.
+	FieldEmailIDRemarks = "email_id_remarks"
 	// FieldCategoryid holds the string denoting the categoryid field in the database.
 	FieldCategoryid = "categoryid"
 	// FieldEmployeeCategoryCode holds the string denoting the employeecategorycode field in the database.
@@ -109,16 +121,18 @@ const (
 	FieldPhotoRemStatus = "photo_rem_status"
 	// FieldPhotoRemarks holds the string denoting the photoremarks field in the database.
 	FieldPhotoRemarks = "photo_remarks"
-	// FieldCadreid holds the string denoting the cadreid field in the database.
-	FieldCadreid = "cadreid"
-	// FieldEmployeeCadre holds the string denoting the employeecadre field in the database.
-	FieldEmployeeCadre = "employee_cadre"
-	// FieldEmployeeCadreVerified holds the string denoting the employeecadreverified field in the database.
-	FieldEmployeeCadreVerified = "employee_cadre_verified"
-	// FieldEmployeeCadreRemStatus holds the string denoting the employeecadreremstatus field in the database.
-	FieldEmployeeCadreRemStatus = "employee_cadre_rem_status"
-	// FieldEmployeeCadreRemarks holds the string denoting the employeecadreremarks field in the database.
-	FieldEmployeeCadreRemarks = "employee_cadre_remarks"
+	// FieldPostID holds the string denoting the postid field in the database.
+	FieldPostID = "post_id"
+	// FieldPostCode holds the string denoting the postcode field in the database.
+	FieldPostCode = "post_code"
+	// FieldEmployeePost holds the string denoting the employeepost field in the database.
+	FieldEmployeePost = "employee_post"
+	// FieldEmployeePostVerified holds the string denoting the employeepostverified field in the database.
+	FieldEmployeePostVerified = "employee_post_verified"
+	// FieldEmployeePostRemStatus holds the string denoting the employeepostremstatus field in the database.
+	FieldEmployeePostRemStatus = "employee_post_rem_status"
+	// FieldEmployeePostRemarks holds the string denoting the employeepostremarks field in the database.
+	FieldEmployeePostRemarks = "employee_post_remarks"
 	// FieldDesignationID holds the string denoting the designationid field in the database.
 	FieldDesignationID = "designation_id"
 	// FieldEmployeeDesignation holds the string denoting the employeedesignation field in the database.
@@ -203,8 +217,10 @@ const (
 	FieldAPSWorkingRemarks = "aps_working_remarks"
 	// FieldProfilestatus holds the string denoting the profilestatus field in the database.
 	FieldProfilestatus = "profilestatus"
+	// FieldRoleUserCode holds the string denoting the roleusercode field in the database.
+	FieldRoleUserCode = "role_user_code"
 	// Table holds the table name of the employees in the database.
-	Table = "employees"
+	Table = "Employees"
 )
 
 // Columns holds all SQL columns for employees fields.
@@ -231,7 +247,13 @@ var Columns = []string{
 	FieldGenderRemStatus,
 	FieldGenderRemarks,
 	FieldMobileNumber,
+	FieldMobileNumberVerified,
+	FieldMobileNumberRemStatus,
+	FieldMobileNumberRemarks,
 	FieldEmailID,
+	FieldEmailIDVerified,
+	FieldEmailIDRemStatus,
+	FieldEmailIDRemarks,
 	FieldCategoryid,
 	FieldEmployeeCategoryCode,
 	FieldEmployeeCategory,
@@ -258,11 +280,12 @@ var Columns = []string{
 	FieldPhotoVerified,
 	FieldPhotoRemStatus,
 	FieldPhotoRemarks,
-	FieldCadreid,
-	FieldEmployeeCadre,
-	FieldEmployeeCadreVerified,
-	FieldEmployeeCadreRemStatus,
-	FieldEmployeeCadreRemarks,
+	FieldPostID,
+	FieldPostCode,
+	FieldEmployeePost,
+	FieldEmployeePostVerified,
+	FieldEmployeePostRemStatus,
+	FieldEmployeePostRemarks,
 	FieldDesignationID,
 	FieldEmployeeDesignation,
 	FieldEmployeeDesignationVerified,
@@ -305,12 +328,25 @@ var Columns = []string{
 	FieldAPSWorkingRemStatus,
 	FieldAPSWorkingRemarks,
 	FieldProfilestatus,
+	FieldRoleUserCode,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "Employees"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"directorate_users_employee_user",
+	"employee_posts_emp_posts",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -338,6 +374,14 @@ var (
 	DefaultGenderVerified bool
 	// DefaultGenderRemStatus holds the default value on creation for the "genderRemStatus" field.
 	DefaultGenderRemStatus bool
+	// DefaultMobileNumberVerified holds the default value on creation for the "MobileNumberVerified" field.
+	DefaultMobileNumberVerified bool
+	// DefaultMobileNumberRemStatus holds the default value on creation for the "MobileNumberRemStatus" field.
+	DefaultMobileNumberRemStatus bool
+	// DefaultEmailIDVerified holds the default value on creation for the "EmailIDVerified" field.
+	DefaultEmailIDVerified bool
+	// DefaultEmailIDRemStatus holds the default value on creation for the "EmailIDRemStatus" field.
+	DefaultEmailIDRemStatus bool
 	// DefaultEmployeeCategoryCodeVerified holds the default value on creation for the "EmployeeCategoryCodeVerified" field.
 	DefaultEmployeeCategoryCodeVerified bool
 	// DefaultEmployeeCategoryCodeRemStatus holds the default value on creation for the "EmployeeCategoryCodeRemStatus" field.
@@ -362,10 +406,10 @@ var (
 	DefaultPhotoVerified bool
 	// DefaultPhotoRemStatus holds the default value on creation for the "PhotoRemStatus" field.
 	DefaultPhotoRemStatus bool
-	// DefaultEmployeeCadreVerified holds the default value on creation for the "EmployeeCadreVerified" field.
-	DefaultEmployeeCadreVerified bool
-	// DefaultEmployeeCadreRemStatus holds the default value on creation for the "EmployeeCadreRemStatus" field.
-	DefaultEmployeeCadreRemStatus bool
+	// DefaultEmployeePostVerified holds the default value on creation for the "EmployeePostVerified" field.
+	DefaultEmployeePostVerified bool
+	// DefaultEmployeePostRemStatus holds the default value on creation for the "EmployeePostRemStatus" field.
+	DefaultEmployeePostRemStatus bool
 	// DefaultEmployeeDesignationVerified holds the default value on creation for the "EmployeeDesignationVerified" field.
 	DefaultEmployeeDesignationVerified bool
 	// DefaultEmployeeDesignationRemStatus holds the default value on creation for the "EmployeeDesignationRemStatus" field.
@@ -542,9 +586,39 @@ func ByMobileNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMobileNumber, opts...).ToFunc()
 }
 
+// ByMobileNumberVerified orders the results by the MobileNumberVerified field.
+func ByMobileNumberVerified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMobileNumberVerified, opts...).ToFunc()
+}
+
+// ByMobileNumberRemStatus orders the results by the MobileNumberRemStatus field.
+func ByMobileNumberRemStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMobileNumberRemStatus, opts...).ToFunc()
+}
+
+// ByMobileNumberRemarks orders the results by the MobileNumberRemarks field.
+func ByMobileNumberRemarks(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMobileNumberRemarks, opts...).ToFunc()
+}
+
 // ByEmailID orders the results by the EmailID field.
 func ByEmailID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmailID, opts...).ToFunc()
+}
+
+// ByEmailIDVerified orders the results by the EmailIDVerified field.
+func ByEmailIDVerified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailIDVerified, opts...).ToFunc()
+}
+
+// ByEmailIDRemStatus orders the results by the EmailIDRemStatus field.
+func ByEmailIDRemStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailIDRemStatus, opts...).ToFunc()
+}
+
+// ByEmailIDRemarks orders the results by the EmailIDRemarks field.
+func ByEmailIDRemarks(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailIDRemarks, opts...).ToFunc()
 }
 
 // ByCategoryid orders the results by the Categoryid field.
@@ -677,29 +751,34 @@ func ByPhotoRemarks(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPhotoRemarks, opts...).ToFunc()
 }
 
-// ByCadreid orders the results by the Cadreid field.
-func ByCadreid(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCadreid, opts...).ToFunc()
+// ByPostID orders the results by the PostID field.
+func ByPostID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPostID, opts...).ToFunc()
 }
 
-// ByEmployeeCadre orders the results by the EmployeeCadre field.
-func ByEmployeeCadre(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmployeeCadre, opts...).ToFunc()
+// ByPostCode orders the results by the PostCode field.
+func ByPostCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPostCode, opts...).ToFunc()
 }
 
-// ByEmployeeCadreVerified orders the results by the EmployeeCadreVerified field.
-func ByEmployeeCadreVerified(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmployeeCadreVerified, opts...).ToFunc()
+// ByEmployeePost orders the results by the EmployeePost field.
+func ByEmployeePost(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmployeePost, opts...).ToFunc()
 }
 
-// ByEmployeeCadreRemStatus orders the results by the EmployeeCadreRemStatus field.
-func ByEmployeeCadreRemStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmployeeCadreRemStatus, opts...).ToFunc()
+// ByEmployeePostVerified orders the results by the EmployeePostVerified field.
+func ByEmployeePostVerified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmployeePostVerified, opts...).ToFunc()
 }
 
-// ByEmployeeCadreRemarks orders the results by the EmployeeCadreRemarks field.
-func ByEmployeeCadreRemarks(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmployeeCadreRemarks, opts...).ToFunc()
+// ByEmployeePostRemStatus orders the results by the EmployeePostRemStatus field.
+func ByEmployeePostRemStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmployeePostRemStatus, opts...).ToFunc()
+}
+
+// ByEmployeePostRemarks orders the results by the EmployeePostRemarks field.
+func ByEmployeePostRemarks(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmployeePostRemarks, opts...).ToFunc()
 }
 
 // ByDesignationID orders the results by the DesignationID field.
@@ -910,4 +989,9 @@ func ByAPSWorkingRemarks(opts ...sql.OrderTermOption) OrderOption {
 // ByProfilestatus orders the results by the profilestatus field.
 func ByProfilestatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProfilestatus, opts...).ToFunc()
+}
+
+// ByRoleUserCode orders the results by the RoleUserCode field.
+func ByRoleUserCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRoleUserCode, opts...).ToFunc()
 }

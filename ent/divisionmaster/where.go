@@ -682,6 +682,29 @@ func HasRegionsWith(preds ...predicate.RegionMaster) predicate.DivisionMaster {
 	})
 }
 
+// HasDivisionsRef applies the HasEdge predicate on the "divisions_ref" edge.
+func HasDivisionsRef() predicate.DivisionMaster {
+	return predicate.DivisionMaster(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DivisionsRefTable, DivisionsRefColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDivisionsRefWith applies the HasEdge predicate on the "divisions_ref" edge with a given conditions (other predicates).
+func HasDivisionsRefWith(preds ...predicate.Facility) predicate.DivisionMaster {
+	return predicate.DivisionMaster(func(s *sql.Selector) {
+		step := newDivisionsRefStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.DivisionMaster) predicate.DivisionMaster {
 	return predicate.DivisionMaster(func(s *sql.Selector) {

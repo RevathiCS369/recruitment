@@ -6,7 +6,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/employeeposts"
+	"recruit/ent/employees"
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -63,9 +65,81 @@ func (epu *EmployeePostsUpdate) SetBaseCadreFlag(b bool) *EmployeePostsUpdate {
 	return epu
 }
 
+// AddEmpPostIDs adds the "emp_posts" edge to the Employees entity by IDs.
+func (epu *EmployeePostsUpdate) AddEmpPostIDs(ids ...int32) *EmployeePostsUpdate {
+	epu.mutation.AddEmpPostIDs(ids...)
+	return epu
+}
+
+// AddEmpPosts adds the "emp_posts" edges to the Employees entity.
+func (epu *EmployeePostsUpdate) AddEmpPosts(e ...*Employees) *EmployeePostsUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.AddEmpPostIDs(ids...)
+}
+
+// AddPostEligibilityIDs adds the "PostEligibility" edge to the EligibilityMaster entity by IDs.
+func (epu *EmployeePostsUpdate) AddPostEligibilityIDs(ids ...int32) *EmployeePostsUpdate {
+	epu.mutation.AddPostEligibilityIDs(ids...)
+	return epu
+}
+
+// AddPostEligibility adds the "PostEligibility" edges to the EligibilityMaster entity.
+func (epu *EmployeePostsUpdate) AddPostEligibility(e ...*EligibilityMaster) *EmployeePostsUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.AddPostEligibilityIDs(ids...)
+}
+
 // Mutation returns the EmployeePostsMutation object of the builder.
 func (epu *EmployeePostsUpdate) Mutation() *EmployeePostsMutation {
 	return epu.mutation
+}
+
+// ClearEmpPosts clears all "emp_posts" edges to the Employees entity.
+func (epu *EmployeePostsUpdate) ClearEmpPosts() *EmployeePostsUpdate {
+	epu.mutation.ClearEmpPosts()
+	return epu
+}
+
+// RemoveEmpPostIDs removes the "emp_posts" edge to Employees entities by IDs.
+func (epu *EmployeePostsUpdate) RemoveEmpPostIDs(ids ...int32) *EmployeePostsUpdate {
+	epu.mutation.RemoveEmpPostIDs(ids...)
+	return epu
+}
+
+// RemoveEmpPosts removes "emp_posts" edges to Employees entities.
+func (epu *EmployeePostsUpdate) RemoveEmpPosts(e ...*Employees) *EmployeePostsUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.RemoveEmpPostIDs(ids...)
+}
+
+// ClearPostEligibility clears all "PostEligibility" edges to the EligibilityMaster entity.
+func (epu *EmployeePostsUpdate) ClearPostEligibility() *EmployeePostsUpdate {
+	epu.mutation.ClearPostEligibility()
+	return epu
+}
+
+// RemovePostEligibilityIDs removes the "PostEligibility" edge to EligibilityMaster entities by IDs.
+func (epu *EmployeePostsUpdate) RemovePostEligibilityIDs(ids ...int32) *EmployeePostsUpdate {
+	epu.mutation.RemovePostEligibilityIDs(ids...)
+	return epu
+}
+
+// RemovePostEligibility removes "PostEligibility" edges to EligibilityMaster entities.
+func (epu *EmployeePostsUpdate) RemovePostEligibility(e ...*EligibilityMaster) *EmployeePostsUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.RemovePostEligibilityIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -121,6 +195,96 @@ func (epu *EmployeePostsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if value, ok := epu.mutation.BaseCadreFlag(); ok {
 		_spec.SetField(employeeposts.FieldBaseCadreFlag, field.TypeBool, value)
+	}
+	if epu.mutation.EmpPostsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.EmpPostsTable,
+			Columns: []string{employeeposts.EmpPostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(employees.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.RemovedEmpPostsIDs(); len(nodes) > 0 && !epu.mutation.EmpPostsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.EmpPostsTable,
+			Columns: []string{employeeposts.EmpPostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(employees.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.EmpPostsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.EmpPostsTable,
+			Columns: []string{employeeposts.EmpPostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(employees.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epu.mutation.PostEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.PostEligibilityTable,
+			Columns: []string{employeeposts.PostEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.RemovedPostEligibilityIDs(); len(nodes) > 0 && !epu.mutation.PostEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.PostEligibilityTable,
+			Columns: []string{employeeposts.PostEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.PostEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.PostEligibilityTable,
+			Columns: []string{employeeposts.PostEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, epu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -178,9 +342,81 @@ func (epuo *EmployeePostsUpdateOne) SetBaseCadreFlag(b bool) *EmployeePostsUpdat
 	return epuo
 }
 
+// AddEmpPostIDs adds the "emp_posts" edge to the Employees entity by IDs.
+func (epuo *EmployeePostsUpdateOne) AddEmpPostIDs(ids ...int32) *EmployeePostsUpdateOne {
+	epuo.mutation.AddEmpPostIDs(ids...)
+	return epuo
+}
+
+// AddEmpPosts adds the "emp_posts" edges to the Employees entity.
+func (epuo *EmployeePostsUpdateOne) AddEmpPosts(e ...*Employees) *EmployeePostsUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.AddEmpPostIDs(ids...)
+}
+
+// AddPostEligibilityIDs adds the "PostEligibility" edge to the EligibilityMaster entity by IDs.
+func (epuo *EmployeePostsUpdateOne) AddPostEligibilityIDs(ids ...int32) *EmployeePostsUpdateOne {
+	epuo.mutation.AddPostEligibilityIDs(ids...)
+	return epuo
+}
+
+// AddPostEligibility adds the "PostEligibility" edges to the EligibilityMaster entity.
+func (epuo *EmployeePostsUpdateOne) AddPostEligibility(e ...*EligibilityMaster) *EmployeePostsUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.AddPostEligibilityIDs(ids...)
+}
+
 // Mutation returns the EmployeePostsMutation object of the builder.
 func (epuo *EmployeePostsUpdateOne) Mutation() *EmployeePostsMutation {
 	return epuo.mutation
+}
+
+// ClearEmpPosts clears all "emp_posts" edges to the Employees entity.
+func (epuo *EmployeePostsUpdateOne) ClearEmpPosts() *EmployeePostsUpdateOne {
+	epuo.mutation.ClearEmpPosts()
+	return epuo
+}
+
+// RemoveEmpPostIDs removes the "emp_posts" edge to Employees entities by IDs.
+func (epuo *EmployeePostsUpdateOne) RemoveEmpPostIDs(ids ...int32) *EmployeePostsUpdateOne {
+	epuo.mutation.RemoveEmpPostIDs(ids...)
+	return epuo
+}
+
+// RemoveEmpPosts removes "emp_posts" edges to Employees entities.
+func (epuo *EmployeePostsUpdateOne) RemoveEmpPosts(e ...*Employees) *EmployeePostsUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.RemoveEmpPostIDs(ids...)
+}
+
+// ClearPostEligibility clears all "PostEligibility" edges to the EligibilityMaster entity.
+func (epuo *EmployeePostsUpdateOne) ClearPostEligibility() *EmployeePostsUpdateOne {
+	epuo.mutation.ClearPostEligibility()
+	return epuo
+}
+
+// RemovePostEligibilityIDs removes the "PostEligibility" edge to EligibilityMaster entities by IDs.
+func (epuo *EmployeePostsUpdateOne) RemovePostEligibilityIDs(ids ...int32) *EmployeePostsUpdateOne {
+	epuo.mutation.RemovePostEligibilityIDs(ids...)
+	return epuo
+}
+
+// RemovePostEligibility removes "PostEligibility" edges to EligibilityMaster entities.
+func (epuo *EmployeePostsUpdateOne) RemovePostEligibility(e ...*EligibilityMaster) *EmployeePostsUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.RemovePostEligibilityIDs(ids...)
 }
 
 // Where appends a list predicates to the EmployeePostsUpdate builder.
@@ -266,6 +502,96 @@ func (epuo *EmployeePostsUpdateOne) sqlSave(ctx context.Context) (_node *Employe
 	}
 	if value, ok := epuo.mutation.BaseCadreFlag(); ok {
 		_spec.SetField(employeeposts.FieldBaseCadreFlag, field.TypeBool, value)
+	}
+	if epuo.mutation.EmpPostsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.EmpPostsTable,
+			Columns: []string{employeeposts.EmpPostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(employees.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.RemovedEmpPostsIDs(); len(nodes) > 0 && !epuo.mutation.EmpPostsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.EmpPostsTable,
+			Columns: []string{employeeposts.EmpPostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(employees.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.EmpPostsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.EmpPostsTable,
+			Columns: []string{employeeposts.EmpPostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(employees.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epuo.mutation.PostEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.PostEligibilityTable,
+			Columns: []string{employeeposts.PostEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.RemovedPostEligibilityIDs(); len(nodes) > 0 && !epuo.mutation.PostEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.PostEligibilityTable,
+			Columns: []string{employeeposts.PostEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.PostEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.PostEligibilityTable,
+			Columns: []string{employeeposts.PostEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &EmployeePosts{config: epuo.config}
 	_spec.Assign = _node.assignValues

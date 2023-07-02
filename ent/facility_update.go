@@ -7,6 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/circlemaster"
+	"recruit/ent/divisionmaster"
+	"recruit/ent/exam_applications_ip"
+	"recruit/ent/exam_applications_ps"
 	"recruit/ent/facility"
 	"recruit/ent/predicate"
 	"recruit/ent/regionmaster"
@@ -30,14 +33,41 @@ func (fu *FacilityUpdate) Where(ps ...predicate.Facility) *FacilityUpdate {
 }
 
 // SetFacilityCode sets the "FacilityCode" field.
-func (fu *FacilityUpdate) SetFacilityCode(s string) *FacilityUpdate {
-	fu.mutation.SetFacilityCode(s)
+func (fu *FacilityUpdate) SetFacilityCode(i int32) *FacilityUpdate {
+	fu.mutation.ResetFacilityCode()
+	fu.mutation.SetFacilityCode(i)
+	return fu
+}
+
+// SetNillableFacilityCode sets the "FacilityCode" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableFacilityCode(i *int32) *FacilityUpdate {
+	if i != nil {
+		fu.SetFacilityCode(*i)
+	}
+	return fu
+}
+
+// AddFacilityCode adds i to the "FacilityCode" field.
+func (fu *FacilityUpdate) AddFacilityCode(i int32) *FacilityUpdate {
+	fu.mutation.AddFacilityCode(i)
+	return fu
+}
+
+// ClearFacilityCode clears the value of the "FacilityCode" field.
+func (fu *FacilityUpdate) ClearFacilityCode() *FacilityUpdate {
+	fu.mutation.ClearFacilityCode()
 	return fu
 }
 
 // SetOfficeType sets the "OfficeType" field.
 func (fu *FacilityUpdate) SetOfficeType(s string) *FacilityUpdate {
 	fu.mutation.SetOfficeType(s)
+	return fu
+}
+
+// SetFacilityOfficeID sets the "FacilityOfficeID" field.
+func (fu *FacilityUpdate) SetFacilityOfficeID(s string) *FacilityUpdate {
+	fu.mutation.SetFacilityOfficeID(s)
 	return fu
 }
 
@@ -108,14 +138,14 @@ func (fu *FacilityUpdate) ClearEmailID() *FacilityUpdate {
 }
 
 // SetMobileNumber sets the "MobileNumber" field.
-func (fu *FacilityUpdate) SetMobileNumber(i int32) *FacilityUpdate {
+func (fu *FacilityUpdate) SetMobileNumber(i int64) *FacilityUpdate {
 	fu.mutation.ResetMobileNumber()
 	fu.mutation.SetMobileNumber(i)
 	return fu
 }
 
 // SetNillableMobileNumber sets the "MobileNumber" field if the given value is not nil.
-func (fu *FacilityUpdate) SetNillableMobileNumber(i *int32) *FacilityUpdate {
+func (fu *FacilityUpdate) SetNillableMobileNumber(i *int64) *FacilityUpdate {
 	if i != nil {
 		fu.SetMobileNumber(*i)
 	}
@@ -123,7 +153,7 @@ func (fu *FacilityUpdate) SetNillableMobileNumber(i *int32) *FacilityUpdate {
 }
 
 // AddMobileNumber adds i to the "MobileNumber" field.
-func (fu *FacilityUpdate) AddMobileNumber(i int32) *FacilityUpdate {
+func (fu *FacilityUpdate) AddMobileNumber(i int64) *FacilityUpdate {
 	fu.mutation.AddMobileNumber(i)
 	return fu
 }
@@ -161,6 +191,46 @@ func (fu *FacilityUpdate) ClearDivisionCode() *FacilityUpdate {
 	return fu
 }
 
+// SetDivisionName sets the "DivisionName" field.
+func (fu *FacilityUpdate) SetDivisionName(s string) *FacilityUpdate {
+	fu.mutation.SetDivisionName(s)
+	return fu
+}
+
+// SetNillableDivisionName sets the "DivisionName" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableDivisionName(s *string) *FacilityUpdate {
+	if s != nil {
+		fu.SetDivisionName(*s)
+	}
+	return fu
+}
+
+// ClearDivisionName clears the value of the "DivisionName" field.
+func (fu *FacilityUpdate) ClearDivisionName() *FacilityUpdate {
+	fu.mutation.ClearDivisionName()
+	return fu
+}
+
+// SetDivisionID sets the "DivisionID" field.
+func (fu *FacilityUpdate) SetDivisionID(i int32) *FacilityUpdate {
+	fu.mutation.SetDivisionID(i)
+	return fu
+}
+
+// SetNillableDivisionID sets the "DivisionID" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableDivisionID(i *int32) *FacilityUpdate {
+	if i != nil {
+		fu.SetDivisionID(*i)
+	}
+	return fu
+}
+
+// ClearDivisionID clears the value of the "DivisionID" field.
+func (fu *FacilityUpdate) ClearDivisionID() *FacilityUpdate {
+	fu.mutation.ClearDivisionID()
+	return fu
+}
+
 // SetRegionCode sets the "RegionCode" field.
 func (fu *FacilityUpdate) SetRegionCode(i int32) *FacilityUpdate {
 	fu.mutation.ResetRegionCode()
@@ -185,6 +255,46 @@ func (fu *FacilityUpdate) AddRegionCode(i int32) *FacilityUpdate {
 // ClearRegionCode clears the value of the "RegionCode" field.
 func (fu *FacilityUpdate) ClearRegionCode() *FacilityUpdate {
 	fu.mutation.ClearRegionCode()
+	return fu
+}
+
+// SetRegionID sets the "RegionID" field.
+func (fu *FacilityUpdate) SetRegionID(i int32) *FacilityUpdate {
+	fu.mutation.SetRegionID(i)
+	return fu
+}
+
+// SetNillableRegionID sets the "RegionID" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableRegionID(i *int32) *FacilityUpdate {
+	if i != nil {
+		fu.SetRegionID(*i)
+	}
+	return fu
+}
+
+// ClearRegionID clears the value of the "RegionID" field.
+func (fu *FacilityUpdate) ClearRegionID() *FacilityUpdate {
+	fu.mutation.ClearRegionID()
+	return fu
+}
+
+// SetRegionName sets the "RegionName" field.
+func (fu *FacilityUpdate) SetRegionName(s string) *FacilityUpdate {
+	fu.mutation.SetRegionName(s)
+	return fu
+}
+
+// SetNillableRegionName sets the "RegionName" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableRegionName(s *string) *FacilityUpdate {
+	if s != nil {
+		fu.SetRegionName(*s)
+	}
+	return fu
+}
+
+// ClearRegionName clears the value of the "RegionName" field.
+func (fu *FacilityUpdate) ClearRegionName() *FacilityUpdate {
+	fu.mutation.ClearRegionName()
 	return fu
 }
 
@@ -215,19 +325,141 @@ func (fu *FacilityUpdate) ClearCircleCode() *FacilityUpdate {
 	return fu
 }
 
-// AddRegionRefIDs adds the "region_ref" edge to the RegionMaster entity by IDs.
-func (fu *FacilityUpdate) AddRegionRefIDs(ids ...int32) *FacilityUpdate {
-	fu.mutation.AddRegionRefIDs(ids...)
+// SetCircleID sets the "CircleID" field.
+func (fu *FacilityUpdate) SetCircleID(i int32) *FacilityUpdate {
+	fu.mutation.SetCircleID(i)
 	return fu
 }
 
-// AddRegionRef adds the "region_ref" edges to the RegionMaster entity.
-func (fu *FacilityUpdate) AddRegionRef(r ...*RegionMaster) *FacilityUpdate {
-	ids := make([]int32, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+// SetNillableCircleID sets the "CircleID" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableCircleID(i *int32) *FacilityUpdate {
+	if i != nil {
+		fu.SetCircleID(*i)
 	}
-	return fu.AddRegionRefIDs(ids...)
+	return fu
+}
+
+// ClearCircleID clears the value of the "CircleID" field.
+func (fu *FacilityUpdate) ClearCircleID() *FacilityUpdate {
+	fu.mutation.ClearCircleID()
+	return fu
+}
+
+// SetCircleName sets the "CircleName" field.
+func (fu *FacilityUpdate) SetCircleName(s string) *FacilityUpdate {
+	fu.mutation.SetCircleName(s)
+	return fu
+}
+
+// SetNillableCircleName sets the "CircleName" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableCircleName(s *string) *FacilityUpdate {
+	if s != nil {
+		fu.SetCircleName(*s)
+	}
+	return fu
+}
+
+// ClearCircleName clears the value of the "CircleName" field.
+func (fu *FacilityUpdate) ClearCircleName() *FacilityUpdate {
+	fu.mutation.ClearCircleName()
+	return fu
+}
+
+// SetReportingOfficeID sets the "ReportingOfficeID" field.
+func (fu *FacilityUpdate) SetReportingOfficeID(s string) *FacilityUpdate {
+	fu.mutation.SetReportingOfficeID(s)
+	return fu
+}
+
+// SetNillableReportingOfficeID sets the "ReportingOfficeID" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableReportingOfficeID(s *string) *FacilityUpdate {
+	if s != nil {
+		fu.SetReportingOfficeID(*s)
+	}
+	return fu
+}
+
+// ClearReportingOfficeID clears the value of the "ReportingOfficeID" field.
+func (fu *FacilityUpdate) ClearReportingOfficeID() *FacilityUpdate {
+	fu.mutation.ClearReportingOfficeID()
+	return fu
+}
+
+// SetReportingOfficeName sets the "ReportingOfficeName" field.
+func (fu *FacilityUpdate) SetReportingOfficeName(s string) *FacilityUpdate {
+	fu.mutation.SetReportingOfficeName(s)
+	return fu
+}
+
+// SetNillableReportingOfficeName sets the "ReportingOfficeName" field if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableReportingOfficeName(s *string) *FacilityUpdate {
+	if s != nil {
+		fu.SetReportingOfficeName(*s)
+	}
+	return fu
+}
+
+// ClearReportingOfficeName clears the value of the "ReportingOfficeName" field.
+func (fu *FacilityUpdate) ClearReportingOfficeName() *FacilityUpdate {
+	fu.mutation.ClearReportingOfficeName()
+	return fu
+}
+
+// SetDivisionsID sets the "divisions" edge to the DivisionMaster entity by ID.
+func (fu *FacilityUpdate) SetDivisionsID(id int32) *FacilityUpdate {
+	fu.mutation.SetDivisionsID(id)
+	return fu
+}
+
+// SetNillableDivisionsID sets the "divisions" edge to the DivisionMaster entity by ID if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableDivisionsID(id *int32) *FacilityUpdate {
+	if id != nil {
+		fu = fu.SetDivisionsID(*id)
+	}
+	return fu
+}
+
+// SetDivisions sets the "divisions" edge to the DivisionMaster entity.
+func (fu *FacilityUpdate) SetDivisions(d *DivisionMaster) *FacilityUpdate {
+	return fu.SetDivisionsID(d.ID)
+}
+
+// SetRegionsID sets the "regions" edge to the RegionMaster entity by ID.
+func (fu *FacilityUpdate) SetRegionsID(id int32) *FacilityUpdate {
+	fu.mutation.SetRegionsID(id)
+	return fu
+}
+
+// SetNillableRegionsID sets the "regions" edge to the RegionMaster entity by ID if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableRegionsID(id *int32) *FacilityUpdate {
+	if id != nil {
+		fu = fu.SetRegionsID(*id)
+	}
+	return fu
+}
+
+// SetRegions sets the "regions" edge to the RegionMaster entity.
+func (fu *FacilityUpdate) SetRegions(r *RegionMaster) *FacilityUpdate {
+	return fu.SetRegionsID(r.ID)
+}
+
+// SetCirclesID sets the "circles" edge to the CircleMaster entity by ID.
+func (fu *FacilityUpdate) SetCirclesID(id int32) *FacilityUpdate {
+	fu.mutation.SetCirclesID(id)
+	return fu
+}
+
+// SetNillableCirclesID sets the "circles" edge to the CircleMaster entity by ID if the given value is not nil.
+func (fu *FacilityUpdate) SetNillableCirclesID(id *int32) *FacilityUpdate {
+	if id != nil {
+		fu = fu.SetCirclesID(*id)
+	}
+	return fu
+}
+
+// SetCircles sets the "circles" edge to the CircleMaster entity.
+func (fu *FacilityUpdate) SetCircles(c *CircleMaster) *FacilityUpdate {
+	return fu.SetCirclesID(c.ID)
 }
 
 // AddCircleRefIDs adds the "circle_ref" edge to the CircleMaster entity by IDs.
@@ -245,30 +477,57 @@ func (fu *FacilityUpdate) AddCircleRef(c ...*CircleMaster) *FacilityUpdate {
 	return fu.AddCircleRefIDs(ids...)
 }
 
+// AddOfficePSRefIDs adds the "Office_PS_Ref" edge to the Exam_Applications_PS entity by IDs.
+func (fu *FacilityUpdate) AddOfficePSRefIDs(ids ...int64) *FacilityUpdate {
+	fu.mutation.AddOfficePSRefIDs(ids...)
+	return fu
+}
+
+// AddOfficePSRef adds the "Office_PS_Ref" edges to the Exam_Applications_PS entity.
+func (fu *FacilityUpdate) AddOfficePSRef(e ...*Exam_Applications_PS) *FacilityUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.AddOfficePSRefIDs(ids...)
+}
+
+// AddOfficeIPRefIDs adds the "Office_IP_Ref" edge to the Exam_Applications_IP entity by IDs.
+func (fu *FacilityUpdate) AddOfficeIPRefIDs(ids ...int64) *FacilityUpdate {
+	fu.mutation.AddOfficeIPRefIDs(ids...)
+	return fu
+}
+
+// AddOfficeIPRef adds the "Office_IP_Ref" edges to the Exam_Applications_IP entity.
+func (fu *FacilityUpdate) AddOfficeIPRef(e ...*Exam_Applications_IP) *FacilityUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.AddOfficeIPRefIDs(ids...)
+}
+
 // Mutation returns the FacilityMutation object of the builder.
 func (fu *FacilityUpdate) Mutation() *FacilityMutation {
 	return fu.mutation
 }
 
-// ClearRegionRef clears all "region_ref" edges to the RegionMaster entity.
-func (fu *FacilityUpdate) ClearRegionRef() *FacilityUpdate {
-	fu.mutation.ClearRegionRef()
+// ClearDivisions clears the "divisions" edge to the DivisionMaster entity.
+func (fu *FacilityUpdate) ClearDivisions() *FacilityUpdate {
+	fu.mutation.ClearDivisions()
 	return fu
 }
 
-// RemoveRegionRefIDs removes the "region_ref" edge to RegionMaster entities by IDs.
-func (fu *FacilityUpdate) RemoveRegionRefIDs(ids ...int32) *FacilityUpdate {
-	fu.mutation.RemoveRegionRefIDs(ids...)
+// ClearRegions clears the "regions" edge to the RegionMaster entity.
+func (fu *FacilityUpdate) ClearRegions() *FacilityUpdate {
+	fu.mutation.ClearRegions()
 	return fu
 }
 
-// RemoveRegionRef removes "region_ref" edges to RegionMaster entities.
-func (fu *FacilityUpdate) RemoveRegionRef(r ...*RegionMaster) *FacilityUpdate {
-	ids := make([]int32, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
-	}
-	return fu.RemoveRegionRefIDs(ids...)
+// ClearCircles clears the "circles" edge to the CircleMaster entity.
+func (fu *FacilityUpdate) ClearCircles() *FacilityUpdate {
+	fu.mutation.ClearCircles()
+	return fu
 }
 
 // ClearCircleRef clears all "circle_ref" edges to the CircleMaster entity.
@@ -290,6 +549,48 @@ func (fu *FacilityUpdate) RemoveCircleRef(c ...*CircleMaster) *FacilityUpdate {
 		ids[i] = c[i].ID
 	}
 	return fu.RemoveCircleRefIDs(ids...)
+}
+
+// ClearOfficePSRef clears all "Office_PS_Ref" edges to the Exam_Applications_PS entity.
+func (fu *FacilityUpdate) ClearOfficePSRef() *FacilityUpdate {
+	fu.mutation.ClearOfficePSRef()
+	return fu
+}
+
+// RemoveOfficePSRefIDs removes the "Office_PS_Ref" edge to Exam_Applications_PS entities by IDs.
+func (fu *FacilityUpdate) RemoveOfficePSRefIDs(ids ...int64) *FacilityUpdate {
+	fu.mutation.RemoveOfficePSRefIDs(ids...)
+	return fu
+}
+
+// RemoveOfficePSRef removes "Office_PS_Ref" edges to Exam_Applications_PS entities.
+func (fu *FacilityUpdate) RemoveOfficePSRef(e ...*Exam_Applications_PS) *FacilityUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.RemoveOfficePSRefIDs(ids...)
+}
+
+// ClearOfficeIPRef clears all "Office_IP_Ref" edges to the Exam_Applications_IP entity.
+func (fu *FacilityUpdate) ClearOfficeIPRef() *FacilityUpdate {
+	fu.mutation.ClearOfficeIPRef()
+	return fu
+}
+
+// RemoveOfficeIPRefIDs removes the "Office_IP_Ref" edge to Exam_Applications_IP entities by IDs.
+func (fu *FacilityUpdate) RemoveOfficeIPRefIDs(ids ...int64) *FacilityUpdate {
+	fu.mutation.RemoveOfficeIPRefIDs(ids...)
+	return fu
+}
+
+// RemoveOfficeIPRef removes "Office_IP_Ref" edges to Exam_Applications_IP entities.
+func (fu *FacilityUpdate) RemoveOfficeIPRef(e ...*Exam_Applications_IP) *FacilityUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.RemoveOfficeIPRefIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -329,10 +630,19 @@ func (fu *FacilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := fu.mutation.FacilityCode(); ok {
-		_spec.SetField(facility.FieldFacilityCode, field.TypeString, value)
+		_spec.SetField(facility.FieldFacilityCode, field.TypeInt32, value)
+	}
+	if value, ok := fu.mutation.AddedFacilityCode(); ok {
+		_spec.AddField(facility.FieldFacilityCode, field.TypeInt32, value)
+	}
+	if fu.mutation.FacilityCodeCleared() {
+		_spec.ClearField(facility.FieldFacilityCode, field.TypeInt32)
 	}
 	if value, ok := fu.mutation.OfficeType(); ok {
 		_spec.SetField(facility.FieldOfficeType, field.TypeString, value)
+	}
+	if value, ok := fu.mutation.FacilityOfficeID(); ok {
+		_spec.SetField(facility.FieldFacilityOfficeID, field.TypeString, value)
 	}
 	if value, ok := fu.mutation.FacilityName(); ok {
 		_spec.SetField(facility.FieldFacilityName, field.TypeString, value)
@@ -356,13 +666,13 @@ func (fu *FacilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(facility.FieldEmailID, field.TypeString)
 	}
 	if value, ok := fu.mutation.MobileNumber(); ok {
-		_spec.SetField(facility.FieldMobileNumber, field.TypeInt32, value)
+		_spec.SetField(facility.FieldMobileNumber, field.TypeInt64, value)
 	}
 	if value, ok := fu.mutation.AddedMobileNumber(); ok {
-		_spec.AddField(facility.FieldMobileNumber, field.TypeInt32, value)
+		_spec.AddField(facility.FieldMobileNumber, field.TypeInt64, value)
 	}
 	if fu.mutation.MobileNumberCleared() {
-		_spec.ClearField(facility.FieldMobileNumber, field.TypeInt32)
+		_spec.ClearField(facility.FieldMobileNumber, field.TypeInt64)
 	}
 	if value, ok := fu.mutation.DivisionCode(); ok {
 		_spec.SetField(facility.FieldDivisionCode, field.TypeInt32, value)
@@ -373,6 +683,12 @@ func (fu *FacilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.DivisionCodeCleared() {
 		_spec.ClearField(facility.FieldDivisionCode, field.TypeInt32)
 	}
+	if value, ok := fu.mutation.DivisionName(); ok {
+		_spec.SetField(facility.FieldDivisionName, field.TypeString, value)
+	}
+	if fu.mutation.DivisionNameCleared() {
+		_spec.ClearField(facility.FieldDivisionName, field.TypeString)
+	}
 	if value, ok := fu.mutation.RegionCode(); ok {
 		_spec.SetField(facility.FieldRegionCode, field.TypeInt32, value)
 	}
@@ -381,6 +697,12 @@ func (fu *FacilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if fu.mutation.RegionCodeCleared() {
 		_spec.ClearField(facility.FieldRegionCode, field.TypeInt32)
+	}
+	if value, ok := fu.mutation.RegionName(); ok {
+		_spec.SetField(facility.FieldRegionName, field.TypeString, value)
+	}
+	if fu.mutation.RegionNameCleared() {
+		_spec.ClearField(facility.FieldRegionName, field.TypeString)
 	}
 	if value, ok := fu.mutation.CircleCode(); ok {
 		_spec.SetField(facility.FieldCircleCode, field.TypeInt32, value)
@@ -391,12 +713,59 @@ func (fu *FacilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.CircleCodeCleared() {
 		_spec.ClearField(facility.FieldCircleCode, field.TypeInt32)
 	}
-	if fu.mutation.RegionRefCleared() {
+	if value, ok := fu.mutation.CircleName(); ok {
+		_spec.SetField(facility.FieldCircleName, field.TypeString, value)
+	}
+	if fu.mutation.CircleNameCleared() {
+		_spec.ClearField(facility.FieldCircleName, field.TypeString)
+	}
+	if value, ok := fu.mutation.ReportingOfficeID(); ok {
+		_spec.SetField(facility.FieldReportingOfficeID, field.TypeString, value)
+	}
+	if fu.mutation.ReportingOfficeIDCleared() {
+		_spec.ClearField(facility.FieldReportingOfficeID, field.TypeString)
+	}
+	if value, ok := fu.mutation.ReportingOfficeName(); ok {
+		_spec.SetField(facility.FieldReportingOfficeName, field.TypeString, value)
+	}
+	if fu.mutation.ReportingOfficeNameCleared() {
+		_spec.ClearField(facility.FieldReportingOfficeName, field.TypeString)
+	}
+	if fu.mutation.DivisionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   facility.RegionRefTable,
-			Columns: []string{facility.RegionRefColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.DivisionsTable,
+			Columns: []string{facility.DivisionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(divisionmaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.DivisionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.DivisionsTable,
+			Columns: []string{facility.DivisionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(divisionmaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.RegionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.RegionsTable,
+			Columns: []string{facility.RegionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
@@ -404,12 +773,12 @@ func (fu *FacilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.RemovedRegionRefIDs(); len(nodes) > 0 && !fu.mutation.RegionRefCleared() {
+	if nodes := fu.mutation.RegionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   facility.RegionRefTable,
-			Columns: []string{facility.RegionRefColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.RegionsTable,
+			Columns: []string{facility.RegionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
@@ -418,17 +787,30 @@ func (fu *FacilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := fu.mutation.RegionRefIDs(); len(nodes) > 0 {
+	if fu.mutation.CirclesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   facility.RegionRefTable,
-			Columns: []string{facility.RegionRefColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.CirclesTable,
+			Columns: []string{facility.CirclesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
+				IDSpec: sqlgraph.NewFieldSpec(circlemaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.CirclesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.CirclesTable,
+			Columns: []string{facility.CirclesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(circlemaster.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {
@@ -481,6 +863,96 @@ func (fu *FacilityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if fu.mutation.OfficePSRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficePSRefTable,
+			Columns: []string{facility.OfficePSRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ps.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedOfficePSRefIDs(); len(nodes) > 0 && !fu.mutation.OfficePSRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficePSRefTable,
+			Columns: []string{facility.OfficePSRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ps.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.OfficePSRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficePSRefTable,
+			Columns: []string{facility.OfficePSRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ps.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.OfficeIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficeIPRefTable,
+			Columns: []string{facility.OfficeIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ip.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedOfficeIPRefIDs(); len(nodes) > 0 && !fu.mutation.OfficeIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficeIPRefTable,
+			Columns: []string{facility.OfficeIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ip.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.OfficeIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficeIPRefTable,
+			Columns: []string{facility.OfficeIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ip.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, fu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{facility.Label}
@@ -502,14 +974,41 @@ type FacilityUpdateOne struct {
 }
 
 // SetFacilityCode sets the "FacilityCode" field.
-func (fuo *FacilityUpdateOne) SetFacilityCode(s string) *FacilityUpdateOne {
-	fuo.mutation.SetFacilityCode(s)
+func (fuo *FacilityUpdateOne) SetFacilityCode(i int32) *FacilityUpdateOne {
+	fuo.mutation.ResetFacilityCode()
+	fuo.mutation.SetFacilityCode(i)
+	return fuo
+}
+
+// SetNillableFacilityCode sets the "FacilityCode" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableFacilityCode(i *int32) *FacilityUpdateOne {
+	if i != nil {
+		fuo.SetFacilityCode(*i)
+	}
+	return fuo
+}
+
+// AddFacilityCode adds i to the "FacilityCode" field.
+func (fuo *FacilityUpdateOne) AddFacilityCode(i int32) *FacilityUpdateOne {
+	fuo.mutation.AddFacilityCode(i)
+	return fuo
+}
+
+// ClearFacilityCode clears the value of the "FacilityCode" field.
+func (fuo *FacilityUpdateOne) ClearFacilityCode() *FacilityUpdateOne {
+	fuo.mutation.ClearFacilityCode()
 	return fuo
 }
 
 // SetOfficeType sets the "OfficeType" field.
 func (fuo *FacilityUpdateOne) SetOfficeType(s string) *FacilityUpdateOne {
 	fuo.mutation.SetOfficeType(s)
+	return fuo
+}
+
+// SetFacilityOfficeID sets the "FacilityOfficeID" field.
+func (fuo *FacilityUpdateOne) SetFacilityOfficeID(s string) *FacilityUpdateOne {
+	fuo.mutation.SetFacilityOfficeID(s)
 	return fuo
 }
 
@@ -580,14 +1079,14 @@ func (fuo *FacilityUpdateOne) ClearEmailID() *FacilityUpdateOne {
 }
 
 // SetMobileNumber sets the "MobileNumber" field.
-func (fuo *FacilityUpdateOne) SetMobileNumber(i int32) *FacilityUpdateOne {
+func (fuo *FacilityUpdateOne) SetMobileNumber(i int64) *FacilityUpdateOne {
 	fuo.mutation.ResetMobileNumber()
 	fuo.mutation.SetMobileNumber(i)
 	return fuo
 }
 
 // SetNillableMobileNumber sets the "MobileNumber" field if the given value is not nil.
-func (fuo *FacilityUpdateOne) SetNillableMobileNumber(i *int32) *FacilityUpdateOne {
+func (fuo *FacilityUpdateOne) SetNillableMobileNumber(i *int64) *FacilityUpdateOne {
 	if i != nil {
 		fuo.SetMobileNumber(*i)
 	}
@@ -595,7 +1094,7 @@ func (fuo *FacilityUpdateOne) SetNillableMobileNumber(i *int32) *FacilityUpdateO
 }
 
 // AddMobileNumber adds i to the "MobileNumber" field.
-func (fuo *FacilityUpdateOne) AddMobileNumber(i int32) *FacilityUpdateOne {
+func (fuo *FacilityUpdateOne) AddMobileNumber(i int64) *FacilityUpdateOne {
 	fuo.mutation.AddMobileNumber(i)
 	return fuo
 }
@@ -633,6 +1132,46 @@ func (fuo *FacilityUpdateOne) ClearDivisionCode() *FacilityUpdateOne {
 	return fuo
 }
 
+// SetDivisionName sets the "DivisionName" field.
+func (fuo *FacilityUpdateOne) SetDivisionName(s string) *FacilityUpdateOne {
+	fuo.mutation.SetDivisionName(s)
+	return fuo
+}
+
+// SetNillableDivisionName sets the "DivisionName" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableDivisionName(s *string) *FacilityUpdateOne {
+	if s != nil {
+		fuo.SetDivisionName(*s)
+	}
+	return fuo
+}
+
+// ClearDivisionName clears the value of the "DivisionName" field.
+func (fuo *FacilityUpdateOne) ClearDivisionName() *FacilityUpdateOne {
+	fuo.mutation.ClearDivisionName()
+	return fuo
+}
+
+// SetDivisionID sets the "DivisionID" field.
+func (fuo *FacilityUpdateOne) SetDivisionID(i int32) *FacilityUpdateOne {
+	fuo.mutation.SetDivisionID(i)
+	return fuo
+}
+
+// SetNillableDivisionID sets the "DivisionID" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableDivisionID(i *int32) *FacilityUpdateOne {
+	if i != nil {
+		fuo.SetDivisionID(*i)
+	}
+	return fuo
+}
+
+// ClearDivisionID clears the value of the "DivisionID" field.
+func (fuo *FacilityUpdateOne) ClearDivisionID() *FacilityUpdateOne {
+	fuo.mutation.ClearDivisionID()
+	return fuo
+}
+
 // SetRegionCode sets the "RegionCode" field.
 func (fuo *FacilityUpdateOne) SetRegionCode(i int32) *FacilityUpdateOne {
 	fuo.mutation.ResetRegionCode()
@@ -657,6 +1196,46 @@ func (fuo *FacilityUpdateOne) AddRegionCode(i int32) *FacilityUpdateOne {
 // ClearRegionCode clears the value of the "RegionCode" field.
 func (fuo *FacilityUpdateOne) ClearRegionCode() *FacilityUpdateOne {
 	fuo.mutation.ClearRegionCode()
+	return fuo
+}
+
+// SetRegionID sets the "RegionID" field.
+func (fuo *FacilityUpdateOne) SetRegionID(i int32) *FacilityUpdateOne {
+	fuo.mutation.SetRegionID(i)
+	return fuo
+}
+
+// SetNillableRegionID sets the "RegionID" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableRegionID(i *int32) *FacilityUpdateOne {
+	if i != nil {
+		fuo.SetRegionID(*i)
+	}
+	return fuo
+}
+
+// ClearRegionID clears the value of the "RegionID" field.
+func (fuo *FacilityUpdateOne) ClearRegionID() *FacilityUpdateOne {
+	fuo.mutation.ClearRegionID()
+	return fuo
+}
+
+// SetRegionName sets the "RegionName" field.
+func (fuo *FacilityUpdateOne) SetRegionName(s string) *FacilityUpdateOne {
+	fuo.mutation.SetRegionName(s)
+	return fuo
+}
+
+// SetNillableRegionName sets the "RegionName" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableRegionName(s *string) *FacilityUpdateOne {
+	if s != nil {
+		fuo.SetRegionName(*s)
+	}
+	return fuo
+}
+
+// ClearRegionName clears the value of the "RegionName" field.
+func (fuo *FacilityUpdateOne) ClearRegionName() *FacilityUpdateOne {
+	fuo.mutation.ClearRegionName()
 	return fuo
 }
 
@@ -687,19 +1266,141 @@ func (fuo *FacilityUpdateOne) ClearCircleCode() *FacilityUpdateOne {
 	return fuo
 }
 
-// AddRegionRefIDs adds the "region_ref" edge to the RegionMaster entity by IDs.
-func (fuo *FacilityUpdateOne) AddRegionRefIDs(ids ...int32) *FacilityUpdateOne {
-	fuo.mutation.AddRegionRefIDs(ids...)
+// SetCircleID sets the "CircleID" field.
+func (fuo *FacilityUpdateOne) SetCircleID(i int32) *FacilityUpdateOne {
+	fuo.mutation.SetCircleID(i)
 	return fuo
 }
 
-// AddRegionRef adds the "region_ref" edges to the RegionMaster entity.
-func (fuo *FacilityUpdateOne) AddRegionRef(r ...*RegionMaster) *FacilityUpdateOne {
-	ids := make([]int32, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+// SetNillableCircleID sets the "CircleID" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableCircleID(i *int32) *FacilityUpdateOne {
+	if i != nil {
+		fuo.SetCircleID(*i)
 	}
-	return fuo.AddRegionRefIDs(ids...)
+	return fuo
+}
+
+// ClearCircleID clears the value of the "CircleID" field.
+func (fuo *FacilityUpdateOne) ClearCircleID() *FacilityUpdateOne {
+	fuo.mutation.ClearCircleID()
+	return fuo
+}
+
+// SetCircleName sets the "CircleName" field.
+func (fuo *FacilityUpdateOne) SetCircleName(s string) *FacilityUpdateOne {
+	fuo.mutation.SetCircleName(s)
+	return fuo
+}
+
+// SetNillableCircleName sets the "CircleName" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableCircleName(s *string) *FacilityUpdateOne {
+	if s != nil {
+		fuo.SetCircleName(*s)
+	}
+	return fuo
+}
+
+// ClearCircleName clears the value of the "CircleName" field.
+func (fuo *FacilityUpdateOne) ClearCircleName() *FacilityUpdateOne {
+	fuo.mutation.ClearCircleName()
+	return fuo
+}
+
+// SetReportingOfficeID sets the "ReportingOfficeID" field.
+func (fuo *FacilityUpdateOne) SetReportingOfficeID(s string) *FacilityUpdateOne {
+	fuo.mutation.SetReportingOfficeID(s)
+	return fuo
+}
+
+// SetNillableReportingOfficeID sets the "ReportingOfficeID" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableReportingOfficeID(s *string) *FacilityUpdateOne {
+	if s != nil {
+		fuo.SetReportingOfficeID(*s)
+	}
+	return fuo
+}
+
+// ClearReportingOfficeID clears the value of the "ReportingOfficeID" field.
+func (fuo *FacilityUpdateOne) ClearReportingOfficeID() *FacilityUpdateOne {
+	fuo.mutation.ClearReportingOfficeID()
+	return fuo
+}
+
+// SetReportingOfficeName sets the "ReportingOfficeName" field.
+func (fuo *FacilityUpdateOne) SetReportingOfficeName(s string) *FacilityUpdateOne {
+	fuo.mutation.SetReportingOfficeName(s)
+	return fuo
+}
+
+// SetNillableReportingOfficeName sets the "ReportingOfficeName" field if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableReportingOfficeName(s *string) *FacilityUpdateOne {
+	if s != nil {
+		fuo.SetReportingOfficeName(*s)
+	}
+	return fuo
+}
+
+// ClearReportingOfficeName clears the value of the "ReportingOfficeName" field.
+func (fuo *FacilityUpdateOne) ClearReportingOfficeName() *FacilityUpdateOne {
+	fuo.mutation.ClearReportingOfficeName()
+	return fuo
+}
+
+// SetDivisionsID sets the "divisions" edge to the DivisionMaster entity by ID.
+func (fuo *FacilityUpdateOne) SetDivisionsID(id int32) *FacilityUpdateOne {
+	fuo.mutation.SetDivisionsID(id)
+	return fuo
+}
+
+// SetNillableDivisionsID sets the "divisions" edge to the DivisionMaster entity by ID if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableDivisionsID(id *int32) *FacilityUpdateOne {
+	if id != nil {
+		fuo = fuo.SetDivisionsID(*id)
+	}
+	return fuo
+}
+
+// SetDivisions sets the "divisions" edge to the DivisionMaster entity.
+func (fuo *FacilityUpdateOne) SetDivisions(d *DivisionMaster) *FacilityUpdateOne {
+	return fuo.SetDivisionsID(d.ID)
+}
+
+// SetRegionsID sets the "regions" edge to the RegionMaster entity by ID.
+func (fuo *FacilityUpdateOne) SetRegionsID(id int32) *FacilityUpdateOne {
+	fuo.mutation.SetRegionsID(id)
+	return fuo
+}
+
+// SetNillableRegionsID sets the "regions" edge to the RegionMaster entity by ID if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableRegionsID(id *int32) *FacilityUpdateOne {
+	if id != nil {
+		fuo = fuo.SetRegionsID(*id)
+	}
+	return fuo
+}
+
+// SetRegions sets the "regions" edge to the RegionMaster entity.
+func (fuo *FacilityUpdateOne) SetRegions(r *RegionMaster) *FacilityUpdateOne {
+	return fuo.SetRegionsID(r.ID)
+}
+
+// SetCirclesID sets the "circles" edge to the CircleMaster entity by ID.
+func (fuo *FacilityUpdateOne) SetCirclesID(id int32) *FacilityUpdateOne {
+	fuo.mutation.SetCirclesID(id)
+	return fuo
+}
+
+// SetNillableCirclesID sets the "circles" edge to the CircleMaster entity by ID if the given value is not nil.
+func (fuo *FacilityUpdateOne) SetNillableCirclesID(id *int32) *FacilityUpdateOne {
+	if id != nil {
+		fuo = fuo.SetCirclesID(*id)
+	}
+	return fuo
+}
+
+// SetCircles sets the "circles" edge to the CircleMaster entity.
+func (fuo *FacilityUpdateOne) SetCircles(c *CircleMaster) *FacilityUpdateOne {
+	return fuo.SetCirclesID(c.ID)
 }
 
 // AddCircleRefIDs adds the "circle_ref" edge to the CircleMaster entity by IDs.
@@ -717,30 +1418,57 @@ func (fuo *FacilityUpdateOne) AddCircleRef(c ...*CircleMaster) *FacilityUpdateOn
 	return fuo.AddCircleRefIDs(ids...)
 }
 
+// AddOfficePSRefIDs adds the "Office_PS_Ref" edge to the Exam_Applications_PS entity by IDs.
+func (fuo *FacilityUpdateOne) AddOfficePSRefIDs(ids ...int64) *FacilityUpdateOne {
+	fuo.mutation.AddOfficePSRefIDs(ids...)
+	return fuo
+}
+
+// AddOfficePSRef adds the "Office_PS_Ref" edges to the Exam_Applications_PS entity.
+func (fuo *FacilityUpdateOne) AddOfficePSRef(e ...*Exam_Applications_PS) *FacilityUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.AddOfficePSRefIDs(ids...)
+}
+
+// AddOfficeIPRefIDs adds the "Office_IP_Ref" edge to the Exam_Applications_IP entity by IDs.
+func (fuo *FacilityUpdateOne) AddOfficeIPRefIDs(ids ...int64) *FacilityUpdateOne {
+	fuo.mutation.AddOfficeIPRefIDs(ids...)
+	return fuo
+}
+
+// AddOfficeIPRef adds the "Office_IP_Ref" edges to the Exam_Applications_IP entity.
+func (fuo *FacilityUpdateOne) AddOfficeIPRef(e ...*Exam_Applications_IP) *FacilityUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.AddOfficeIPRefIDs(ids...)
+}
+
 // Mutation returns the FacilityMutation object of the builder.
 func (fuo *FacilityUpdateOne) Mutation() *FacilityMutation {
 	return fuo.mutation
 }
 
-// ClearRegionRef clears all "region_ref" edges to the RegionMaster entity.
-func (fuo *FacilityUpdateOne) ClearRegionRef() *FacilityUpdateOne {
-	fuo.mutation.ClearRegionRef()
+// ClearDivisions clears the "divisions" edge to the DivisionMaster entity.
+func (fuo *FacilityUpdateOne) ClearDivisions() *FacilityUpdateOne {
+	fuo.mutation.ClearDivisions()
 	return fuo
 }
 
-// RemoveRegionRefIDs removes the "region_ref" edge to RegionMaster entities by IDs.
-func (fuo *FacilityUpdateOne) RemoveRegionRefIDs(ids ...int32) *FacilityUpdateOne {
-	fuo.mutation.RemoveRegionRefIDs(ids...)
+// ClearRegions clears the "regions" edge to the RegionMaster entity.
+func (fuo *FacilityUpdateOne) ClearRegions() *FacilityUpdateOne {
+	fuo.mutation.ClearRegions()
 	return fuo
 }
 
-// RemoveRegionRef removes "region_ref" edges to RegionMaster entities.
-func (fuo *FacilityUpdateOne) RemoveRegionRef(r ...*RegionMaster) *FacilityUpdateOne {
-	ids := make([]int32, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
-	}
-	return fuo.RemoveRegionRefIDs(ids...)
+// ClearCircles clears the "circles" edge to the CircleMaster entity.
+func (fuo *FacilityUpdateOne) ClearCircles() *FacilityUpdateOne {
+	fuo.mutation.ClearCircles()
+	return fuo
 }
 
 // ClearCircleRef clears all "circle_ref" edges to the CircleMaster entity.
@@ -762,6 +1490,48 @@ func (fuo *FacilityUpdateOne) RemoveCircleRef(c ...*CircleMaster) *FacilityUpdat
 		ids[i] = c[i].ID
 	}
 	return fuo.RemoveCircleRefIDs(ids...)
+}
+
+// ClearOfficePSRef clears all "Office_PS_Ref" edges to the Exam_Applications_PS entity.
+func (fuo *FacilityUpdateOne) ClearOfficePSRef() *FacilityUpdateOne {
+	fuo.mutation.ClearOfficePSRef()
+	return fuo
+}
+
+// RemoveOfficePSRefIDs removes the "Office_PS_Ref" edge to Exam_Applications_PS entities by IDs.
+func (fuo *FacilityUpdateOne) RemoveOfficePSRefIDs(ids ...int64) *FacilityUpdateOne {
+	fuo.mutation.RemoveOfficePSRefIDs(ids...)
+	return fuo
+}
+
+// RemoveOfficePSRef removes "Office_PS_Ref" edges to Exam_Applications_PS entities.
+func (fuo *FacilityUpdateOne) RemoveOfficePSRef(e ...*Exam_Applications_PS) *FacilityUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.RemoveOfficePSRefIDs(ids...)
+}
+
+// ClearOfficeIPRef clears all "Office_IP_Ref" edges to the Exam_Applications_IP entity.
+func (fuo *FacilityUpdateOne) ClearOfficeIPRef() *FacilityUpdateOne {
+	fuo.mutation.ClearOfficeIPRef()
+	return fuo
+}
+
+// RemoveOfficeIPRefIDs removes the "Office_IP_Ref" edge to Exam_Applications_IP entities by IDs.
+func (fuo *FacilityUpdateOne) RemoveOfficeIPRefIDs(ids ...int64) *FacilityUpdateOne {
+	fuo.mutation.RemoveOfficeIPRefIDs(ids...)
+	return fuo
+}
+
+// RemoveOfficeIPRef removes "Office_IP_Ref" edges to Exam_Applications_IP entities.
+func (fuo *FacilityUpdateOne) RemoveOfficeIPRef(e ...*Exam_Applications_IP) *FacilityUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.RemoveOfficeIPRefIDs(ids...)
 }
 
 // Where appends a list predicates to the FacilityUpdate builder.
@@ -831,10 +1601,19 @@ func (fuo *FacilityUpdateOne) sqlSave(ctx context.Context) (_node *Facility, err
 		}
 	}
 	if value, ok := fuo.mutation.FacilityCode(); ok {
-		_spec.SetField(facility.FieldFacilityCode, field.TypeString, value)
+		_spec.SetField(facility.FieldFacilityCode, field.TypeInt32, value)
+	}
+	if value, ok := fuo.mutation.AddedFacilityCode(); ok {
+		_spec.AddField(facility.FieldFacilityCode, field.TypeInt32, value)
+	}
+	if fuo.mutation.FacilityCodeCleared() {
+		_spec.ClearField(facility.FieldFacilityCode, field.TypeInt32)
 	}
 	if value, ok := fuo.mutation.OfficeType(); ok {
 		_spec.SetField(facility.FieldOfficeType, field.TypeString, value)
+	}
+	if value, ok := fuo.mutation.FacilityOfficeID(); ok {
+		_spec.SetField(facility.FieldFacilityOfficeID, field.TypeString, value)
 	}
 	if value, ok := fuo.mutation.FacilityName(); ok {
 		_spec.SetField(facility.FieldFacilityName, field.TypeString, value)
@@ -858,13 +1637,13 @@ func (fuo *FacilityUpdateOne) sqlSave(ctx context.Context) (_node *Facility, err
 		_spec.ClearField(facility.FieldEmailID, field.TypeString)
 	}
 	if value, ok := fuo.mutation.MobileNumber(); ok {
-		_spec.SetField(facility.FieldMobileNumber, field.TypeInt32, value)
+		_spec.SetField(facility.FieldMobileNumber, field.TypeInt64, value)
 	}
 	if value, ok := fuo.mutation.AddedMobileNumber(); ok {
-		_spec.AddField(facility.FieldMobileNumber, field.TypeInt32, value)
+		_spec.AddField(facility.FieldMobileNumber, field.TypeInt64, value)
 	}
 	if fuo.mutation.MobileNumberCleared() {
-		_spec.ClearField(facility.FieldMobileNumber, field.TypeInt32)
+		_spec.ClearField(facility.FieldMobileNumber, field.TypeInt64)
 	}
 	if value, ok := fuo.mutation.DivisionCode(); ok {
 		_spec.SetField(facility.FieldDivisionCode, field.TypeInt32, value)
@@ -875,6 +1654,12 @@ func (fuo *FacilityUpdateOne) sqlSave(ctx context.Context) (_node *Facility, err
 	if fuo.mutation.DivisionCodeCleared() {
 		_spec.ClearField(facility.FieldDivisionCode, field.TypeInt32)
 	}
+	if value, ok := fuo.mutation.DivisionName(); ok {
+		_spec.SetField(facility.FieldDivisionName, field.TypeString, value)
+	}
+	if fuo.mutation.DivisionNameCleared() {
+		_spec.ClearField(facility.FieldDivisionName, field.TypeString)
+	}
 	if value, ok := fuo.mutation.RegionCode(); ok {
 		_spec.SetField(facility.FieldRegionCode, field.TypeInt32, value)
 	}
@@ -883,6 +1668,12 @@ func (fuo *FacilityUpdateOne) sqlSave(ctx context.Context) (_node *Facility, err
 	}
 	if fuo.mutation.RegionCodeCleared() {
 		_spec.ClearField(facility.FieldRegionCode, field.TypeInt32)
+	}
+	if value, ok := fuo.mutation.RegionName(); ok {
+		_spec.SetField(facility.FieldRegionName, field.TypeString, value)
+	}
+	if fuo.mutation.RegionNameCleared() {
+		_spec.ClearField(facility.FieldRegionName, field.TypeString)
 	}
 	if value, ok := fuo.mutation.CircleCode(); ok {
 		_spec.SetField(facility.FieldCircleCode, field.TypeInt32, value)
@@ -893,12 +1684,59 @@ func (fuo *FacilityUpdateOne) sqlSave(ctx context.Context) (_node *Facility, err
 	if fuo.mutation.CircleCodeCleared() {
 		_spec.ClearField(facility.FieldCircleCode, field.TypeInt32)
 	}
-	if fuo.mutation.RegionRefCleared() {
+	if value, ok := fuo.mutation.CircleName(); ok {
+		_spec.SetField(facility.FieldCircleName, field.TypeString, value)
+	}
+	if fuo.mutation.CircleNameCleared() {
+		_spec.ClearField(facility.FieldCircleName, field.TypeString)
+	}
+	if value, ok := fuo.mutation.ReportingOfficeID(); ok {
+		_spec.SetField(facility.FieldReportingOfficeID, field.TypeString, value)
+	}
+	if fuo.mutation.ReportingOfficeIDCleared() {
+		_spec.ClearField(facility.FieldReportingOfficeID, field.TypeString)
+	}
+	if value, ok := fuo.mutation.ReportingOfficeName(); ok {
+		_spec.SetField(facility.FieldReportingOfficeName, field.TypeString, value)
+	}
+	if fuo.mutation.ReportingOfficeNameCleared() {
+		_spec.ClearField(facility.FieldReportingOfficeName, field.TypeString)
+	}
+	if fuo.mutation.DivisionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   facility.RegionRefTable,
-			Columns: []string{facility.RegionRefColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.DivisionsTable,
+			Columns: []string{facility.DivisionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(divisionmaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.DivisionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.DivisionsTable,
+			Columns: []string{facility.DivisionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(divisionmaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.RegionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.RegionsTable,
+			Columns: []string{facility.RegionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
@@ -906,12 +1744,12 @@ func (fuo *FacilityUpdateOne) sqlSave(ctx context.Context) (_node *Facility, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.RemovedRegionRefIDs(); len(nodes) > 0 && !fuo.mutation.RegionRefCleared() {
+	if nodes := fuo.mutation.RegionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   facility.RegionRefTable,
-			Columns: []string{facility.RegionRefColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.RegionsTable,
+			Columns: []string{facility.RegionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
@@ -920,17 +1758,30 @@ func (fuo *FacilityUpdateOne) sqlSave(ctx context.Context) (_node *Facility, err
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := fuo.mutation.RegionRefIDs(); len(nodes) > 0 {
+	if fuo.mutation.CirclesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   facility.RegionRefTable,
-			Columns: []string{facility.RegionRefColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.CirclesTable,
+			Columns: []string{facility.CirclesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
+				IDSpec: sqlgraph.NewFieldSpec(circlemaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.CirclesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.CirclesTable,
+			Columns: []string{facility.CirclesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(circlemaster.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {
@@ -976,6 +1827,96 @@ func (fuo *FacilityUpdateOne) sqlSave(ctx context.Context) (_node *Facility, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(circlemaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.OfficePSRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficePSRefTable,
+			Columns: []string{facility.OfficePSRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ps.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedOfficePSRefIDs(); len(nodes) > 0 && !fuo.mutation.OfficePSRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficePSRefTable,
+			Columns: []string{facility.OfficePSRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ps.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.OfficePSRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficePSRefTable,
+			Columns: []string{facility.OfficePSRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ps.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.OfficeIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficeIPRefTable,
+			Columns: []string{facility.OfficeIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ip.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedOfficeIPRefIDs(); len(nodes) > 0 && !fuo.mutation.OfficeIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficeIPRefTable,
+			Columns: []string{facility.OfficeIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ip.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.OfficeIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficeIPRefTable,
+			Columns: []string{facility.OfficeIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ip.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

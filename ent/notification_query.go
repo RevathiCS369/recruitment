@@ -10,6 +10,8 @@ import (
 	"recruit/ent/application"
 	"recruit/ent/center"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/nodalofficer"
 	"recruit/ent/notification"
 	"recruit/ent/predicate"
@@ -23,17 +25,19 @@ import (
 // NotificationQuery is the builder for querying Notification entities.
 type NotificationQuery struct {
 	config
-	ctx               *QueryContext
-	order             []notification.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Notification
-	withApplications  *ApplicationQuery
-	withCenters       *CenterQuery
-	withNodalOfficers *NodalOfficerQuery
-	withExam          *ExamQuery
-	withVacancyYears  *VacancyYearQuery
-	withNotifyRef     *NotificationQuery
-	withFKs           bool
+	ctx                 *QueryContext
+	order               []notification.OrderOption
+	inters              []Interceptor
+	predicates          []predicate.Notification
+	withApplications    *ApplicationQuery
+	withCenters         *CenterQuery
+	withNodalOfficers   *NodalOfficerQuery
+	withExam            *ExamQuery
+	withVacancyYears    *VacancyYearQuery
+	withNotifyRef       *NotificationQuery
+	withNotificationsPs *ExamPSQuery
+	withNotificationsIP *ExamIPQuery
+	withFKs             bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -195,6 +199,50 @@ func (nq *NotificationQuery) QueryNotifyRef() *NotificationQuery {
 			sqlgraph.From(notification.Table, notification.FieldID, selector),
 			sqlgraph.To(notification.Table, notification.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, notification.NotifyRefTable, notification.NotifyRefPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNotificationsPs chains the current query on the "notifications_ps" edge.
+func (nq *NotificationQuery) QueryNotificationsPs() *ExamPSQuery {
+	query := (&ExamPSClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, selector),
+			sqlgraph.To(exam_ps.Table, exam_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, notification.NotificationsPsTable, notification.NotificationsPsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNotificationsIP chains the current query on the "notifications_ip" edge.
+func (nq *NotificationQuery) QueryNotificationsIP() *ExamIPQuery {
+	query := (&ExamIPClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, selector),
+			sqlgraph.To(exam_ip.Table, exam_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, notification.NotificationsIPTable, notification.NotificationsIPColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
@@ -389,17 +437,19 @@ func (nq *NotificationQuery) Clone() *NotificationQuery {
 		return nil
 	}
 	return &NotificationQuery{
-		config:            nq.config,
-		ctx:               nq.ctx.Clone(),
-		order:             append([]notification.OrderOption{}, nq.order...),
-		inters:            append([]Interceptor{}, nq.inters...),
-		predicates:        append([]predicate.Notification{}, nq.predicates...),
-		withApplications:  nq.withApplications.Clone(),
-		withCenters:       nq.withCenters.Clone(),
-		withNodalOfficers: nq.withNodalOfficers.Clone(),
-		withExam:          nq.withExam.Clone(),
-		withVacancyYears:  nq.withVacancyYears.Clone(),
-		withNotifyRef:     nq.withNotifyRef.Clone(),
+		config:              nq.config,
+		ctx:                 nq.ctx.Clone(),
+		order:               append([]notification.OrderOption{}, nq.order...),
+		inters:              append([]Interceptor{}, nq.inters...),
+		predicates:          append([]predicate.Notification{}, nq.predicates...),
+		withApplications:    nq.withApplications.Clone(),
+		withCenters:         nq.withCenters.Clone(),
+		withNodalOfficers:   nq.withNodalOfficers.Clone(),
+		withExam:            nq.withExam.Clone(),
+		withVacancyYears:    nq.withVacancyYears.Clone(),
+		withNotifyRef:       nq.withNotifyRef.Clone(),
+		withNotificationsPs: nq.withNotificationsPs.Clone(),
+		withNotificationsIP: nq.withNotificationsIP.Clone(),
 		// clone intermediate query.
 		sql:  nq.sql.Clone(),
 		path: nq.path,
@@ -469,6 +519,28 @@ func (nq *NotificationQuery) WithNotifyRef(opts ...func(*NotificationQuery)) *No
 		opt(query)
 	}
 	nq.withNotifyRef = query
+	return nq
+}
+
+// WithNotificationsPs tells the query-builder to eager-load the nodes that are connected to
+// the "notifications_ps" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NotificationQuery) WithNotificationsPs(opts ...func(*ExamPSQuery)) *NotificationQuery {
+	query := (&ExamPSClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withNotificationsPs = query
+	return nq
+}
+
+// WithNotificationsIP tells the query-builder to eager-load the nodes that are connected to
+// the "notifications_ip" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NotificationQuery) WithNotificationsIP(opts ...func(*ExamIPQuery)) *NotificationQuery {
+	query := (&ExamIPClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withNotificationsIP = query
 	return nq
 }
 
@@ -551,13 +623,15 @@ func (nq *NotificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		nodes       = []*Notification{}
 		withFKs     = nq.withFKs
 		_spec       = nq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [8]bool{
 			nq.withApplications != nil,
 			nq.withCenters != nil,
 			nq.withNodalOfficers != nil,
 			nq.withExam != nil,
 			nq.withVacancyYears != nil,
 			nq.withNotifyRef != nil,
+			nq.withNotificationsPs != nil,
+			nq.withNotificationsIP != nil,
 		}
 	)
 	if withFKs {
@@ -619,6 +693,20 @@ func (nq *NotificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := nq.loadNotifyRef(ctx, query, nodes,
 			func(n *Notification) { n.Edges.NotifyRef = []*Notification{} },
 			func(n *Notification, e *Notification) { n.Edges.NotifyRef = append(n.Edges.NotifyRef, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withNotificationsPs; query != nil {
+		if err := nq.loadNotificationsPs(ctx, query, nodes,
+			func(n *Notification) { n.Edges.NotificationsPs = []*Exam_PS{} },
+			func(n *Notification, e *Exam_PS) { n.Edges.NotificationsPs = append(n.Edges.NotificationsPs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withNotificationsIP; query != nil {
+		if err := nq.loadNotificationsIP(ctx, query, nodes,
+			func(n *Notification) { n.Edges.NotificationsIP = []*Exam_IP{} },
+			func(n *Notification, e *Exam_IP) { n.Edges.NotificationsIP = append(n.Edges.NotificationsIP, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -834,6 +922,68 @@ func (nq *NotificationQuery) loadNotifyRef(ctx context.Context, query *Notificat
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (nq *NotificationQuery) loadNotificationsPs(ctx context.Context, query *ExamPSQuery, nodes []*Notification, init func(*Notification), assign func(*Notification, *Exam_PS)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*Notification)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Exam_PS(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(notification.NotificationsPsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.notification_notifications_ps
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "notification_notifications_ps" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "notification_notifications_ps" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (nq *NotificationQuery) loadNotificationsIP(ctx context.Context, query *ExamIPQuery, nodes []*Notification, init func(*Notification), assign func(*Notification, *Exam_IP)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*Notification)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Exam_IP(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(notification.NotificationsIPColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.notification_notifications_ip
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "notification_notifications_ip" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "notification_notifications_ip" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

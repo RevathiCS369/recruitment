@@ -42,11 +42,17 @@ type Notification struct {
 	SyllabusFile string `json:"SyllabusFile,omitempty"`
 	// VacanciesFile holds the value of the "VacanciesFile" field.
 	VacanciesFile string `json:"VacanciesFile,omitempty"`
+	// ExamCodePS holds the value of the "ExamCodePS" field.
+	ExamCodePS int32 `json:"ExamCodePS,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NotificationQuery when eager-loading is set.
-	Edges                    NotificationEdges `json:"edges"`
-	exam_calendar_notify_ref *int32
-	selectValues             sql.SelectValues
+	Edges                            NotificationEdges `json:"edges"`
+	eligibility_master_notifications *int32
+	exam_calendar_notify_ref         *int32
+	exam_ip_notifications_ip         *int32
+	exam_pa_notifications_ps         *int32
+	exam_ps_notifications_ps         *int32
+	selectValues                     sql.SelectValues
 }
 
 // NotificationEdges holds the relations/edges for other nodes in the graph.
@@ -63,9 +69,13 @@ type NotificationEdges struct {
 	VacancyYears []*VacancyYear `json:"vacancy_years,omitempty"`
 	// NotifyRef holds the value of the notify_ref edge.
 	NotifyRef []*Notification `json:"notify_ref,omitempty"`
+	// NotificationsPs holds the value of the notifications_ps edge.
+	NotificationsPs []*Exam_PS `json:"notifications_ps,omitempty"`
+	// NotificationsIP holds the value of the notifications_ip edge.
+	NotificationsIP []*Exam_IP `json:"notifications_ip,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [8]bool
 }
 
 // ApplicationsOrErr returns the Applications value or an error if the edge
@@ -126,18 +136,44 @@ func (e NotificationEdges) NotifyRefOrErr() ([]*Notification, error) {
 	return nil, &NotLoadedError{edge: "notify_ref"}
 }
 
+// NotificationsPsOrErr returns the NotificationsPs value or an error if the edge
+// was not loaded in eager-loading.
+func (e NotificationEdges) NotificationsPsOrErr() ([]*Exam_PS, error) {
+	if e.loadedTypes[6] {
+		return e.NotificationsPs, nil
+	}
+	return nil, &NotLoadedError{edge: "notifications_ps"}
+}
+
+// NotificationsIPOrErr returns the NotificationsIP value or an error if the edge
+// was not loaded in eager-loading.
+func (e NotificationEdges) NotificationsIPOrErr() ([]*Exam_IP, error) {
+	if e.loadedTypes[7] {
+		return e.NotificationsIP, nil
+	}
+	return nil, &NotLoadedError{edge: "notifications_ip"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Notification) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case notification.FieldID, notification.FieldExamCode, notification.FieldExamYear:
+		case notification.FieldID, notification.FieldExamCode, notification.FieldExamYear, notification.FieldExamCodePS:
 			values[i] = new(sql.NullInt64)
 		case notification.FieldNotifyFile, notification.FieldSyllabusFile, notification.FieldVacanciesFile:
 			values[i] = new(sql.NullString)
 		case notification.FieldApplicationStartDate, notification.FieldApplicationEndDate, notification.FieldVerificationDateByController, notification.FieldCorrectionDateByCandidate, notification.FieldCorrectionVeriyDateByController, notification.FieldHallTicketAllotmentDateByNodalOfficer, notification.FieldHallTicketDownloadDate:
 			values[i] = new(sql.NullTime)
-		case notification.ForeignKeys[0]: // exam_calendar_notify_ref
+		case notification.ForeignKeys[0]: // eligibility_master_notifications
+			values[i] = new(sql.NullInt64)
+		case notification.ForeignKeys[1]: // exam_calendar_notify_ref
+			values[i] = new(sql.NullInt64)
+		case notification.ForeignKeys[2]: // exam_ip_notifications_ip
+			values[i] = new(sql.NullInt64)
+		case notification.ForeignKeys[3]: // exam_pa_notifications_ps
+			values[i] = new(sql.NullInt64)
+		case notification.ForeignKeys[4]: // exam_ps_notifications_ps
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -232,12 +268,46 @@ func (n *Notification) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.VacanciesFile = value.String
 			}
+		case notification.FieldExamCodePS:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ExamCodePS", values[i])
+			} else if value.Valid {
+				n.ExamCodePS = int32(value.Int64)
+			}
 		case notification.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field eligibility_master_notifications", value)
+			} else if value.Valid {
+				n.eligibility_master_notifications = new(int32)
+				*n.eligibility_master_notifications = int32(value.Int64)
+			}
+		case notification.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field exam_calendar_notify_ref", value)
 			} else if value.Valid {
 				n.exam_calendar_notify_ref = new(int32)
 				*n.exam_calendar_notify_ref = int32(value.Int64)
+			}
+		case notification.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_ip_notifications_ip", value)
+			} else if value.Valid {
+				n.exam_ip_notifications_ip = new(int32)
+				*n.exam_ip_notifications_ip = int32(value.Int64)
+			}
+		case notification.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_pa_notifications_ps", value)
+			} else if value.Valid {
+				n.exam_pa_notifications_ps = new(int32)
+				*n.exam_pa_notifications_ps = int32(value.Int64)
+			}
+		case notification.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_ps_notifications_ps", value)
+			} else if value.Valid {
+				n.exam_ps_notifications_ps = new(int32)
+				*n.exam_ps_notifications_ps = int32(value.Int64)
 			}
 		default:
 			n.selectValues.Set(columns[i], values[i])
@@ -280,6 +350,16 @@ func (n *Notification) QueryVacancyYears() *VacancyYearQuery {
 // QueryNotifyRef queries the "notify_ref" edge of the Notification entity.
 func (n *Notification) QueryNotifyRef() *NotificationQuery {
 	return NewNotificationClient(n.config).QueryNotifyRef(n)
+}
+
+// QueryNotificationsPs queries the "notifications_ps" edge of the Notification entity.
+func (n *Notification) QueryNotificationsPs() *ExamPSQuery {
+	return NewNotificationClient(n.config).QueryNotificationsPs(n)
+}
+
+// QueryNotificationsIP queries the "notifications_ip" edge of the Notification entity.
+func (n *Notification) QueryNotificationsIP() *ExamIPQuery {
+	return NewNotificationClient(n.config).QueryNotificationsIP(n)
 }
 
 // Update returns a builder for updating this Notification.
@@ -340,6 +420,9 @@ func (n *Notification) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("VacanciesFile=")
 	builder.WriteString(n.VacanciesFile)
+	builder.WriteString(", ")
+	builder.WriteString("ExamCodePS=")
+	builder.WriteString(fmt.Sprintf("%v", n.ExamCodePS))
 	builder.WriteByte(')')
 	return builder.String()
 }

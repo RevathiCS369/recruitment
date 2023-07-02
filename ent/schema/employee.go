@@ -3,6 +3,10 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
+
+	//`"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -44,8 +48,15 @@ func (Employees) Fields() []ent.Field {
 		field.Bool("genderRemStatus").Default(false),
 		field.String("genderRemarks").Optional(),
 
-		field.Int32("MobileNumber").Optional(),
+		field.Int64("MobileNumber").Optional(),
+		field.Bool("MobileNumberVerified").Default(false),
+		field.Bool("MobileNumberRemStatus").Default(false),
+		field.String("MobileNumberRemarks").Optional(),
+
 		field.String("EmailID").Optional(),
+		field.Bool("EmailIDVerified").Default(false),
+		field.Bool("EmailIDRemStatus").Default(false),
+		field.String("EmailIDRemarks").Optional(),
 
 		field.Int32("Categoryid").Optional(),
 		field.String("EmployeeCategoryCode").Optional(),
@@ -79,11 +90,18 @@ func (Employees) Fields() []ent.Field {
 		field.Bool("PhotoRemStatus").Default(false),
 		field.String("PhotoRemarks").Optional(),
 
-		field.Int32("Cadreid").Optional(),
+		/*field.Int32("Cadreid").Optional(),
 		field.String("EmployeeCadre"),
 		field.Bool("EmployeeCadreVerified").Default(false),
 		field.Bool("EmployeeCadreRemStatus").Default(false),
-		field.String("EmployeeCadreRemarks").Optional(),
+		field.String("EmployeeCadreRemarks").Optional(),*/
+
+		field.Int32("PostID").Optional(),
+		field.String("PostCode").Optional(),
+		field.String("EmployeePost"),
+		field.Bool("EmployeePostVerified").Default(false),
+		field.Bool("EmployeePostRemStatus").Default(false),
+		field.String("EmployeePostRemarks").Optional(),
 
 		field.Int32("DesignationID").Optional(),
 		field.String("EmployeeDesignation"),
@@ -98,13 +116,13 @@ func (Employees) Fields() []ent.Field {
 		field.String("CircleRemarks").Optional(),
 
 		field.Int32("RegionID").Optional(),
-		field.String("RegionName"),
+		field.String("RegionName").Optional(),
 		field.Bool("RegionVerified").Default(false),
 		field.Bool("RegionRemStatus").Default(false),
 		field.String("RegionRemarks").Optional(),
 
 		field.Int32("DivisionID").Optional(),
-		field.String("DivisionName"),
+		field.String("DivisionName").Optional(),
 		field.Bool("DivisionVerified").Default(false),
 		field.Bool("DivisionRemStatus").Default(false),
 		field.String("DivisionRemarks"),
@@ -140,6 +158,7 @@ func (Employees) Fields() []ent.Field {
 		field.String("APSWorkingRemarks").Optional(),
 
 		field.Bool("profilestatus").Default(false),
+		field.Int32("RoleUserCode").Optional(),
 		//field.Int32("RegistrationID").Unique(),
 	}
 
@@ -149,5 +168,10 @@ func (Employees) Fields() []ent.Field {
 // Edges of the User.
 func (Employees) Edges() []ent.Edge {
 	return nil
-	//edge.From("")
+	//dedge.To("employee_user", DirectorateUsers.Type),
+	//edge.To("emp_login", Login.Type),
+}
+
+func (Employees) Annotations() []schema.Annotation {
+	return []schema.Annotation{entsql.Annotation{Table: "Employees"}}
 }

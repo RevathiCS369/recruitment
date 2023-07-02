@@ -40,6 +40,8 @@ const (
 	FieldVacancyYearCode = "vacancy_year_code"
 	// FieldPaperCode holds the string denoting the papercode field in the database.
 	FieldPaperCode = "paper_code"
+	// FieldExamCodePS holds the string denoting the examcodeps field in the database.
+	FieldExamCodePS = "exam_code_ps"
 	// EdgeVcyYears holds the string denoting the vcy_years edge name in mutations.
 	EdgeVcyYears = "vcy_years"
 	// EdgeExams holds the string denoting the exams edge name in mutations.
@@ -48,6 +50,10 @@ const (
 	EdgePapers = "papers"
 	// EdgeNotifyRef holds the string denoting the notify_ref edge name in mutations.
 	EdgeNotifyRef = "Notify_ref"
+	// EdgeExamcalPsRef holds the string denoting the examcal_ps_ref edge name in mutations.
+	EdgeExamcalPsRef = "examcal_ps_ref"
+	// EdgeExamcalIPRef holds the string denoting the examcal_ip_ref edge name in mutations.
+	EdgeExamcalIPRef = "examcal_ip_ref"
 	// VacancyYearFieldID holds the string denoting the ID field of the VacancyYear.
 	VacancyYearFieldID = "VacancyYearCode"
 	// ExamFieldID holds the string denoting the ID field of the Exam.
@@ -56,6 +62,10 @@ const (
 	ExamPapersFieldID = "PaperCode"
 	// NotificationFieldID holds the string denoting the ID field of the Notification.
 	NotificationFieldID = "NotifyCode"
+	// Exam_PSFieldID holds the string denoting the ID field of the Exam_PS.
+	Exam_PSFieldID = "ExamCodePS"
+	// Exam_IPFieldID holds the string denoting the ID field of the Exam_IP.
+	Exam_IPFieldID = "ExamCodeIP"
 	// Table holds the table name of the examcalendar in the database.
 	Table = "ExamCalendar"
 	// VcyYearsTable is the table that holds the vcy_years relation/edge.
@@ -86,6 +96,20 @@ const (
 	NotifyRefInverseTable = "Notification"
 	// NotifyRefColumn is the table column denoting the Notify_ref relation/edge.
 	NotifyRefColumn = "exam_calendar_notify_ref"
+	// ExamcalPsRefTable is the table that holds the examcal_ps_ref relation/edge.
+	ExamcalPsRefTable = "Exam_PS"
+	// ExamcalPsRefInverseTable is the table name for the Exam_PS entity.
+	// It exists in this package in order to avoid circular dependency with the "exam_ps" package.
+	ExamcalPsRefInverseTable = "Exam_PS"
+	// ExamcalPsRefColumn is the table column denoting the examcal_ps_ref relation/edge.
+	ExamcalPsRefColumn = "exam_calendar_examcal_ps_ref"
+	// ExamcalIPRefTable is the table that holds the examcal_ip_ref relation/edge.
+	ExamcalIPRefTable = "Exam_IP"
+	// ExamcalIPRefInverseTable is the table name for the Exam_IP entity.
+	// It exists in this package in order to avoid circular dependency with the "exam_ip" package.
+	ExamcalIPRefInverseTable = "Exam_IP"
+	// ExamcalIPRefColumn is the table column denoting the examcal_ip_ref relation/edge.
+	ExamcalIPRefColumn = "exam_calendar_examcal_ip_ref"
 )
 
 // Columns holds all SQL columns for examcalendar fields.
@@ -105,12 +129,26 @@ var Columns = []string{
 	FieldExamPapers,
 	FieldVacancyYearCode,
 	FieldPaperCode,
+	FieldExamCodePS,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "ExamCalendar"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"exam_ip_examcal_ip_ref",
+	"exam_pa_examcal_ps_ref",
+	"exam_ps_examcal_ps_ref",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -190,6 +228,11 @@ func ByPaperCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPaperCode, opts...).ToFunc()
 }
 
+// ByExamCodePS orders the results by the ExamCodePS field.
+func ByExamCodePS(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExamCodePS, opts...).ToFunc()
+}
+
 // ByVcyYearsField orders the results by vcy_years field.
 func ByVcyYearsField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -224,6 +267,34 @@ func ByNotifyRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newNotifyRefStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByExamcalPsRefCount orders the results by examcal_ps_ref count.
+func ByExamcalPsRefCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newExamcalPsRefStep(), opts...)
+	}
+}
+
+// ByExamcalPsRef orders the results by examcal_ps_ref terms.
+func ByExamcalPsRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newExamcalPsRefStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByExamcalIPRefCount orders the results by examcal_ip_ref count.
+func ByExamcalIPRefCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newExamcalIPRefStep(), opts...)
+	}
+}
+
+// ByExamcalIPRef orders the results by examcal_ip_ref terms.
+func ByExamcalIPRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newExamcalIPRefStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newVcyYearsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -250,5 +321,19 @@ func newNotifyRefStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NotifyRefInverseTable, NotificationFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, NotifyRefTable, NotifyRefColumn),
+	)
+}
+func newExamcalPsRefStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ExamcalPsRefInverseTable, Exam_PSFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ExamcalPsRefTable, ExamcalPsRefColumn),
+	)
+}
+func newExamcalIPRefStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ExamcalIPRefInverseTable, Exam_IPFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ExamcalIPRefTable, ExamcalIPRefColumn),
 	)
 }

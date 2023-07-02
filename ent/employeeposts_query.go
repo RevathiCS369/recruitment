@@ -4,9 +4,12 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/employeeposts"
+	"recruit/ent/employees"
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -17,10 +20,13 @@ import (
 // EmployeePostsQuery is the builder for querying EmployeePosts entities.
 type EmployeePostsQuery struct {
 	config
-	ctx        *QueryContext
-	order      []employeeposts.OrderOption
-	inters     []Interceptor
-	predicates []predicate.EmployeePosts
+	ctx                 *QueryContext
+	order               []employeeposts.OrderOption
+	inters              []Interceptor
+	predicates          []predicate.EmployeePosts
+	withEmpPosts        *EmployeesQuery
+	withPostEligibility *EligibilityMasterQuery
+	withFKs             bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +61,50 @@ func (epq *EmployeePostsQuery) Unique(unique bool) *EmployeePostsQuery {
 func (epq *EmployeePostsQuery) Order(o ...employeeposts.OrderOption) *EmployeePostsQuery {
 	epq.order = append(epq.order, o...)
 	return epq
+}
+
+// QueryEmpPosts chains the current query on the "emp_posts" edge.
+func (epq *EmployeePostsQuery) QueryEmpPosts() *EmployeesQuery {
+	query := (&EmployeesClient{config: epq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := epq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := epq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(employeeposts.Table, employeeposts.FieldID, selector),
+			sqlgraph.To(employees.Table, employees.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, employeeposts.EmpPostsTable, employeeposts.EmpPostsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(epq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPostEligibility chains the current query on the "PostEligibility" edge.
+func (epq *EmployeePostsQuery) QueryPostEligibility() *EligibilityMasterQuery {
+	query := (&EligibilityMasterClient{config: epq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := epq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := epq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(employeeposts.Table, employeeposts.FieldID, selector),
+			sqlgraph.To(eligibilitymaster.Table, eligibilitymaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, employeeposts.PostEligibilityTable, employeeposts.PostEligibilityColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(epq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first EmployeePosts entity from the query.
@@ -244,15 +294,39 @@ func (epq *EmployeePostsQuery) Clone() *EmployeePostsQuery {
 		return nil
 	}
 	return &EmployeePostsQuery{
-		config:     epq.config,
-		ctx:        epq.ctx.Clone(),
-		order:      append([]employeeposts.OrderOption{}, epq.order...),
-		inters:     append([]Interceptor{}, epq.inters...),
-		predicates: append([]predicate.EmployeePosts{}, epq.predicates...),
+		config:              epq.config,
+		ctx:                 epq.ctx.Clone(),
+		order:               append([]employeeposts.OrderOption{}, epq.order...),
+		inters:              append([]Interceptor{}, epq.inters...),
+		predicates:          append([]predicate.EmployeePosts{}, epq.predicates...),
+		withEmpPosts:        epq.withEmpPosts.Clone(),
+		withPostEligibility: epq.withPostEligibility.Clone(),
 		// clone intermediate query.
 		sql:  epq.sql.Clone(),
 		path: epq.path,
 	}
+}
+
+// WithEmpPosts tells the query-builder to eager-load the nodes that are connected to
+// the "emp_posts" edge. The optional arguments are used to configure the query builder of the edge.
+func (epq *EmployeePostsQuery) WithEmpPosts(opts ...func(*EmployeesQuery)) *EmployeePostsQuery {
+	query := (&EmployeesClient{config: epq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	epq.withEmpPosts = query
+	return epq
+}
+
+// WithPostEligibility tells the query-builder to eager-load the nodes that are connected to
+// the "PostEligibility" edge. The optional arguments are used to configure the query builder of the edge.
+func (epq *EmployeePostsQuery) WithPostEligibility(opts ...func(*EligibilityMasterQuery)) *EmployeePostsQuery {
+	query := (&EligibilityMasterClient{config: epq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	epq.withPostEligibility = query
+	return epq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,15 +405,24 @@ func (epq *EmployeePostsQuery) prepareQuery(ctx context.Context) error {
 
 func (epq *EmployeePostsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EmployeePosts, error) {
 	var (
-		nodes = []*EmployeePosts{}
-		_spec = epq.querySpec()
+		nodes       = []*EmployeePosts{}
+		withFKs     = epq.withFKs
+		_spec       = epq.querySpec()
+		loadedTypes = [2]bool{
+			epq.withEmpPosts != nil,
+			epq.withPostEligibility != nil,
+		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, employeeposts.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*EmployeePosts).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &EmployeePosts{config: epq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +434,86 @@ func (epq *EmployeePostsQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := epq.withEmpPosts; query != nil {
+		if err := epq.loadEmpPosts(ctx, query, nodes,
+			func(n *EmployeePosts) { n.Edges.EmpPosts = []*Employees{} },
+			func(n *EmployeePosts, e *Employees) { n.Edges.EmpPosts = append(n.Edges.EmpPosts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := epq.withPostEligibility; query != nil {
+		if err := epq.loadPostEligibility(ctx, query, nodes,
+			func(n *EmployeePosts) { n.Edges.PostEligibility = []*EligibilityMaster{} },
+			func(n *EmployeePosts, e *EligibilityMaster) {
+				n.Edges.PostEligibility = append(n.Edges.PostEligibility, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (epq *EmployeePostsQuery) loadEmpPosts(ctx context.Context, query *EmployeesQuery, nodes []*EmployeePosts, init func(*EmployeePosts), assign func(*EmployeePosts, *Employees)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*EmployeePosts)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Employees(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(employeeposts.EmpPostsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.employee_posts_emp_posts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "employee_posts_emp_posts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "employee_posts_emp_posts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (epq *EmployeePostsQuery) loadPostEligibility(ctx context.Context, query *EligibilityMasterQuery, nodes []*EmployeePosts, init func(*EmployeePosts), assign func(*EmployeePosts, *EligibilityMaster)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*EmployeePosts)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.EligibilityMaster(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(employeeposts.PostEligibilityColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.employee_posts_post_eligibility
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "employee_posts_post_eligibility" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "employee_posts_post_eligibility" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (epq *EmployeePostsQuery) sqlCount(ctx context.Context) (int, error) {

@@ -18,10 +18,10 @@ func (PaperTypes) Fields() []ent.Field {
 		field.Int32("PaperCode").Optional(),
 		field.String("PaperTypeDescription").MaxLen(100).NotEmpty(),
 		field.String("OrderNumber").MaxLen(100),
-		field.Int32("SequenceNumber"),
+		field.Int32("SequenceNumber").Optional(),
 		field.Time("CreatedDate").SchemaType(map[string]string{
 			dialect.Postgres: "date",
-		}),
+		}).Optional(),
 	}
 }
 

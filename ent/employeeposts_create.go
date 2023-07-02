@@ -6,7 +6,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/employeeposts"
+	"recruit/ent/employees"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -59,6 +61,36 @@ func (epc *EmployeePostsCreate) SetBaseCadreFlag(b bool) *EmployeePostsCreate {
 func (epc *EmployeePostsCreate) SetID(i int32) *EmployeePostsCreate {
 	epc.mutation.SetID(i)
 	return epc
+}
+
+// AddEmpPostIDs adds the "emp_posts" edge to the Employees entity by IDs.
+func (epc *EmployeePostsCreate) AddEmpPostIDs(ids ...int32) *EmployeePostsCreate {
+	epc.mutation.AddEmpPostIDs(ids...)
+	return epc
+}
+
+// AddEmpPosts adds the "emp_posts" edges to the Employees entity.
+func (epc *EmployeePostsCreate) AddEmpPosts(e ...*Employees) *EmployeePostsCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epc.AddEmpPostIDs(ids...)
+}
+
+// AddPostEligibilityIDs adds the "PostEligibility" edge to the EligibilityMaster entity by IDs.
+func (epc *EmployeePostsCreate) AddPostEligibilityIDs(ids ...int32) *EmployeePostsCreate {
+	epc.mutation.AddPostEligibilityIDs(ids...)
+	return epc
+}
+
+// AddPostEligibility adds the "PostEligibility" edges to the EligibilityMaster entity.
+func (epc *EmployeePostsCreate) AddPostEligibility(e ...*EligibilityMaster) *EmployeePostsCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epc.AddPostEligibilityIDs(ids...)
 }
 
 // Mutation returns the EmployeePostsMutation object of the builder.
@@ -168,6 +200,38 @@ func (epc *EmployeePostsCreate) createSpec() (*EmployeePosts, *sqlgraph.CreateSp
 	if value, ok := epc.mutation.BaseCadreFlag(); ok {
 		_spec.SetField(employeeposts.FieldBaseCadreFlag, field.TypeBool, value)
 		_node.BaseCadreFlag = value
+	}
+	if nodes := epc.mutation.EmpPostsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.EmpPostsTable,
+			Columns: []string{employeeposts.EmpPostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(employees.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := epc.mutation.PostEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   employeeposts.PostEligibilityTable,
+			Columns: []string{employeeposts.PostEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

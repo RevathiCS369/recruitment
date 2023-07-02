@@ -53,9 +53,25 @@ func (ptc *PaperTypesCreate) SetSequenceNumber(i int32) *PaperTypesCreate {
 	return ptc
 }
 
+// SetNillableSequenceNumber sets the "SequenceNumber" field if the given value is not nil.
+func (ptc *PaperTypesCreate) SetNillableSequenceNumber(i *int32) *PaperTypesCreate {
+	if i != nil {
+		ptc.SetSequenceNumber(*i)
+	}
+	return ptc
+}
+
 // SetCreatedDate sets the "CreatedDate" field.
 func (ptc *PaperTypesCreate) SetCreatedDate(t time.Time) *PaperTypesCreate {
 	ptc.mutation.SetCreatedDate(t)
+	return ptc
+}
+
+// SetNillableCreatedDate sets the "CreatedDate" field if the given value is not nil.
+func (ptc *PaperTypesCreate) SetNillableCreatedDate(t *time.Time) *PaperTypesCreate {
+	if t != nil {
+		ptc.SetCreatedDate(*t)
+	}
 	return ptc
 }
 
@@ -133,12 +149,6 @@ func (ptc *PaperTypesCreate) check() error {
 		if err := papertypes.OrderNumberValidator(v); err != nil {
 			return &ValidationError{Name: "OrderNumber", err: fmt.Errorf(`ent: validator failed for field "PaperTypes.OrderNumber": %w`, err)}
 		}
-	}
-	if _, ok := ptc.mutation.SequenceNumber(); !ok {
-		return &ValidationError{Name: "SequenceNumber", err: errors.New(`ent: missing required field "PaperTypes.SequenceNumber"`)}
-	}
-	if _, ok := ptc.mutation.CreatedDate(); !ok {
-		return &ValidationError{Name: "CreatedDate", err: errors.New(`ent: missing required field "PaperTypes.CreatedDate"`)}
 	}
 	return nil
 }

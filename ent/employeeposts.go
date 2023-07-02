@@ -28,7 +28,40 @@ type EmployeePosts struct {
 	Scale string `json:"Scale,omitempty"`
 	// BaseCadreFlag holds the value of the "BaseCadreFlag" field.
 	BaseCadreFlag bool `json:"BaseCadreFlag,omitempty"`
-	selectValues  sql.SelectValues
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the EmployeePostsQuery when eager-loading is set.
+	Edges                               EmployeePostsEdges `json:"edges"`
+	eligibility_master_post_eligibility *int32
+	selectValues                        sql.SelectValues
+}
+
+// EmployeePostsEdges holds the relations/edges for other nodes in the graph.
+type EmployeePostsEdges struct {
+	// EmpPosts holds the value of the emp_posts edge.
+	EmpPosts []*Employees `json:"emp_posts,omitempty"`
+	// PostEligibility holds the value of the PostEligibility edge.
+	PostEligibility []*EligibilityMaster `json:"PostEligibility,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+}
+
+// EmpPostsOrErr returns the EmpPosts value or an error if the edge
+// was not loaded in eager-loading.
+func (e EmployeePostsEdges) EmpPostsOrErr() ([]*Employees, error) {
+	if e.loadedTypes[0] {
+		return e.EmpPosts, nil
+	}
+	return nil, &NotLoadedError{edge: "emp_posts"}
+}
+
+// PostEligibilityOrErr returns the PostEligibility value or an error if the edge
+// was not loaded in eager-loading.
+func (e EmployeePostsEdges) PostEligibilityOrErr() ([]*EligibilityMaster, error) {
+	if e.loadedTypes[1] {
+		return e.PostEligibility, nil
+	}
+	return nil, &NotLoadedError{edge: "PostEligibility"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -42,6 +75,8 @@ func (*EmployeePosts) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case employeeposts.FieldPostCode, employeeposts.FieldPostDescription, employeeposts.FieldGroup, employeeposts.FieldPayLevel, employeeposts.FieldScale:
 			values[i] = new(sql.NullString)
+		case employeeposts.ForeignKeys[0]: // eligibility_master_post_eligibility
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -99,6 +134,13 @@ func (ep *EmployeePosts) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ep.BaseCadreFlag = value.Bool
 			}
+		case employeeposts.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field eligibility_master_post_eligibility", value)
+			} else if value.Valid {
+				ep.eligibility_master_post_eligibility = new(int32)
+				*ep.eligibility_master_post_eligibility = int32(value.Int64)
+			}
 		default:
 			ep.selectValues.Set(columns[i], values[i])
 		}
@@ -110,6 +152,16 @@ func (ep *EmployeePosts) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (ep *EmployeePosts) Value(name string) (ent.Value, error) {
 	return ep.selectValues.Get(name)
+}
+
+// QueryEmpPosts queries the "emp_posts" edge of the EmployeePosts entity.
+func (ep *EmployeePosts) QueryEmpPosts() *EmployeesQuery {
+	return NewEmployeePostsClient(ep.config).QueryEmpPosts(ep)
+}
+
+// QueryPostEligibility queries the "PostEligibility" edge of the EmployeePosts entity.
+func (ep *EmployeePosts) QueryPostEligibility() *EligibilityMasterQuery {
+	return NewEmployeePostsClient(ep.config).QueryPostEligibility(ep)
 }
 
 // Update returns a builder for updating this EmployeePosts.

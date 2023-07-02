@@ -6,6 +6,7 @@ import (
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -416,6 +417,52 @@ func BaseCadreFlagEQ(v bool) predicate.EmployeePosts {
 // BaseCadreFlagNEQ applies the NEQ predicate on the "BaseCadreFlag" field.
 func BaseCadreFlagNEQ(v bool) predicate.EmployeePosts {
 	return predicate.EmployeePosts(sql.FieldNEQ(FieldBaseCadreFlag, v))
+}
+
+// HasEmpPosts applies the HasEdge predicate on the "emp_posts" edge.
+func HasEmpPosts() predicate.EmployeePosts {
+	return predicate.EmployeePosts(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EmpPostsTable, EmpPostsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEmpPostsWith applies the HasEdge predicate on the "emp_posts" edge with a given conditions (other predicates).
+func HasEmpPostsWith(preds ...predicate.Employees) predicate.EmployeePosts {
+	return predicate.EmployeePosts(func(s *sql.Selector) {
+		step := newEmpPostsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPostEligibility applies the HasEdge predicate on the "PostEligibility" edge.
+func HasPostEligibility() predicate.EmployeePosts {
+	return predicate.EmployeePosts(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PostEligibilityTable, PostEligibilityColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPostEligibilityWith applies the HasEdge predicate on the "PostEligibility" edge with a given conditions (other predicates).
+func HasPostEligibilityWith(preds ...predicate.EligibilityMaster) predicate.EmployeePosts {
+	return predicate.EmployeePosts(func(s *sql.Selector) {
+		step := newPostEligibilityStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

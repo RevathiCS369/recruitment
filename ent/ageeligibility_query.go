@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"math"
 	"recruit/ent/ageeligibility"
-	"recruit/ent/exameligibility"
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -18,11 +17,10 @@ import (
 // AgeEligibilityQuery is the builder for querying AgeEligibility entities.
 type AgeEligibilityQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []ageeligibility.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.AgeEligibility
-	withExamEligibility *ExamEligibilityQuery
+	ctx        *QueryContext
+	order      []ageeligibility.OrderOption
+	inters     []Interceptor
+	predicates []predicate.AgeEligibility
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,28 +55,6 @@ func (aeq *AgeEligibilityQuery) Unique(unique bool) *AgeEligibilityQuery {
 func (aeq *AgeEligibilityQuery) Order(o ...ageeligibility.OrderOption) *AgeEligibilityQuery {
 	aeq.order = append(aeq.order, o...)
 	return aeq
-}
-
-// QueryExamEligibility chains the current query on the "exam_eligibility" edge.
-func (aeq *AgeEligibilityQuery) QueryExamEligibility() *ExamEligibilityQuery {
-	query := (&ExamEligibilityClient{config: aeq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := aeq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := aeq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(ageeligibility.Table, ageeligibility.FieldID, selector),
-			sqlgraph.To(exameligibility.Table, exameligibility.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ageeligibility.ExamEligibilityTable, ageeligibility.ExamEligibilityColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(aeq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // First returns the first AgeEligibility entity from the query.
@@ -268,27 +244,15 @@ func (aeq *AgeEligibilityQuery) Clone() *AgeEligibilityQuery {
 		return nil
 	}
 	return &AgeEligibilityQuery{
-		config:              aeq.config,
-		ctx:                 aeq.ctx.Clone(),
-		order:               append([]ageeligibility.OrderOption{}, aeq.order...),
-		inters:              append([]Interceptor{}, aeq.inters...),
-		predicates:          append([]predicate.AgeEligibility{}, aeq.predicates...),
-		withExamEligibility: aeq.withExamEligibility.Clone(),
+		config:     aeq.config,
+		ctx:        aeq.ctx.Clone(),
+		order:      append([]ageeligibility.OrderOption{}, aeq.order...),
+		inters:     append([]Interceptor{}, aeq.inters...),
+		predicates: append([]predicate.AgeEligibility{}, aeq.predicates...),
 		// clone intermediate query.
 		sql:  aeq.sql.Clone(),
 		path: aeq.path,
 	}
-}
-
-// WithExamEligibility tells the query-builder to eager-load the nodes that are connected to
-// the "exam_eligibility" edge. The optional arguments are used to configure the query builder of the edge.
-func (aeq *AgeEligibilityQuery) WithExamEligibility(opts ...func(*ExamEligibilityQuery)) *AgeEligibilityQuery {
-	query := (&ExamEligibilityClient{config: aeq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	aeq.withExamEligibility = query
-	return aeq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -297,12 +261,12 @@ func (aeq *AgeEligibilityQuery) WithExamEligibility(opts ...func(*ExamEligibilit
 // Example:
 //
 //	var v []struct {
-//		EligibilityCode int32 `json:"EligibilityCode,omitempty"`
+//		EligibillityCode int32 `json:"EligibillityCode,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.AgeEligibility.Query().
-//		GroupBy(ageeligibility.FieldEligibilityCode).
+//		GroupBy(ageeligibility.FieldEligibillityCode).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (aeq *AgeEligibilityQuery) GroupBy(field string, fields ...string) *AgeEligibilityGroupBy {
@@ -320,11 +284,11 @@ func (aeq *AgeEligibilityQuery) GroupBy(field string, fields ...string) *AgeElig
 // Example:
 //
 //	var v []struct {
-//		EligibilityCode int32 `json:"EligibilityCode,omitempty"`
+//		EligibillityCode int32 `json:"EligibillityCode,omitempty"`
 //	}
 //
 //	client.AgeEligibility.Query().
-//		Select(ageeligibility.FieldEligibilityCode).
+//		Select(ageeligibility.FieldEligibillityCode).
 //		Scan(ctx, &v)
 func (aeq *AgeEligibilityQuery) Select(fields ...string) *AgeEligibilitySelect {
 	aeq.ctx.Fields = append(aeq.ctx.Fields, fields...)
@@ -367,11 +331,8 @@ func (aeq *AgeEligibilityQuery) prepareQuery(ctx context.Context) error {
 
 func (aeq *AgeEligibilityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AgeEligibility, error) {
 	var (
-		nodes       = []*AgeEligibility{}
-		_spec       = aeq.querySpec()
-		loadedTypes = [1]bool{
-			aeq.withExamEligibility != nil,
-		}
+		nodes = []*AgeEligibility{}
+		_spec = aeq.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*AgeEligibility).scanValues(nil, columns)
@@ -379,7 +340,6 @@ func (aeq *AgeEligibilityQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &AgeEligibility{config: aeq.config}
 		nodes = append(nodes, node)
-		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -391,43 +351,7 @@ func (aeq *AgeEligibilityQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := aeq.withExamEligibility; query != nil {
-		if err := aeq.loadExamEligibility(ctx, query, nodes, nil,
-			func(n *AgeEligibility, e *ExamEligibility) { n.Edges.ExamEligibility = e }); err != nil {
-			return nil, err
-		}
-	}
 	return nodes, nil
-}
-
-func (aeq *AgeEligibilityQuery) loadExamEligibility(ctx context.Context, query *ExamEligibilityQuery, nodes []*AgeEligibility, init func(*AgeEligibility), assign func(*AgeEligibility, *ExamEligibility)) error {
-	ids := make([]int32, 0, len(nodes))
-	nodeids := make(map[int32][]*AgeEligibility)
-	for i := range nodes {
-		fk := nodes[i].EligibilityCode
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(exameligibility.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "EligibilityCode" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
 }
 
 func (aeq *AgeEligibilityQuery) sqlCount(ctx context.Context) (int, error) {
@@ -454,9 +378,6 @@ func (aeq *AgeEligibilityQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != ageeligibility.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
-		}
-		if aeq.withExamEligibility != nil {
-			_spec.Node.AddColumnOnce(ageeligibility.FieldEligibilityCode)
 		}
 	}
 	if ps := aeq.predicates; len(ps) > 0 {

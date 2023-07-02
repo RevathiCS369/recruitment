@@ -6,6 +6,7 @@ import (
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -256,6 +257,29 @@ func DisabilityFlagIn(vs ...DisabilityFlag) predicate.Disability {
 // DisabilityFlagNotIn applies the NotIn predicate on the "DisabilityFlag" field.
 func DisabilityFlagNotIn(vs ...DisabilityFlag) predicate.Disability {
 	return predicate.Disability(sql.FieldNotIn(FieldDisabilityFlag, vs...))
+}
+
+// HasDisRef applies the HasEdge predicate on the "dis_ref" edge.
+func HasDisRef() predicate.Disability {
+	return predicate.Disability(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DisRefTable, DisRefColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDisRefWith applies the HasEdge predicate on the "dis_ref" edge with a given conditions (other predicates).
+func HasDisRefWith(preds ...predicate.ExamPapers) predicate.Disability {
+	return predicate.Disability(func(s *sql.Selector) {
+		step := newDisRefStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

@@ -7,7 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/center"
+	"recruit/ent/disability"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
 	"recruit/ent/papertypes"
@@ -44,15 +48,31 @@ func (epc *ExamPapersCreate) SetNillableExamCode(i *int32) *ExamPapersCreate {
 	return epc
 }
 
-// SetCompetitiveQualifying sets the "competitiveQualifying" field.
-func (epc *ExamPapersCreate) SetCompetitiveQualifying(s string) *ExamPapersCreate {
-	epc.mutation.SetCompetitiveQualifying(s)
+// SetCompetitiveQualifying sets the "CompetitiveQualifying" field.
+func (epc *ExamPapersCreate) SetCompetitiveQualifying(b bool) *ExamPapersCreate {
+	epc.mutation.SetCompetitiveQualifying(b)
 	return epc
 }
 
-// SetExceptionForDisability sets the "exceptionForDisability" field.
-func (epc *ExamPapersCreate) SetExceptionForDisability(s string) *ExamPapersCreate {
-	epc.mutation.SetExceptionForDisability(s)
+// SetNillableCompetitiveQualifying sets the "CompetitiveQualifying" field if the given value is not nil.
+func (epc *ExamPapersCreate) SetNillableCompetitiveQualifying(b *bool) *ExamPapersCreate {
+	if b != nil {
+		epc.SetCompetitiveQualifying(*b)
+	}
+	return epc
+}
+
+// SetExceptionForDisability sets the "ExceptionForDisability" field.
+func (epc *ExamPapersCreate) SetExceptionForDisability(b bool) *ExamPapersCreate {
+	epc.mutation.SetExceptionForDisability(b)
+	return epc
+}
+
+// SetNillableExceptionForDisability sets the "ExceptionForDisability" field if the given value is not nil.
+func (epc *ExamPapersCreate) SetNillableExceptionForDisability(b *bool) *ExamPapersCreate {
+	if b != nil {
+		epc.SetExceptionForDisability(*b)
+	}
 	return epc
 }
 
@@ -109,6 +129,70 @@ func (epc *ExamPapersCreate) SetNillableCalendarCode(i *int32) *ExamPapersCreate
 // SetCreatedDate sets the "CreatedDate" field.
 func (epc *ExamPapersCreate) SetCreatedDate(t time.Time) *ExamPapersCreate {
 	epc.mutation.SetCreatedDate(t)
+	return epc
+}
+
+// SetNillableCreatedDate sets the "CreatedDate" field if the given value is not nil.
+func (epc *ExamPapersCreate) SetNillableCreatedDate(t *time.Time) *ExamPapersCreate {
+	if t != nil {
+		epc.SetCreatedDate(*t)
+	}
+	return epc
+}
+
+// SetPaperTypeCode sets the "PaperTypeCode" field.
+func (epc *ExamPapersCreate) SetPaperTypeCode(i int32) *ExamPapersCreate {
+	epc.mutation.SetPaperTypeCode(i)
+	return epc
+}
+
+// SetNillablePaperTypeCode sets the "PaperTypeCode" field if the given value is not nil.
+func (epc *ExamPapersCreate) SetNillablePaperTypeCode(i *int32) *ExamPapersCreate {
+	if i != nil {
+		epc.SetPaperTypeCode(*i)
+	}
+	return epc
+}
+
+// SetPaperTypeName sets the "PaperTypeName" field.
+func (epc *ExamPapersCreate) SetPaperTypeName(s string) *ExamPapersCreate {
+	epc.mutation.SetPaperTypeName(s)
+	return epc
+}
+
+// SetNillablePaperTypeName sets the "PaperTypeName" field if the given value is not nil.
+func (epc *ExamPapersCreate) SetNillablePaperTypeName(s *string) *ExamPapersCreate {
+	if s != nil {
+		epc.SetPaperTypeName(*s)
+	}
+	return epc
+}
+
+// SetDisabilityTypeID sets the "DisabilityTypeID" field.
+func (epc *ExamPapersCreate) SetDisabilityTypeID(i int32) *ExamPapersCreate {
+	epc.mutation.SetDisabilityTypeID(i)
+	return epc
+}
+
+// SetNillableDisabilityTypeID sets the "DisabilityTypeID" field if the given value is not nil.
+func (epc *ExamPapersCreate) SetNillableDisabilityTypeID(i *int32) *ExamPapersCreate {
+	if i != nil {
+		epc.SetDisabilityTypeID(*i)
+	}
+	return epc
+}
+
+// SetExamCodePS sets the "ExamCodePS" field.
+func (epc *ExamPapersCreate) SetExamCodePS(i int32) *ExamPapersCreate {
+	epc.mutation.SetExamCodePS(i)
+	return epc
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (epc *ExamPapersCreate) SetNillableExamCodePS(i *int32) *ExamPapersCreate {
+	if i != nil {
+		epc.SetExamCodePS(*i)
+	}
 	return epc
 }
 
@@ -182,6 +266,66 @@ func (epc *ExamPapersCreate) AddPapersRef(e ...*ExamCalendar) *ExamPapersCreate 
 	return epc.AddPapersRefIDs(ids...)
 }
 
+// AddExamPaperEligibilityIDs adds the "ExamPaperEligibility" edge to the EligibilityMaster entity by IDs.
+func (epc *ExamPapersCreate) AddExamPaperEligibilityIDs(ids ...int32) *ExamPapersCreate {
+	epc.mutation.AddExamPaperEligibilityIDs(ids...)
+	return epc
+}
+
+// AddExamPaperEligibility adds the "ExamPaperEligibility" edges to the EligibilityMaster entity.
+func (epc *ExamPapersCreate) AddExamPaperEligibility(e ...*EligibilityMaster) *ExamPapersCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epc.AddExamPaperEligibilityIDs(ids...)
+}
+
+// AddDisRefIDs adds the "dis_ref" edge to the Disability entity by IDs.
+func (epc *ExamPapersCreate) AddDisRefIDs(ids ...int32) *ExamPapersCreate {
+	epc.mutation.AddDisRefIDs(ids...)
+	return epc
+}
+
+// AddDisRef adds the "dis_ref" edges to the Disability entity.
+func (epc *ExamPapersCreate) AddDisRef(d ...*Disability) *ExamPapersCreate {
+	ids := make([]int32, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return epc.AddDisRefIDs(ids...)
+}
+
+// AddPapersPsRefIDs adds the "papers_ps_ref" edge to the Exam_PS entity by IDs.
+func (epc *ExamPapersCreate) AddPapersPsRefIDs(ids ...int32) *ExamPapersCreate {
+	epc.mutation.AddPapersPsRefIDs(ids...)
+	return epc
+}
+
+// AddPapersPsRef adds the "papers_ps_ref" edges to the Exam_PS entity.
+func (epc *ExamPapersCreate) AddPapersPsRef(e ...*Exam_PS) *ExamPapersCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epc.AddPapersPsRefIDs(ids...)
+}
+
+// AddPapersIPRefIDs adds the "papers_ip_ref" edge to the Exam_IP entity by IDs.
+func (epc *ExamPapersCreate) AddPapersIPRefIDs(ids ...int32) *ExamPapersCreate {
+	epc.mutation.AddPapersIPRefIDs(ids...)
+	return epc
+}
+
+// AddPapersIPRef adds the "papers_ip_ref" edges to the Exam_IP entity.
+func (epc *ExamPapersCreate) AddPapersIPRef(e ...*Exam_IP) *ExamPapersCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epc.AddPapersIPRefIDs(ids...)
+}
+
 // Mutation returns the ExamPapersMutation object of the builder.
 func (epc *ExamPapersCreate) Mutation() *ExamPapersMutation {
 	return epc.mutation
@@ -189,6 +333,7 @@ func (epc *ExamPapersCreate) Mutation() *ExamPapersMutation {
 
 // Save creates the ExamPapers in the database.
 func (epc *ExamPapersCreate) Save(ctx context.Context) (*ExamPapers, error) {
+	epc.defaults()
 	return withHooks(ctx, epc.sqlSave, epc.mutation, epc.hooks)
 }
 
@@ -214,6 +359,18 @@ func (epc *ExamPapersCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (epc *ExamPapersCreate) defaults() {
+	if _, ok := epc.mutation.CompetitiveQualifying(); !ok {
+		v := exampapers.DefaultCompetitiveQualifying
+		epc.mutation.SetCompetitiveQualifying(v)
+	}
+	if _, ok := epc.mutation.ExceptionForDisability(); !ok {
+		v := exampapers.DefaultExceptionForDisability
+		epc.mutation.SetExceptionForDisability(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (epc *ExamPapersCreate) check() error {
 	if _, ok := epc.mutation.PaperDescription(); !ok {
@@ -225,20 +382,10 @@ func (epc *ExamPapersCreate) check() error {
 		}
 	}
 	if _, ok := epc.mutation.CompetitiveQualifying(); !ok {
-		return &ValidationError{Name: "competitiveQualifying", err: errors.New(`ent: missing required field "ExamPapers.competitiveQualifying"`)}
-	}
-	if v, ok := epc.mutation.CompetitiveQualifying(); ok {
-		if err := exampapers.CompetitiveQualifyingValidator(v); err != nil {
-			return &ValidationError{Name: "competitiveQualifying", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.competitiveQualifying": %w`, err)}
-		}
+		return &ValidationError{Name: "CompetitiveQualifying", err: errors.New(`ent: missing required field "ExamPapers.CompetitiveQualifying"`)}
 	}
 	if _, ok := epc.mutation.ExceptionForDisability(); !ok {
-		return &ValidationError{Name: "exceptionForDisability", err: errors.New(`ent: missing required field "ExamPapers.exceptionForDisability"`)}
-	}
-	if v, ok := epc.mutation.ExceptionForDisability(); ok {
-		if err := exampapers.ExceptionForDisabilityValidator(v); err != nil {
-			return &ValidationError{Name: "exceptionForDisability", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.exceptionForDisability": %w`, err)}
-		}
+		return &ValidationError{Name: "ExceptionForDisability", err: errors.New(`ent: missing required field "ExamPapers.ExceptionForDisability"`)}
 	}
 	if _, ok := epc.mutation.MaximumMarks(); !ok {
 		return &ValidationError{Name: "MaximumMarks", err: errors.New(`ent: missing required field "ExamPapers.MaximumMarks"`)}
@@ -288,9 +435,6 @@ func (epc *ExamPapersCreate) check() error {
 			return &ValidationError{Name: "PaperStatus", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.PaperStatus": %w`, err)}
 		}
 	}
-	if _, ok := epc.mutation.CreatedDate(); !ok {
-		return &ValidationError{Name: "CreatedDate", err: errors.New(`ent: missing required field "ExamPapers.CreatedDate"`)}
-	}
 	return nil
 }
 
@@ -328,11 +472,11 @@ func (epc *ExamPapersCreate) createSpec() (*ExamPapers, *sqlgraph.CreateSpec) {
 		_node.PaperDescription = value
 	}
 	if value, ok := epc.mutation.CompetitiveQualifying(); ok {
-		_spec.SetField(exampapers.FieldCompetitiveQualifying, field.TypeString, value)
+		_spec.SetField(exampapers.FieldCompetitiveQualifying, field.TypeBool, value)
 		_node.CompetitiveQualifying = value
 	}
 	if value, ok := epc.mutation.ExceptionForDisability(); ok {
-		_spec.SetField(exampapers.FieldExceptionForDisability, field.TypeString, value)
+		_spec.SetField(exampapers.FieldExceptionForDisability, field.TypeBool, value)
 		_node.ExceptionForDisability = value
 	}
 	if value, ok := epc.mutation.MaximumMarks(); ok {
@@ -366,6 +510,22 @@ func (epc *ExamPapersCreate) createSpec() (*ExamPapers, *sqlgraph.CreateSpec) {
 	if value, ok := epc.mutation.CreatedDate(); ok {
 		_spec.SetField(exampapers.FieldCreatedDate, field.TypeTime, value)
 		_node.CreatedDate = value
+	}
+	if value, ok := epc.mutation.PaperTypeCode(); ok {
+		_spec.SetField(exampapers.FieldPaperTypeCode, field.TypeInt32, value)
+		_node.PaperTypeCode = value
+	}
+	if value, ok := epc.mutation.PaperTypeName(); ok {
+		_spec.SetField(exampapers.FieldPaperTypeName, field.TypeString, value)
+		_node.PaperTypeName = value
+	}
+	if value, ok := epc.mutation.DisabilityTypeID(); ok {
+		_spec.SetField(exampapers.FieldDisabilityTypeID, field.TypeInt32, value)
+		_node.DisabilityTypeID = value
+	}
+	if value, ok := epc.mutation.ExamCodePS(); ok {
+		_spec.SetField(exampapers.FieldExamCodePS, field.TypeInt32, value)
+		_node.ExamCodePS = value
 	}
 	if nodes := epc.mutation.CentersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -432,6 +592,70 @@ func (epc *ExamPapersCreate) createSpec() (*ExamPapers, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := epc.mutation.ExamPaperEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.ExamPaperEligibilityTable,
+			Columns: []string{exampapers.ExamPaperEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := epc.mutation.DisRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.DisRefTable,
+			Columns: []string{exampapers.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(disability.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := epc.mutation.PapersPsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersPsRefTable,
+			Columns: []string{exampapers.PapersPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := epc.mutation.PapersIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersIPRefTable,
+			Columns: []string{exampapers.PapersIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -449,6 +673,7 @@ func (epcb *ExamPapersCreateBulk) Save(ctx context.Context) ([]*ExamPapers, erro
 	for i := range epcb.builders {
 		func(i int, root context.Context) {
 			builder := epcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ExamPapersMutation)
 				if !ok {

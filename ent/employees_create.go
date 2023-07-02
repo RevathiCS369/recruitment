@@ -261,15 +261,57 @@ func (ec *EmployeesCreate) SetNillableGenderRemarks(s *string) *EmployeesCreate 
 }
 
 // SetMobileNumber sets the "MobileNumber" field.
-func (ec *EmployeesCreate) SetMobileNumber(i int32) *EmployeesCreate {
+func (ec *EmployeesCreate) SetMobileNumber(i int64) *EmployeesCreate {
 	ec.mutation.SetMobileNumber(i)
 	return ec
 }
 
 // SetNillableMobileNumber sets the "MobileNumber" field if the given value is not nil.
-func (ec *EmployeesCreate) SetNillableMobileNumber(i *int32) *EmployeesCreate {
+func (ec *EmployeesCreate) SetNillableMobileNumber(i *int64) *EmployeesCreate {
 	if i != nil {
 		ec.SetMobileNumber(*i)
+	}
+	return ec
+}
+
+// SetMobileNumberVerified sets the "MobileNumberVerified" field.
+func (ec *EmployeesCreate) SetMobileNumberVerified(b bool) *EmployeesCreate {
+	ec.mutation.SetMobileNumberVerified(b)
+	return ec
+}
+
+// SetNillableMobileNumberVerified sets the "MobileNumberVerified" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableMobileNumberVerified(b *bool) *EmployeesCreate {
+	if b != nil {
+		ec.SetMobileNumberVerified(*b)
+	}
+	return ec
+}
+
+// SetMobileNumberRemStatus sets the "MobileNumberRemStatus" field.
+func (ec *EmployeesCreate) SetMobileNumberRemStatus(b bool) *EmployeesCreate {
+	ec.mutation.SetMobileNumberRemStatus(b)
+	return ec
+}
+
+// SetNillableMobileNumberRemStatus sets the "MobileNumberRemStatus" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableMobileNumberRemStatus(b *bool) *EmployeesCreate {
+	if b != nil {
+		ec.SetMobileNumberRemStatus(*b)
+	}
+	return ec
+}
+
+// SetMobileNumberRemarks sets the "MobileNumberRemarks" field.
+func (ec *EmployeesCreate) SetMobileNumberRemarks(s string) *EmployeesCreate {
+	ec.mutation.SetMobileNumberRemarks(s)
+	return ec
+}
+
+// SetNillableMobileNumberRemarks sets the "MobileNumberRemarks" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableMobileNumberRemarks(s *string) *EmployeesCreate {
+	if s != nil {
+		ec.SetMobileNumberRemarks(*s)
 	}
 	return ec
 }
@@ -284,6 +326,48 @@ func (ec *EmployeesCreate) SetEmailID(s string) *EmployeesCreate {
 func (ec *EmployeesCreate) SetNillableEmailID(s *string) *EmployeesCreate {
 	if s != nil {
 		ec.SetEmailID(*s)
+	}
+	return ec
+}
+
+// SetEmailIDVerified sets the "EmailIDVerified" field.
+func (ec *EmployeesCreate) SetEmailIDVerified(b bool) *EmployeesCreate {
+	ec.mutation.SetEmailIDVerified(b)
+	return ec
+}
+
+// SetNillableEmailIDVerified sets the "EmailIDVerified" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableEmailIDVerified(b *bool) *EmployeesCreate {
+	if b != nil {
+		ec.SetEmailIDVerified(*b)
+	}
+	return ec
+}
+
+// SetEmailIDRemStatus sets the "EmailIDRemStatus" field.
+func (ec *EmployeesCreate) SetEmailIDRemStatus(b bool) *EmployeesCreate {
+	ec.mutation.SetEmailIDRemStatus(b)
+	return ec
+}
+
+// SetNillableEmailIDRemStatus sets the "EmailIDRemStatus" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableEmailIDRemStatus(b *bool) *EmployeesCreate {
+	if b != nil {
+		ec.SetEmailIDRemStatus(*b)
+	}
+	return ec
+}
+
+// SetEmailIDRemarks sets the "EmailIDRemarks" field.
+func (ec *EmployeesCreate) SetEmailIDRemarks(s string) *EmployeesCreate {
+	ec.mutation.SetEmailIDRemarks(s)
+	return ec
+}
+
+// SetNillableEmailIDRemarks sets the "EmailIDRemarks" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableEmailIDRemarks(s *string) *EmployeesCreate {
+	if s != nil {
+		ec.SetEmailIDRemarks(*s)
 	}
 	return ec
 }
@@ -620,64 +704,78 @@ func (ec *EmployeesCreate) SetNillablePhotoRemarks(s *string) *EmployeesCreate {
 	return ec
 }
 
-// SetCadreid sets the "Cadreid" field.
-func (ec *EmployeesCreate) SetCadreid(i int32) *EmployeesCreate {
-	ec.mutation.SetCadreid(i)
+// SetPostID sets the "PostID" field.
+func (ec *EmployeesCreate) SetPostID(i int32) *EmployeesCreate {
+	ec.mutation.SetPostID(i)
 	return ec
 }
 
-// SetNillableCadreid sets the "Cadreid" field if the given value is not nil.
-func (ec *EmployeesCreate) SetNillableCadreid(i *int32) *EmployeesCreate {
+// SetNillablePostID sets the "PostID" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillablePostID(i *int32) *EmployeesCreate {
 	if i != nil {
-		ec.SetCadreid(*i)
+		ec.SetPostID(*i)
 	}
 	return ec
 }
 
-// SetEmployeeCadre sets the "EmployeeCadre" field.
-func (ec *EmployeesCreate) SetEmployeeCadre(s string) *EmployeesCreate {
-	ec.mutation.SetEmployeeCadre(s)
+// SetPostCode sets the "PostCode" field.
+func (ec *EmployeesCreate) SetPostCode(s string) *EmployeesCreate {
+	ec.mutation.SetPostCode(s)
 	return ec
 }
 
-// SetEmployeeCadreVerified sets the "EmployeeCadreVerified" field.
-func (ec *EmployeesCreate) SetEmployeeCadreVerified(b bool) *EmployeesCreate {
-	ec.mutation.SetEmployeeCadreVerified(b)
-	return ec
-}
-
-// SetNillableEmployeeCadreVerified sets the "EmployeeCadreVerified" field if the given value is not nil.
-func (ec *EmployeesCreate) SetNillableEmployeeCadreVerified(b *bool) *EmployeesCreate {
-	if b != nil {
-		ec.SetEmployeeCadreVerified(*b)
-	}
-	return ec
-}
-
-// SetEmployeeCadreRemStatus sets the "EmployeeCadreRemStatus" field.
-func (ec *EmployeesCreate) SetEmployeeCadreRemStatus(b bool) *EmployeesCreate {
-	ec.mutation.SetEmployeeCadreRemStatus(b)
-	return ec
-}
-
-// SetNillableEmployeeCadreRemStatus sets the "EmployeeCadreRemStatus" field if the given value is not nil.
-func (ec *EmployeesCreate) SetNillableEmployeeCadreRemStatus(b *bool) *EmployeesCreate {
-	if b != nil {
-		ec.SetEmployeeCadreRemStatus(*b)
-	}
-	return ec
-}
-
-// SetEmployeeCadreRemarks sets the "EmployeeCadreRemarks" field.
-func (ec *EmployeesCreate) SetEmployeeCadreRemarks(s string) *EmployeesCreate {
-	ec.mutation.SetEmployeeCadreRemarks(s)
-	return ec
-}
-
-// SetNillableEmployeeCadreRemarks sets the "EmployeeCadreRemarks" field if the given value is not nil.
-func (ec *EmployeesCreate) SetNillableEmployeeCadreRemarks(s *string) *EmployeesCreate {
+// SetNillablePostCode sets the "PostCode" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillablePostCode(s *string) *EmployeesCreate {
 	if s != nil {
-		ec.SetEmployeeCadreRemarks(*s)
+		ec.SetPostCode(*s)
+	}
+	return ec
+}
+
+// SetEmployeePost sets the "EmployeePost" field.
+func (ec *EmployeesCreate) SetEmployeePost(s string) *EmployeesCreate {
+	ec.mutation.SetEmployeePost(s)
+	return ec
+}
+
+// SetEmployeePostVerified sets the "EmployeePostVerified" field.
+func (ec *EmployeesCreate) SetEmployeePostVerified(b bool) *EmployeesCreate {
+	ec.mutation.SetEmployeePostVerified(b)
+	return ec
+}
+
+// SetNillableEmployeePostVerified sets the "EmployeePostVerified" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableEmployeePostVerified(b *bool) *EmployeesCreate {
+	if b != nil {
+		ec.SetEmployeePostVerified(*b)
+	}
+	return ec
+}
+
+// SetEmployeePostRemStatus sets the "EmployeePostRemStatus" field.
+func (ec *EmployeesCreate) SetEmployeePostRemStatus(b bool) *EmployeesCreate {
+	ec.mutation.SetEmployeePostRemStatus(b)
+	return ec
+}
+
+// SetNillableEmployeePostRemStatus sets the "EmployeePostRemStatus" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableEmployeePostRemStatus(b *bool) *EmployeesCreate {
+	if b != nil {
+		ec.SetEmployeePostRemStatus(*b)
+	}
+	return ec
+}
+
+// SetEmployeePostRemarks sets the "EmployeePostRemarks" field.
+func (ec *EmployeesCreate) SetEmployeePostRemarks(s string) *EmployeesCreate {
+	ec.mutation.SetEmployeePostRemarks(s)
+	return ec
+}
+
+// SetNillableEmployeePostRemarks sets the "EmployeePostRemarks" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableEmployeePostRemarks(s *string) *EmployeesCreate {
+	if s != nil {
+		ec.SetEmployeePostRemarks(*s)
 	}
 	return ec
 }
@@ -826,6 +924,14 @@ func (ec *EmployeesCreate) SetRegionName(s string) *EmployeesCreate {
 	return ec
 }
 
+// SetNillableRegionName sets the "RegionName" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableRegionName(s *string) *EmployeesCreate {
+	if s != nil {
+		ec.SetRegionName(*s)
+	}
+	return ec
+}
+
 // SetRegionVerified sets the "RegionVerified" field.
 func (ec *EmployeesCreate) SetRegionVerified(b bool) *EmployeesCreate {
 	ec.mutation.SetRegionVerified(b)
@@ -885,6 +991,14 @@ func (ec *EmployeesCreate) SetNillableDivisionID(i *int32) *EmployeesCreate {
 // SetDivisionName sets the "DivisionName" field.
 func (ec *EmployeesCreate) SetDivisionName(s string) *EmployeesCreate {
 	ec.mutation.SetDivisionName(s)
+	return ec
+}
+
+// SetNillableDivisionName sets the "DivisionName" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableDivisionName(s *string) *EmployeesCreate {
+	if s != nil {
+		ec.SetDivisionName(*s)
+	}
 	return ec
 }
 
@@ -1190,6 +1304,20 @@ func (ec *EmployeesCreate) SetNillableProfilestatus(b *bool) *EmployeesCreate {
 	return ec
 }
 
+// SetRoleUserCode sets the "RoleUserCode" field.
+func (ec *EmployeesCreate) SetRoleUserCode(i int32) *EmployeesCreate {
+	ec.mutation.SetRoleUserCode(i)
+	return ec
+}
+
+// SetNillableRoleUserCode sets the "RoleUserCode" field if the given value is not nil.
+func (ec *EmployeesCreate) SetNillableRoleUserCode(i *int32) *EmployeesCreate {
+	if i != nil {
+		ec.SetRoleUserCode(*i)
+	}
+	return ec
+}
+
 // SetID sets the "id" field.
 func (ec *EmployeesCreate) SetID(i int32) *EmployeesCreate {
 	ec.mutation.SetID(i)
@@ -1271,6 +1399,22 @@ func (ec *EmployeesCreate) defaults() {
 		v := employees.DefaultGenderRemStatus
 		ec.mutation.SetGenderRemStatus(v)
 	}
+	if _, ok := ec.mutation.MobileNumberVerified(); !ok {
+		v := employees.DefaultMobileNumberVerified
+		ec.mutation.SetMobileNumberVerified(v)
+	}
+	if _, ok := ec.mutation.MobileNumberRemStatus(); !ok {
+		v := employees.DefaultMobileNumberRemStatus
+		ec.mutation.SetMobileNumberRemStatus(v)
+	}
+	if _, ok := ec.mutation.EmailIDVerified(); !ok {
+		v := employees.DefaultEmailIDVerified
+		ec.mutation.SetEmailIDVerified(v)
+	}
+	if _, ok := ec.mutation.EmailIDRemStatus(); !ok {
+		v := employees.DefaultEmailIDRemStatus
+		ec.mutation.SetEmailIDRemStatus(v)
+	}
 	if _, ok := ec.mutation.EmployeeCategoryCodeVerified(); !ok {
 		v := employees.DefaultEmployeeCategoryCodeVerified
 		ec.mutation.SetEmployeeCategoryCodeVerified(v)
@@ -1319,13 +1463,13 @@ func (ec *EmployeesCreate) defaults() {
 		v := employees.DefaultPhotoRemStatus
 		ec.mutation.SetPhotoRemStatus(v)
 	}
-	if _, ok := ec.mutation.EmployeeCadreVerified(); !ok {
-		v := employees.DefaultEmployeeCadreVerified
-		ec.mutation.SetEmployeeCadreVerified(v)
+	if _, ok := ec.mutation.EmployeePostVerified(); !ok {
+		v := employees.DefaultEmployeePostVerified
+		ec.mutation.SetEmployeePostVerified(v)
 	}
-	if _, ok := ec.mutation.EmployeeCadreRemStatus(); !ok {
-		v := employees.DefaultEmployeeCadreRemStatus
-		ec.mutation.SetEmployeeCadreRemStatus(v)
+	if _, ok := ec.mutation.EmployeePostRemStatus(); !ok {
+		v := employees.DefaultEmployeePostRemStatus
+		ec.mutation.SetEmployeePostRemStatus(v)
 	}
 	if _, ok := ec.mutation.EmployeeDesignationVerified(); !ok {
 		v := employees.DefaultEmployeeDesignationVerified
@@ -1457,6 +1601,18 @@ func (ec *EmployeesCreate) check() error {
 	if _, ok := ec.mutation.GenderRemStatus(); !ok {
 		return &ValidationError{Name: "genderRemStatus", err: errors.New(`ent: missing required field "Employees.genderRemStatus"`)}
 	}
+	if _, ok := ec.mutation.MobileNumberVerified(); !ok {
+		return &ValidationError{Name: "MobileNumberVerified", err: errors.New(`ent: missing required field "Employees.MobileNumberVerified"`)}
+	}
+	if _, ok := ec.mutation.MobileNumberRemStatus(); !ok {
+		return &ValidationError{Name: "MobileNumberRemStatus", err: errors.New(`ent: missing required field "Employees.MobileNumberRemStatus"`)}
+	}
+	if _, ok := ec.mutation.EmailIDVerified(); !ok {
+		return &ValidationError{Name: "EmailIDVerified", err: errors.New(`ent: missing required field "Employees.EmailIDVerified"`)}
+	}
+	if _, ok := ec.mutation.EmailIDRemStatus(); !ok {
+		return &ValidationError{Name: "EmailIDRemStatus", err: errors.New(`ent: missing required field "Employees.EmailIDRemStatus"`)}
+	}
 	if _, ok := ec.mutation.EmployeeCategory(); !ok {
 		return &ValidationError{Name: "EmployeeCategory", err: errors.New(`ent: missing required field "Employees.EmployeeCategory"`)}
 	}
@@ -1505,14 +1661,14 @@ func (ec *EmployeesCreate) check() error {
 	if _, ok := ec.mutation.PhotoRemStatus(); !ok {
 		return &ValidationError{Name: "PhotoRemStatus", err: errors.New(`ent: missing required field "Employees.PhotoRemStatus"`)}
 	}
-	if _, ok := ec.mutation.EmployeeCadre(); !ok {
-		return &ValidationError{Name: "EmployeeCadre", err: errors.New(`ent: missing required field "Employees.EmployeeCadre"`)}
+	if _, ok := ec.mutation.EmployeePost(); !ok {
+		return &ValidationError{Name: "EmployeePost", err: errors.New(`ent: missing required field "Employees.EmployeePost"`)}
 	}
-	if _, ok := ec.mutation.EmployeeCadreVerified(); !ok {
-		return &ValidationError{Name: "EmployeeCadreVerified", err: errors.New(`ent: missing required field "Employees.EmployeeCadreVerified"`)}
+	if _, ok := ec.mutation.EmployeePostVerified(); !ok {
+		return &ValidationError{Name: "EmployeePostVerified", err: errors.New(`ent: missing required field "Employees.EmployeePostVerified"`)}
 	}
-	if _, ok := ec.mutation.EmployeeCadreRemStatus(); !ok {
-		return &ValidationError{Name: "EmployeeCadreRemStatus", err: errors.New(`ent: missing required field "Employees.EmployeeCadreRemStatus"`)}
+	if _, ok := ec.mutation.EmployeePostRemStatus(); !ok {
+		return &ValidationError{Name: "EmployeePostRemStatus", err: errors.New(`ent: missing required field "Employees.EmployeePostRemStatus"`)}
 	}
 	if _, ok := ec.mutation.EmployeeDesignation(); !ok {
 		return &ValidationError{Name: "EmployeeDesignation", err: errors.New(`ent: missing required field "Employees.EmployeeDesignation"`)}
@@ -1532,17 +1688,11 @@ func (ec *EmployeesCreate) check() error {
 	if _, ok := ec.mutation.CircleRemStatus(); !ok {
 		return &ValidationError{Name: "CircleRemStatus", err: errors.New(`ent: missing required field "Employees.CircleRemStatus"`)}
 	}
-	if _, ok := ec.mutation.RegionName(); !ok {
-		return &ValidationError{Name: "RegionName", err: errors.New(`ent: missing required field "Employees.RegionName"`)}
-	}
 	if _, ok := ec.mutation.RegionVerified(); !ok {
 		return &ValidationError{Name: "RegionVerified", err: errors.New(`ent: missing required field "Employees.RegionVerified"`)}
 	}
 	if _, ok := ec.mutation.RegionRemStatus(); !ok {
 		return &ValidationError{Name: "RegionRemStatus", err: errors.New(`ent: missing required field "Employees.RegionRemStatus"`)}
-	}
-	if _, ok := ec.mutation.DivisionName(); !ok {
-		return &ValidationError{Name: "DivisionName", err: errors.New(`ent: missing required field "Employees.DivisionName"`)}
 	}
 	if _, ok := ec.mutation.DivisionVerified(); !ok {
 		return &ValidationError{Name: "DivisionVerified", err: errors.New(`ent: missing required field "Employees.DivisionVerified"`)}
@@ -1714,12 +1864,36 @@ func (ec *EmployeesCreate) createSpec() (*Employees, *sqlgraph.CreateSpec) {
 		_node.GenderRemarks = value
 	}
 	if value, ok := ec.mutation.MobileNumber(); ok {
-		_spec.SetField(employees.FieldMobileNumber, field.TypeInt32, value)
+		_spec.SetField(employees.FieldMobileNumber, field.TypeInt64, value)
 		_node.MobileNumber = value
+	}
+	if value, ok := ec.mutation.MobileNumberVerified(); ok {
+		_spec.SetField(employees.FieldMobileNumberVerified, field.TypeBool, value)
+		_node.MobileNumberVerified = value
+	}
+	if value, ok := ec.mutation.MobileNumberRemStatus(); ok {
+		_spec.SetField(employees.FieldMobileNumberRemStatus, field.TypeBool, value)
+		_node.MobileNumberRemStatus = value
+	}
+	if value, ok := ec.mutation.MobileNumberRemarks(); ok {
+		_spec.SetField(employees.FieldMobileNumberRemarks, field.TypeString, value)
+		_node.MobileNumberRemarks = value
 	}
 	if value, ok := ec.mutation.EmailID(); ok {
 		_spec.SetField(employees.FieldEmailID, field.TypeString, value)
 		_node.EmailID = value
+	}
+	if value, ok := ec.mutation.EmailIDVerified(); ok {
+		_spec.SetField(employees.FieldEmailIDVerified, field.TypeBool, value)
+		_node.EmailIDVerified = value
+	}
+	if value, ok := ec.mutation.EmailIDRemStatus(); ok {
+		_spec.SetField(employees.FieldEmailIDRemStatus, field.TypeBool, value)
+		_node.EmailIDRemStatus = value
+	}
+	if value, ok := ec.mutation.EmailIDRemarks(); ok {
+		_spec.SetField(employees.FieldEmailIDRemarks, field.TypeString, value)
+		_node.EmailIDRemarks = value
 	}
 	if value, ok := ec.mutation.Categoryid(); ok {
 		_spec.SetField(employees.FieldCategoryid, field.TypeInt32, value)
@@ -1825,25 +1999,29 @@ func (ec *EmployeesCreate) createSpec() (*Employees, *sqlgraph.CreateSpec) {
 		_spec.SetField(employees.FieldPhotoRemarks, field.TypeString, value)
 		_node.PhotoRemarks = value
 	}
-	if value, ok := ec.mutation.Cadreid(); ok {
-		_spec.SetField(employees.FieldCadreid, field.TypeInt32, value)
-		_node.Cadreid = value
+	if value, ok := ec.mutation.PostID(); ok {
+		_spec.SetField(employees.FieldPostID, field.TypeInt32, value)
+		_node.PostID = value
 	}
-	if value, ok := ec.mutation.EmployeeCadre(); ok {
-		_spec.SetField(employees.FieldEmployeeCadre, field.TypeString, value)
-		_node.EmployeeCadre = value
+	if value, ok := ec.mutation.PostCode(); ok {
+		_spec.SetField(employees.FieldPostCode, field.TypeString, value)
+		_node.PostCode = value
 	}
-	if value, ok := ec.mutation.EmployeeCadreVerified(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreVerified, field.TypeBool, value)
-		_node.EmployeeCadreVerified = value
+	if value, ok := ec.mutation.EmployeePost(); ok {
+		_spec.SetField(employees.FieldEmployeePost, field.TypeString, value)
+		_node.EmployeePost = value
 	}
-	if value, ok := ec.mutation.EmployeeCadreRemStatus(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreRemStatus, field.TypeBool, value)
-		_node.EmployeeCadreRemStatus = value
+	if value, ok := ec.mutation.EmployeePostVerified(); ok {
+		_spec.SetField(employees.FieldEmployeePostVerified, field.TypeBool, value)
+		_node.EmployeePostVerified = value
 	}
-	if value, ok := ec.mutation.EmployeeCadreRemarks(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreRemarks, field.TypeString, value)
-		_node.EmployeeCadreRemarks = value
+	if value, ok := ec.mutation.EmployeePostRemStatus(); ok {
+		_spec.SetField(employees.FieldEmployeePostRemStatus, field.TypeBool, value)
+		_node.EmployeePostRemStatus = value
+	}
+	if value, ok := ec.mutation.EmployeePostRemarks(); ok {
+		_spec.SetField(employees.FieldEmployeePostRemarks, field.TypeString, value)
+		_node.EmployeePostRemarks = value
 	}
 	if value, ok := ec.mutation.DesignationID(); ok {
 		_spec.SetField(employees.FieldDesignationID, field.TypeInt32, value)
@@ -2012,6 +2190,10 @@ func (ec *EmployeesCreate) createSpec() (*Employees, *sqlgraph.CreateSpec) {
 	if value, ok := ec.mutation.Profilestatus(); ok {
 		_spec.SetField(employees.FieldProfilestatus, field.TypeBool, value)
 		_node.Profilestatus = value
+	}
+	if value, ok := ec.mutation.RoleUserCode(); ok {
+		_spec.SetField(employees.FieldRoleUserCode, field.TypeInt32, value)
+		_node.RoleUserCode = value
 	}
 	return _node, _spec
 }

@@ -7,6 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/circlemaster"
+	"recruit/ent/divisionmaster"
+	"recruit/ent/exam_applications_ip"
+	"recruit/ent/exam_applications_ps"
 	"recruit/ent/facility"
 	"recruit/ent/regionmaster"
 
@@ -22,14 +25,28 @@ type FacilityCreate struct {
 }
 
 // SetFacilityCode sets the "FacilityCode" field.
-func (fc *FacilityCreate) SetFacilityCode(s string) *FacilityCreate {
-	fc.mutation.SetFacilityCode(s)
+func (fc *FacilityCreate) SetFacilityCode(i int32) *FacilityCreate {
+	fc.mutation.SetFacilityCode(i)
+	return fc
+}
+
+// SetNillableFacilityCode sets the "FacilityCode" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableFacilityCode(i *int32) *FacilityCreate {
+	if i != nil {
+		fc.SetFacilityCode(*i)
+	}
 	return fc
 }
 
 // SetOfficeType sets the "OfficeType" field.
 func (fc *FacilityCreate) SetOfficeType(s string) *FacilityCreate {
 	fc.mutation.SetOfficeType(s)
+	return fc
+}
+
+// SetFacilityOfficeID sets the "FacilityOfficeID" field.
+func (fc *FacilityCreate) SetFacilityOfficeID(s string) *FacilityCreate {
+	fc.mutation.SetFacilityOfficeID(s)
 	return fc
 }
 
@@ -82,13 +99,13 @@ func (fc *FacilityCreate) SetNillableEmailID(s *string) *FacilityCreate {
 }
 
 // SetMobileNumber sets the "MobileNumber" field.
-func (fc *FacilityCreate) SetMobileNumber(i int32) *FacilityCreate {
+func (fc *FacilityCreate) SetMobileNumber(i int64) *FacilityCreate {
 	fc.mutation.SetMobileNumber(i)
 	return fc
 }
 
 // SetNillableMobileNumber sets the "MobileNumber" field if the given value is not nil.
-func (fc *FacilityCreate) SetNillableMobileNumber(i *int32) *FacilityCreate {
+func (fc *FacilityCreate) SetNillableMobileNumber(i *int64) *FacilityCreate {
 	if i != nil {
 		fc.SetMobileNumber(*i)
 	}
@@ -109,6 +126,34 @@ func (fc *FacilityCreate) SetNillableDivisionCode(i *int32) *FacilityCreate {
 	return fc
 }
 
+// SetDivisionName sets the "DivisionName" field.
+func (fc *FacilityCreate) SetDivisionName(s string) *FacilityCreate {
+	fc.mutation.SetDivisionName(s)
+	return fc
+}
+
+// SetNillableDivisionName sets the "DivisionName" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableDivisionName(s *string) *FacilityCreate {
+	if s != nil {
+		fc.SetDivisionName(*s)
+	}
+	return fc
+}
+
+// SetDivisionID sets the "DivisionID" field.
+func (fc *FacilityCreate) SetDivisionID(i int32) *FacilityCreate {
+	fc.mutation.SetDivisionID(i)
+	return fc
+}
+
+// SetNillableDivisionID sets the "DivisionID" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableDivisionID(i *int32) *FacilityCreate {
+	if i != nil {
+		fc.SetDivisionID(*i)
+	}
+	return fc
+}
+
 // SetRegionCode sets the "RegionCode" field.
 func (fc *FacilityCreate) SetRegionCode(i int32) *FacilityCreate {
 	fc.mutation.SetRegionCode(i)
@@ -119,6 +164,34 @@ func (fc *FacilityCreate) SetRegionCode(i int32) *FacilityCreate {
 func (fc *FacilityCreate) SetNillableRegionCode(i *int32) *FacilityCreate {
 	if i != nil {
 		fc.SetRegionCode(*i)
+	}
+	return fc
+}
+
+// SetRegionID sets the "RegionID" field.
+func (fc *FacilityCreate) SetRegionID(i int32) *FacilityCreate {
+	fc.mutation.SetRegionID(i)
+	return fc
+}
+
+// SetNillableRegionID sets the "RegionID" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableRegionID(i *int32) *FacilityCreate {
+	if i != nil {
+		fc.SetRegionID(*i)
+	}
+	return fc
+}
+
+// SetRegionName sets the "RegionName" field.
+func (fc *FacilityCreate) SetRegionName(s string) *FacilityCreate {
+	fc.mutation.SetRegionName(s)
+	return fc
+}
+
+// SetNillableRegionName sets the "RegionName" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableRegionName(s *string) *FacilityCreate {
+	if s != nil {
+		fc.SetRegionName(*s)
 	}
 	return fc
 }
@@ -137,25 +210,123 @@ func (fc *FacilityCreate) SetNillableCircleCode(i *int32) *FacilityCreate {
 	return fc
 }
 
+// SetCircleID sets the "CircleID" field.
+func (fc *FacilityCreate) SetCircleID(i int32) *FacilityCreate {
+	fc.mutation.SetCircleID(i)
+	return fc
+}
+
+// SetNillableCircleID sets the "CircleID" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableCircleID(i *int32) *FacilityCreate {
+	if i != nil {
+		fc.SetCircleID(*i)
+	}
+	return fc
+}
+
+// SetCircleName sets the "CircleName" field.
+func (fc *FacilityCreate) SetCircleName(s string) *FacilityCreate {
+	fc.mutation.SetCircleName(s)
+	return fc
+}
+
+// SetNillableCircleName sets the "CircleName" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableCircleName(s *string) *FacilityCreate {
+	if s != nil {
+		fc.SetCircleName(*s)
+	}
+	return fc
+}
+
+// SetReportingOfficeID sets the "ReportingOfficeID" field.
+func (fc *FacilityCreate) SetReportingOfficeID(s string) *FacilityCreate {
+	fc.mutation.SetReportingOfficeID(s)
+	return fc
+}
+
+// SetNillableReportingOfficeID sets the "ReportingOfficeID" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableReportingOfficeID(s *string) *FacilityCreate {
+	if s != nil {
+		fc.SetReportingOfficeID(*s)
+	}
+	return fc
+}
+
+// SetReportingOfficeName sets the "ReportingOfficeName" field.
+func (fc *FacilityCreate) SetReportingOfficeName(s string) *FacilityCreate {
+	fc.mutation.SetReportingOfficeName(s)
+	return fc
+}
+
+// SetNillableReportingOfficeName sets the "ReportingOfficeName" field if the given value is not nil.
+func (fc *FacilityCreate) SetNillableReportingOfficeName(s *string) *FacilityCreate {
+	if s != nil {
+		fc.SetReportingOfficeName(*s)
+	}
+	return fc
+}
+
 // SetID sets the "id" field.
 func (fc *FacilityCreate) SetID(i int32) *FacilityCreate {
 	fc.mutation.SetID(i)
 	return fc
 }
 
-// AddRegionRefIDs adds the "region_ref" edge to the RegionMaster entity by IDs.
-func (fc *FacilityCreate) AddRegionRefIDs(ids ...int32) *FacilityCreate {
-	fc.mutation.AddRegionRefIDs(ids...)
+// SetDivisionsID sets the "divisions" edge to the DivisionMaster entity by ID.
+func (fc *FacilityCreate) SetDivisionsID(id int32) *FacilityCreate {
+	fc.mutation.SetDivisionsID(id)
 	return fc
 }
 
-// AddRegionRef adds the "region_ref" edges to the RegionMaster entity.
-func (fc *FacilityCreate) AddRegionRef(r ...*RegionMaster) *FacilityCreate {
-	ids := make([]int32, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+// SetNillableDivisionsID sets the "divisions" edge to the DivisionMaster entity by ID if the given value is not nil.
+func (fc *FacilityCreate) SetNillableDivisionsID(id *int32) *FacilityCreate {
+	if id != nil {
+		fc = fc.SetDivisionsID(*id)
 	}
-	return fc.AddRegionRefIDs(ids...)
+	return fc
+}
+
+// SetDivisions sets the "divisions" edge to the DivisionMaster entity.
+func (fc *FacilityCreate) SetDivisions(d *DivisionMaster) *FacilityCreate {
+	return fc.SetDivisionsID(d.ID)
+}
+
+// SetRegionsID sets the "regions" edge to the RegionMaster entity by ID.
+func (fc *FacilityCreate) SetRegionsID(id int32) *FacilityCreate {
+	fc.mutation.SetRegionsID(id)
+	return fc
+}
+
+// SetNillableRegionsID sets the "regions" edge to the RegionMaster entity by ID if the given value is not nil.
+func (fc *FacilityCreate) SetNillableRegionsID(id *int32) *FacilityCreate {
+	if id != nil {
+		fc = fc.SetRegionsID(*id)
+	}
+	return fc
+}
+
+// SetRegions sets the "regions" edge to the RegionMaster entity.
+func (fc *FacilityCreate) SetRegions(r *RegionMaster) *FacilityCreate {
+	return fc.SetRegionsID(r.ID)
+}
+
+// SetCirclesID sets the "circles" edge to the CircleMaster entity by ID.
+func (fc *FacilityCreate) SetCirclesID(id int32) *FacilityCreate {
+	fc.mutation.SetCirclesID(id)
+	return fc
+}
+
+// SetNillableCirclesID sets the "circles" edge to the CircleMaster entity by ID if the given value is not nil.
+func (fc *FacilityCreate) SetNillableCirclesID(id *int32) *FacilityCreate {
+	if id != nil {
+		fc = fc.SetCirclesID(*id)
+	}
+	return fc
+}
+
+// SetCircles sets the "circles" edge to the CircleMaster entity.
+func (fc *FacilityCreate) SetCircles(c *CircleMaster) *FacilityCreate {
+	return fc.SetCirclesID(c.ID)
 }
 
 // AddCircleRefIDs adds the "circle_ref" edge to the CircleMaster entity by IDs.
@@ -171,6 +342,36 @@ func (fc *FacilityCreate) AddCircleRef(c ...*CircleMaster) *FacilityCreate {
 		ids[i] = c[i].ID
 	}
 	return fc.AddCircleRefIDs(ids...)
+}
+
+// AddOfficePSRefIDs adds the "Office_PS_Ref" edge to the Exam_Applications_PS entity by IDs.
+func (fc *FacilityCreate) AddOfficePSRefIDs(ids ...int64) *FacilityCreate {
+	fc.mutation.AddOfficePSRefIDs(ids...)
+	return fc
+}
+
+// AddOfficePSRef adds the "Office_PS_Ref" edges to the Exam_Applications_PS entity.
+func (fc *FacilityCreate) AddOfficePSRef(e ...*Exam_Applications_PS) *FacilityCreate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fc.AddOfficePSRefIDs(ids...)
+}
+
+// AddOfficeIPRefIDs adds the "Office_IP_Ref" edge to the Exam_Applications_IP entity by IDs.
+func (fc *FacilityCreate) AddOfficeIPRefIDs(ids ...int64) *FacilityCreate {
+	fc.mutation.AddOfficeIPRefIDs(ids...)
+	return fc
+}
+
+// AddOfficeIPRef adds the "Office_IP_Ref" edges to the Exam_Applications_IP entity.
+func (fc *FacilityCreate) AddOfficeIPRef(e ...*Exam_Applications_IP) *FacilityCreate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fc.AddOfficeIPRefIDs(ids...)
 }
 
 // Mutation returns the FacilityMutation object of the builder.
@@ -207,11 +408,11 @@ func (fc *FacilityCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (fc *FacilityCreate) check() error {
-	if _, ok := fc.mutation.FacilityCode(); !ok {
-		return &ValidationError{Name: "FacilityCode", err: errors.New(`ent: missing required field "Facility.FacilityCode"`)}
-	}
 	if _, ok := fc.mutation.OfficeType(); !ok {
 		return &ValidationError{Name: "OfficeType", err: errors.New(`ent: missing required field "Facility.OfficeType"`)}
+	}
+	if _, ok := fc.mutation.FacilityOfficeID(); !ok {
+		return &ValidationError{Name: "FacilityOfficeID", err: errors.New(`ent: missing required field "Facility.FacilityOfficeID"`)}
 	}
 	if _, ok := fc.mutation.FacilityName(); !ok {
 		return &ValidationError{Name: "FacilityName", err: errors.New(`ent: missing required field "Facility.FacilityName"`)}
@@ -249,12 +450,16 @@ func (fc *FacilityCreate) createSpec() (*Facility, *sqlgraph.CreateSpec) {
 		_spec.ID.Value = id
 	}
 	if value, ok := fc.mutation.FacilityCode(); ok {
-		_spec.SetField(facility.FieldFacilityCode, field.TypeString, value)
+		_spec.SetField(facility.FieldFacilityCode, field.TypeInt32, value)
 		_node.FacilityCode = value
 	}
 	if value, ok := fc.mutation.OfficeType(); ok {
 		_spec.SetField(facility.FieldOfficeType, field.TypeString, value)
 		_node.OfficeType = value
+	}
+	if value, ok := fc.mutation.FacilityOfficeID(); ok {
+		_spec.SetField(facility.FieldFacilityOfficeID, field.TypeString, value)
+		_node.FacilityOfficeID = value
 	}
 	if value, ok := fc.mutation.FacilityName(); ok {
 		_spec.SetField(facility.FieldFacilityName, field.TypeString, value)
@@ -273,27 +478,64 @@ func (fc *FacilityCreate) createSpec() (*Facility, *sqlgraph.CreateSpec) {
 		_node.EmailID = value
 	}
 	if value, ok := fc.mutation.MobileNumber(); ok {
-		_spec.SetField(facility.FieldMobileNumber, field.TypeInt32, value)
+		_spec.SetField(facility.FieldMobileNumber, field.TypeInt64, value)
 		_node.MobileNumber = value
 	}
 	if value, ok := fc.mutation.DivisionCode(); ok {
 		_spec.SetField(facility.FieldDivisionCode, field.TypeInt32, value)
 		_node.DivisionCode = value
 	}
+	if value, ok := fc.mutation.DivisionName(); ok {
+		_spec.SetField(facility.FieldDivisionName, field.TypeString, value)
+		_node.DivisionName = value
+	}
 	if value, ok := fc.mutation.RegionCode(); ok {
 		_spec.SetField(facility.FieldRegionCode, field.TypeInt32, value)
 		_node.RegionCode = value
+	}
+	if value, ok := fc.mutation.RegionName(); ok {
+		_spec.SetField(facility.FieldRegionName, field.TypeString, value)
+		_node.RegionName = value
 	}
 	if value, ok := fc.mutation.CircleCode(); ok {
 		_spec.SetField(facility.FieldCircleCode, field.TypeInt32, value)
 		_node.CircleCode = value
 	}
-	if nodes := fc.mutation.RegionRefIDs(); len(nodes) > 0 {
+	if value, ok := fc.mutation.CircleName(); ok {
+		_spec.SetField(facility.FieldCircleName, field.TypeString, value)
+		_node.CircleName = value
+	}
+	if value, ok := fc.mutation.ReportingOfficeID(); ok {
+		_spec.SetField(facility.FieldReportingOfficeID, field.TypeString, value)
+		_node.ReportingOfficeID = value
+	}
+	if value, ok := fc.mutation.ReportingOfficeName(); ok {
+		_spec.SetField(facility.FieldReportingOfficeName, field.TypeString, value)
+		_node.ReportingOfficeName = value
+	}
+	if nodes := fc.mutation.DivisionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   facility.RegionRefTable,
-			Columns: []string{facility.RegionRefColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.DivisionsTable,
+			Columns: []string{facility.DivisionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(divisionmaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DivisionID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.RegionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.RegionsTable,
+			Columns: []string{facility.RegionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(regionmaster.FieldID, field.TypeInt32),
@@ -302,6 +544,24 @@ func (fc *FacilityCreate) createSpec() (*Facility, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.RegionID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.CirclesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   facility.CirclesTable,
+			Columns: []string{facility.CirclesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(circlemaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CircleID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := fc.mutation.CircleRefIDs(); len(nodes) > 0 {
@@ -313,6 +573,38 @@ func (fc *FacilityCreate) createSpec() (*Facility, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(circlemaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.OfficePSRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficePSRefTable,
+			Columns: []string{facility.OfficePSRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ps.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.OfficeIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   facility.OfficeIPRefTable,
+			Columns: []string{facility.OfficeIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_applications_ip.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

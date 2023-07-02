@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	//"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -17,7 +17,7 @@ type EmployeePosts struct {
 func (EmployeePosts) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int32("id").StorageKey("PostID"), 
-		field.String("PostCode"),
+		field.String("PostCode").Unique(),
 		field.String("PostDescription"),
 		field.String("Group"),
 		field.String("PayLevel"),
@@ -25,8 +25,9 @@ func (EmployeePosts) Fields() []ent.Field {
 		field.Bool("BaseCadreFlag"),}
 }
 func (EmployeePosts) Edges() []ent.Edge {
-	//edge.To("emp_posts","Employees.Type")
-	return nil
+	return []ent.Edge{edge.To("emp_posts",Employees.Type),
+	edge.To("PostEligibility", EligibilityMaster.Type),
+}
 }
 func (EmployeePosts) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "EmployeePosts"}}

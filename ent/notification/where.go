@@ -115,6 +115,11 @@ func VacanciesFile(v string) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldVacanciesFile, v))
 }
 
+// ExamCodePS applies equality check predicate on the "ExamCodePS" field. It's identical to ExamCodePSEQ.
+func ExamCodePS(v int32) predicate.Notification {
+	return predicate.Notification(sql.FieldEQ(FieldExamCodePS, v))
+}
+
 // ExamCodeEQ applies the EQ predicate on the "ExamCode" field.
 func ExamCodeEQ(v int32) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldExamCode, v))
@@ -700,6 +705,56 @@ func VacanciesFileContainsFold(v string) predicate.Notification {
 	return predicate.Notification(sql.FieldContainsFold(FieldVacanciesFile, v))
 }
 
+// ExamCodePSEQ applies the EQ predicate on the "ExamCodePS" field.
+func ExamCodePSEQ(v int32) predicate.Notification {
+	return predicate.Notification(sql.FieldEQ(FieldExamCodePS, v))
+}
+
+// ExamCodePSNEQ applies the NEQ predicate on the "ExamCodePS" field.
+func ExamCodePSNEQ(v int32) predicate.Notification {
+	return predicate.Notification(sql.FieldNEQ(FieldExamCodePS, v))
+}
+
+// ExamCodePSIn applies the In predicate on the "ExamCodePS" field.
+func ExamCodePSIn(vs ...int32) predicate.Notification {
+	return predicate.Notification(sql.FieldIn(FieldExamCodePS, vs...))
+}
+
+// ExamCodePSNotIn applies the NotIn predicate on the "ExamCodePS" field.
+func ExamCodePSNotIn(vs ...int32) predicate.Notification {
+	return predicate.Notification(sql.FieldNotIn(FieldExamCodePS, vs...))
+}
+
+// ExamCodePSGT applies the GT predicate on the "ExamCodePS" field.
+func ExamCodePSGT(v int32) predicate.Notification {
+	return predicate.Notification(sql.FieldGT(FieldExamCodePS, v))
+}
+
+// ExamCodePSGTE applies the GTE predicate on the "ExamCodePS" field.
+func ExamCodePSGTE(v int32) predicate.Notification {
+	return predicate.Notification(sql.FieldGTE(FieldExamCodePS, v))
+}
+
+// ExamCodePSLT applies the LT predicate on the "ExamCodePS" field.
+func ExamCodePSLT(v int32) predicate.Notification {
+	return predicate.Notification(sql.FieldLT(FieldExamCodePS, v))
+}
+
+// ExamCodePSLTE applies the LTE predicate on the "ExamCodePS" field.
+func ExamCodePSLTE(v int32) predicate.Notification {
+	return predicate.Notification(sql.FieldLTE(FieldExamCodePS, v))
+}
+
+// ExamCodePSIsNil applies the IsNil predicate on the "ExamCodePS" field.
+func ExamCodePSIsNil() predicate.Notification {
+	return predicate.Notification(sql.FieldIsNull(FieldExamCodePS))
+}
+
+// ExamCodePSNotNil applies the NotNil predicate on the "ExamCodePS" field.
+func ExamCodePSNotNil() predicate.Notification {
+	return predicate.Notification(sql.FieldNotNull(FieldExamCodePS))
+}
+
 // HasApplications applies the HasEdge predicate on the "applications" edge.
 func HasApplications() predicate.Notification {
 	return predicate.Notification(func(s *sql.Selector) {
@@ -830,6 +885,52 @@ func HasNotifyRef() predicate.Notification {
 func HasNotifyRefWith(preds ...predicate.Notification) predicate.Notification {
 	return predicate.Notification(func(s *sql.Selector) {
 		step := newNotifyRefStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasNotificationsPs applies the HasEdge predicate on the "notifications_ps" edge.
+func HasNotificationsPs() predicate.Notification {
+	return predicate.Notification(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, NotificationsPsTable, NotificationsPsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNotificationsPsWith applies the HasEdge predicate on the "notifications_ps" edge with a given conditions (other predicates).
+func HasNotificationsPsWith(preds ...predicate.Exam_PS) predicate.Notification {
+	return predicate.Notification(func(s *sql.Selector) {
+		step := newNotificationsPsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasNotificationsIP applies the HasEdge predicate on the "notifications_ip" edge.
+func HasNotificationsIP() predicate.Notification {
+	return predicate.Notification(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, NotificationsIPTable, NotificationsIPColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNotificationsIPWith applies the HasEdge predicate on the "notifications_ip" edge with a given conditions (other predicates).
+func HasNotificationsIPWith(preds ...predicate.Exam_IP) predicate.Notification {
+	return predicate.Notification(func(s *sql.Selector) {
+		step := newNotificationsIPStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

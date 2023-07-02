@@ -4,7 +4,10 @@ package ent
 
 import (
 	"fmt"
+	"recruit/ent/circlemaster"
+	"recruit/ent/divisionmaster"
 	"recruit/ent/facility"
+	"recruit/ent/regionmaster"
 	"strings"
 
 	"entgo.io/ent"
@@ -17,9 +20,11 @@ type Facility struct {
 	// ID of the ent.
 	ID int32 `json:"id,omitempty"`
 	// FacilityCode holds the value of the "FacilityCode" field.
-	FacilityCode string `json:"FacilityCode,omitempty"`
+	FacilityCode int32 `json:"FacilityCode,omitempty"`
 	// OfficeType holds the value of the "OfficeType" field.
 	OfficeType string `json:"OfficeType,omitempty"`
+	// FacilityOfficeID holds the value of the "FacilityOfficeID" field.
+	FacilityOfficeID string `json:"FacilityOfficeID,omitempty"`
 	// FacilityName holds the value of the "FacilityName" field.
 	FacilityName string `json:"FacilityName,omitempty"`
 	// ReportingOfficeType holds the value of the "ReportingOfficeType" field.
@@ -29,48 +34,120 @@ type Facility struct {
 	// EmailID holds the value of the "EmailID" field.
 	EmailID string `json:"EmailID,omitempty"`
 	// MobileNumber holds the value of the "MobileNumber" field.
-	MobileNumber int32 `json:"MobileNumber,omitempty"`
+	MobileNumber int64 `json:"MobileNumber,omitempty"`
 	// DivisionCode holds the value of the "DivisionCode" field.
 	DivisionCode int32 `json:"DivisionCode,omitempty"`
+	// DivisionName holds the value of the "DivisionName" field.
+	DivisionName string `json:"DivisionName,omitempty"`
+	// DivisionID holds the value of the "DivisionID" field.
+	DivisionID int32 `json:"DivisionID,omitempty"`
 	// RegionCode holds the value of the "RegionCode" field.
 	RegionCode int32 `json:"RegionCode,omitempty"`
+	// RegionID holds the value of the "RegionID" field.
+	RegionID int32 `json:"RegionID,omitempty"`
+	// RegionName holds the value of the "RegionName" field.
+	RegionName string `json:"RegionName,omitempty"`
 	// CircleCode holds the value of the "CircleCode" field.
 	CircleCode int32 `json:"CircleCode,omitempty"`
+	// CircleID holds the value of the "CircleID" field.
+	CircleID int32 `json:"CircleID,omitempty"`
+	// CircleName holds the value of the "CircleName" field.
+	CircleName string `json:"CircleName,omitempty"`
+	// ReportingOfficeID holds the value of the "ReportingOfficeID" field.
+	ReportingOfficeID string `json:"ReportingOfficeID,omitempty"`
+	// ReportingOfficeName holds the value of the "ReportingOfficeName" field.
+	ReportingOfficeName string `json:"ReportingOfficeName,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FacilityQuery when eager-loading is set.
-	Edges                        FacilityEdges `json:"edges"`
-	circle_master_circle_ref     *int32
-	region_master_region_ref_ref *int32
-	selectValues                 sql.SelectValues
+	Edges                              FacilityEdges `json:"edges"`
+	exam_applications_ip_office_ip_ref *int64
+	exam_applications_ps_office_ps_ref *int64
+	selectValues                       sql.SelectValues
 }
 
 // FacilityEdges holds the relations/edges for other nodes in the graph.
 type FacilityEdges struct {
-	// RegionRef holds the value of the region_ref edge.
-	RegionRef []*RegionMaster `json:"region_ref,omitempty"`
+	// Divisions holds the value of the divisions edge.
+	Divisions *DivisionMaster `json:"divisions,omitempty"`
+	// Regions holds the value of the regions edge.
+	Regions *RegionMaster `json:"regions,omitempty"`
+	// Circles holds the value of the circles edge.
+	Circles *CircleMaster `json:"circles,omitempty"`
 	// CircleRef holds the value of the circle_ref edge.
 	CircleRef []*CircleMaster `json:"circle_ref,omitempty"`
+	// OfficePSRef holds the value of the Office_PS_Ref edge.
+	OfficePSRef []*Exam_Applications_PS `json:"Office_PS_Ref,omitempty"`
+	// OfficeIPRef holds the value of the Office_IP_Ref edge.
+	OfficeIPRef []*Exam_Applications_IP `json:"Office_IP_Ref,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [6]bool
 }
 
-// RegionRefOrErr returns the RegionRef value or an error if the edge
-// was not loaded in eager-loading.
-func (e FacilityEdges) RegionRefOrErr() ([]*RegionMaster, error) {
+// DivisionsOrErr returns the Divisions value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FacilityEdges) DivisionsOrErr() (*DivisionMaster, error) {
 	if e.loadedTypes[0] {
-		return e.RegionRef, nil
+		if e.Divisions == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: divisionmaster.Label}
+		}
+		return e.Divisions, nil
 	}
-	return nil, &NotLoadedError{edge: "region_ref"}
+	return nil, &NotLoadedError{edge: "divisions"}
+}
+
+// RegionsOrErr returns the Regions value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FacilityEdges) RegionsOrErr() (*RegionMaster, error) {
+	if e.loadedTypes[1] {
+		if e.Regions == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: regionmaster.Label}
+		}
+		return e.Regions, nil
+	}
+	return nil, &NotLoadedError{edge: "regions"}
+}
+
+// CirclesOrErr returns the Circles value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FacilityEdges) CirclesOrErr() (*CircleMaster, error) {
+	if e.loadedTypes[2] {
+		if e.Circles == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: circlemaster.Label}
+		}
+		return e.Circles, nil
+	}
+	return nil, &NotLoadedError{edge: "circles"}
 }
 
 // CircleRefOrErr returns the CircleRef value or an error if the edge
 // was not loaded in eager-loading.
 func (e FacilityEdges) CircleRefOrErr() ([]*CircleMaster, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.CircleRef, nil
 	}
 	return nil, &NotLoadedError{edge: "circle_ref"}
+}
+
+// OfficePSRefOrErr returns the OfficePSRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e FacilityEdges) OfficePSRefOrErr() ([]*Exam_Applications_PS, error) {
+	if e.loadedTypes[4] {
+		return e.OfficePSRef, nil
+	}
+	return nil, &NotLoadedError{edge: "Office_PS_Ref"}
+}
+
+// OfficeIPRefOrErr returns the OfficeIPRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e FacilityEdges) OfficeIPRefOrErr() ([]*Exam_Applications_IP, error) {
+	if e.loadedTypes[5] {
+		return e.OfficeIPRef, nil
+	}
+	return nil, &NotLoadedError{edge: "Office_IP_Ref"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -78,13 +155,13 @@ func (*Facility) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case facility.FieldID, facility.FieldMobileNumber, facility.FieldDivisionCode, facility.FieldRegionCode, facility.FieldCircleCode:
+		case facility.FieldID, facility.FieldFacilityCode, facility.FieldMobileNumber, facility.FieldDivisionCode, facility.FieldDivisionID, facility.FieldRegionCode, facility.FieldRegionID, facility.FieldCircleCode, facility.FieldCircleID:
 			values[i] = new(sql.NullInt64)
-		case facility.FieldFacilityCode, facility.FieldOfficeType, facility.FieldFacilityName, facility.FieldReportingOfficeType, facility.FieldReportingOfficeCode, facility.FieldEmailID:
+		case facility.FieldOfficeType, facility.FieldFacilityOfficeID, facility.FieldFacilityName, facility.FieldReportingOfficeType, facility.FieldReportingOfficeCode, facility.FieldEmailID, facility.FieldDivisionName, facility.FieldRegionName, facility.FieldCircleName, facility.FieldReportingOfficeID, facility.FieldReportingOfficeName:
 			values[i] = new(sql.NullString)
-		case facility.ForeignKeys[0]: // circle_master_circle_ref
+		case facility.ForeignKeys[0]: // exam_applications_ip_office_ip_ref
 			values[i] = new(sql.NullInt64)
-		case facility.ForeignKeys[1]: // region_master_region_ref_ref
+		case facility.ForeignKeys[1]: // exam_applications_ps_office_ps_ref
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -108,16 +185,22 @@ func (f *Facility) assignValues(columns []string, values []any) error {
 			}
 			f.ID = int32(value.Int64)
 		case facility.FieldFacilityCode:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field FacilityCode", values[i])
 			} else if value.Valid {
-				f.FacilityCode = value.String
+				f.FacilityCode = int32(value.Int64)
 			}
 		case facility.FieldOfficeType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field OfficeType", values[i])
 			} else if value.Valid {
 				f.OfficeType = value.String
+			}
+		case facility.FieldFacilityOfficeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field FacilityOfficeID", values[i])
+			} else if value.Valid {
+				f.FacilityOfficeID = value.String
 			}
 		case facility.FieldFacilityName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -147,7 +230,7 @@ func (f *Facility) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field MobileNumber", values[i])
 			} else if value.Valid {
-				f.MobileNumber = int32(value.Int64)
+				f.MobileNumber = value.Int64
 			}
 		case facility.FieldDivisionCode:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -155,11 +238,35 @@ func (f *Facility) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				f.DivisionCode = int32(value.Int64)
 			}
+		case facility.FieldDivisionName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field DivisionName", values[i])
+			} else if value.Valid {
+				f.DivisionName = value.String
+			}
+		case facility.FieldDivisionID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field DivisionID", values[i])
+			} else if value.Valid {
+				f.DivisionID = int32(value.Int64)
+			}
 		case facility.FieldRegionCode:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field RegionCode", values[i])
 			} else if value.Valid {
 				f.RegionCode = int32(value.Int64)
+			}
+		case facility.FieldRegionID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field RegionID", values[i])
+			} else if value.Valid {
+				f.RegionID = int32(value.Int64)
+			}
+		case facility.FieldRegionName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field RegionName", values[i])
+			} else if value.Valid {
+				f.RegionName = value.String
 			}
 		case facility.FieldCircleCode:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -167,19 +274,43 @@ func (f *Facility) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				f.CircleCode = int32(value.Int64)
 			}
+		case facility.FieldCircleID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field CircleID", values[i])
+			} else if value.Valid {
+				f.CircleID = int32(value.Int64)
+			}
+		case facility.FieldCircleName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field CircleName", values[i])
+			} else if value.Valid {
+				f.CircleName = value.String
+			}
+		case facility.FieldReportingOfficeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ReportingOfficeID", values[i])
+			} else if value.Valid {
+				f.ReportingOfficeID = value.String
+			}
+		case facility.FieldReportingOfficeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ReportingOfficeName", values[i])
+			} else if value.Valid {
+				f.ReportingOfficeName = value.String
+			}
 		case facility.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field circle_master_circle_ref", value)
+				return fmt.Errorf("unexpected type %T for edge-field exam_applications_ip_office_ip_ref", value)
 			} else if value.Valid {
-				f.circle_master_circle_ref = new(int32)
-				*f.circle_master_circle_ref = int32(value.Int64)
+				f.exam_applications_ip_office_ip_ref = new(int64)
+				*f.exam_applications_ip_office_ip_ref = int64(value.Int64)
 			}
 		case facility.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field region_master_region_ref_ref", value)
+				return fmt.Errorf("unexpected type %T for edge-field exam_applications_ps_office_ps_ref", value)
 			} else if value.Valid {
-				f.region_master_region_ref_ref = new(int32)
-				*f.region_master_region_ref_ref = int32(value.Int64)
+				f.exam_applications_ps_office_ps_ref = new(int64)
+				*f.exam_applications_ps_office_ps_ref = int64(value.Int64)
 			}
 		default:
 			f.selectValues.Set(columns[i], values[i])
@@ -194,14 +325,34 @@ func (f *Facility) Value(name string) (ent.Value, error) {
 	return f.selectValues.Get(name)
 }
 
-// QueryRegionRef queries the "region_ref" edge of the Facility entity.
-func (f *Facility) QueryRegionRef() *RegionMasterQuery {
-	return NewFacilityClient(f.config).QueryRegionRef(f)
+// QueryDivisions queries the "divisions" edge of the Facility entity.
+func (f *Facility) QueryDivisions() *DivisionMasterQuery {
+	return NewFacilityClient(f.config).QueryDivisions(f)
+}
+
+// QueryRegions queries the "regions" edge of the Facility entity.
+func (f *Facility) QueryRegions() *RegionMasterQuery {
+	return NewFacilityClient(f.config).QueryRegions(f)
+}
+
+// QueryCircles queries the "circles" edge of the Facility entity.
+func (f *Facility) QueryCircles() *CircleMasterQuery {
+	return NewFacilityClient(f.config).QueryCircles(f)
 }
 
 // QueryCircleRef queries the "circle_ref" edge of the Facility entity.
 func (f *Facility) QueryCircleRef() *CircleMasterQuery {
 	return NewFacilityClient(f.config).QueryCircleRef(f)
+}
+
+// QueryOfficePSRef queries the "Office_PS_Ref" edge of the Facility entity.
+func (f *Facility) QueryOfficePSRef() *ExamApplicationsPSQuery {
+	return NewFacilityClient(f.config).QueryOfficePSRef(f)
+}
+
+// QueryOfficeIPRef queries the "Office_IP_Ref" edge of the Facility entity.
+func (f *Facility) QueryOfficeIPRef() *ExamApplicationsIPQuery {
+	return NewFacilityClient(f.config).QueryOfficeIPRef(f)
 }
 
 // Update returns a builder for updating this Facility.
@@ -228,10 +379,13 @@ func (f *Facility) String() string {
 	builder.WriteString("Facility(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", f.ID))
 	builder.WriteString("FacilityCode=")
-	builder.WriteString(f.FacilityCode)
+	builder.WriteString(fmt.Sprintf("%v", f.FacilityCode))
 	builder.WriteString(", ")
 	builder.WriteString("OfficeType=")
 	builder.WriteString(f.OfficeType)
+	builder.WriteString(", ")
+	builder.WriteString("FacilityOfficeID=")
+	builder.WriteString(f.FacilityOfficeID)
 	builder.WriteString(", ")
 	builder.WriteString("FacilityName=")
 	builder.WriteString(f.FacilityName)
@@ -251,11 +405,35 @@ func (f *Facility) String() string {
 	builder.WriteString("DivisionCode=")
 	builder.WriteString(fmt.Sprintf("%v", f.DivisionCode))
 	builder.WriteString(", ")
+	builder.WriteString("DivisionName=")
+	builder.WriteString(f.DivisionName)
+	builder.WriteString(", ")
+	builder.WriteString("DivisionID=")
+	builder.WriteString(fmt.Sprintf("%v", f.DivisionID))
+	builder.WriteString(", ")
 	builder.WriteString("RegionCode=")
 	builder.WriteString(fmt.Sprintf("%v", f.RegionCode))
 	builder.WriteString(", ")
+	builder.WriteString("RegionID=")
+	builder.WriteString(fmt.Sprintf("%v", f.RegionID))
+	builder.WriteString(", ")
+	builder.WriteString("RegionName=")
+	builder.WriteString(f.RegionName)
+	builder.WriteString(", ")
 	builder.WriteString("CircleCode=")
 	builder.WriteString(fmt.Sprintf("%v", f.CircleCode))
+	builder.WriteString(", ")
+	builder.WriteString("CircleID=")
+	builder.WriteString(fmt.Sprintf("%v", f.CircleID))
+	builder.WriteString(", ")
+	builder.WriteString("CircleName=")
+	builder.WriteString(f.CircleName)
+	builder.WriteString(", ")
+	builder.WriteString("ReportingOfficeID=")
+	builder.WriteString(f.ReportingOfficeID)
+	builder.WriteString(", ")
+	builder.WriteString("ReportingOfficeName=")
+	builder.WriteString(f.ReportingOfficeName)
 	builder.WriteByte(')')
 	return builder.String()
 }

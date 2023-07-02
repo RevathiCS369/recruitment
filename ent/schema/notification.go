@@ -39,14 +39,20 @@ func (Notification) Fields() []ent.Field {
 		}),
 		field.String("NotifyFile").Optional(),
 		field.String("SyllabusFile").Optional(),
-		field.String("VacanciesFile").Optional()}
+		field.String("VacanciesFile").Optional(),
+		field.Int32("ExamCodePS").Optional()}
 }
 func (Notification) Edges() []ent.Edge {
 	return []ent.Edge{edge.To("applications", Application.Type),
 		edge.To("centers", Center.Type), edge.To("nodal_officers", NodalOfficer.Type),
 		edge.From("exam", Exam.Type).Ref("notifications").Unique().Field("ExamCode"),
 		edge.To("vacancy_years", VacancyYear.Type),
-		edge.To("notify_ref", Notification.Type)}
+		edge.To("notify_ref", Notification.Type),
+		//edge.From("notificationsPS", Exam_PS.Type).Ref("notifications_ps").Unique().Field("ExamCodePS"),
+		edge.To("notifications_ps", Exam_PS.Type),
+		edge.To("notifications_ip", Exam_IP.Type),
+	}
+
 }
 func (Notification) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "Notification"}}

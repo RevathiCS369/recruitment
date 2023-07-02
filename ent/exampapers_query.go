@@ -8,7 +8,11 @@ import (
 	"fmt"
 	"math"
 	"recruit/ent/center"
+	"recruit/ent/disability"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
 	"recruit/ent/papertypes"
@@ -22,14 +26,19 @@ import (
 // ExamPapersQuery is the builder for querying ExamPapers entities.
 type ExamPapersQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []exampapers.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.ExamPapers
-	withCenters         *CenterQuery
-	withExam            *ExamQuery
-	withExampapersTypes *PaperTypesQuery
-	withPapersRef       *ExamCalendarQuery
+	ctx                      *QueryContext
+	order                    []exampapers.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.ExamPapers
+	withCenters              *CenterQuery
+	withExam                 *ExamQuery
+	withExampapersTypes      *PaperTypesQuery
+	withPapersRef            *ExamCalendarQuery
+	withExamPaperEligibility *EligibilityMasterQuery
+	withDisRef               *DisabilityQuery
+	withPapersPsRef          *ExamPSQuery
+	withPapersIPRef          *ExamIPQuery
+	withFKs                  bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -147,6 +156,94 @@ func (epq *ExamPapersQuery) QueryPapersRef() *ExamCalendarQuery {
 			sqlgraph.From(exampapers.Table, exampapers.FieldID, selector),
 			sqlgraph.To(examcalendar.Table, examcalendar.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.PapersRefTable, exampapers.PapersRefColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(epq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryExamPaperEligibility chains the current query on the "ExamPaperEligibility" edge.
+func (epq *ExamPapersQuery) QueryExamPaperEligibility() *EligibilityMasterQuery {
+	query := (&EligibilityMasterClient{config: epq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := epq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := epq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exampapers.Table, exampapers.FieldID, selector),
+			sqlgraph.To(eligibilitymaster.Table, eligibilitymaster.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.ExamPaperEligibilityTable, exampapers.ExamPaperEligibilityColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(epq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDisRef chains the current query on the "dis_ref" edge.
+func (epq *ExamPapersQuery) QueryDisRef() *DisabilityQuery {
+	query := (&DisabilityClient{config: epq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := epq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := epq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exampapers.Table, exampapers.FieldID, selector),
+			sqlgraph.To(disability.Table, disability.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.DisRefTable, exampapers.DisRefColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(epq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPapersPsRef chains the current query on the "papers_ps_ref" edge.
+func (epq *ExamPapersQuery) QueryPapersPsRef() *ExamPSQuery {
+	query := (&ExamPSClient{config: epq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := epq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := epq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exampapers.Table, exampapers.FieldID, selector),
+			sqlgraph.To(exam_ps.Table, exam_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.PapersPsRefTable, exampapers.PapersPsRefColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(epq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPapersIPRef chains the current query on the "papers_ip_ref" edge.
+func (epq *ExamPapersQuery) QueryPapersIPRef() *ExamIPQuery {
+	query := (&ExamIPClient{config: epq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := epq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := epq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(exampapers.Table, exampapers.FieldID, selector),
+			sqlgraph.To(exam_ip.Table, exam_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, exampapers.PapersIPRefTable, exampapers.PapersIPRefColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(epq.driver.Dialect(), step)
 		return fromU, nil
@@ -341,15 +438,19 @@ func (epq *ExamPapersQuery) Clone() *ExamPapersQuery {
 		return nil
 	}
 	return &ExamPapersQuery{
-		config:              epq.config,
-		ctx:                 epq.ctx.Clone(),
-		order:               append([]exampapers.OrderOption{}, epq.order...),
-		inters:              append([]Interceptor{}, epq.inters...),
-		predicates:          append([]predicate.ExamPapers{}, epq.predicates...),
-		withCenters:         epq.withCenters.Clone(),
-		withExam:            epq.withExam.Clone(),
-		withExampapersTypes: epq.withExampapersTypes.Clone(),
-		withPapersRef:       epq.withPapersRef.Clone(),
+		config:                   epq.config,
+		ctx:                      epq.ctx.Clone(),
+		order:                    append([]exampapers.OrderOption{}, epq.order...),
+		inters:                   append([]Interceptor{}, epq.inters...),
+		predicates:               append([]predicate.ExamPapers{}, epq.predicates...),
+		withCenters:              epq.withCenters.Clone(),
+		withExam:                 epq.withExam.Clone(),
+		withExampapersTypes:      epq.withExampapersTypes.Clone(),
+		withPapersRef:            epq.withPapersRef.Clone(),
+		withExamPaperEligibility: epq.withExamPaperEligibility.Clone(),
+		withDisRef:               epq.withDisRef.Clone(),
+		withPapersPsRef:          epq.withPapersPsRef.Clone(),
+		withPapersIPRef:          epq.withPapersIPRef.Clone(),
 		// clone intermediate query.
 		sql:  epq.sql.Clone(),
 		path: epq.path,
@@ -397,6 +498,50 @@ func (epq *ExamPapersQuery) WithPapersRef(opts ...func(*ExamCalendarQuery)) *Exa
 		opt(query)
 	}
 	epq.withPapersRef = query
+	return epq
+}
+
+// WithExamPaperEligibility tells the query-builder to eager-load the nodes that are connected to
+// the "ExamPaperEligibility" edge. The optional arguments are used to configure the query builder of the edge.
+func (epq *ExamPapersQuery) WithExamPaperEligibility(opts ...func(*EligibilityMasterQuery)) *ExamPapersQuery {
+	query := (&EligibilityMasterClient{config: epq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	epq.withExamPaperEligibility = query
+	return epq
+}
+
+// WithDisRef tells the query-builder to eager-load the nodes that are connected to
+// the "dis_ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (epq *ExamPapersQuery) WithDisRef(opts ...func(*DisabilityQuery)) *ExamPapersQuery {
+	query := (&DisabilityClient{config: epq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	epq.withDisRef = query
+	return epq
+}
+
+// WithPapersPsRef tells the query-builder to eager-load the nodes that are connected to
+// the "papers_ps_ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (epq *ExamPapersQuery) WithPapersPsRef(opts ...func(*ExamPSQuery)) *ExamPapersQuery {
+	query := (&ExamPSClient{config: epq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	epq.withPapersPsRef = query
+	return epq
+}
+
+// WithPapersIPRef tells the query-builder to eager-load the nodes that are connected to
+// the "papers_ip_ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (epq *ExamPapersQuery) WithPapersIPRef(opts ...func(*ExamIPQuery)) *ExamPapersQuery {
+	query := (&ExamIPClient{config: epq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	epq.withPapersIPRef = query
 	return epq
 }
 
@@ -477,14 +622,22 @@ func (epq *ExamPapersQuery) prepareQuery(ctx context.Context) error {
 func (epq *ExamPapersQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ExamPapers, error) {
 	var (
 		nodes       = []*ExamPapers{}
+		withFKs     = epq.withFKs
 		_spec       = epq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [8]bool{
 			epq.withCenters != nil,
 			epq.withExam != nil,
 			epq.withExampapersTypes != nil,
 			epq.withPapersRef != nil,
+			epq.withExamPaperEligibility != nil,
+			epq.withDisRef != nil,
+			epq.withPapersPsRef != nil,
+			epq.withPapersIPRef != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, exampapers.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ExamPapers).scanValues(nil, columns)
 	}
@@ -527,6 +680,36 @@ func (epq *ExamPapersQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := epq.loadPapersRef(ctx, query, nodes,
 			func(n *ExamPapers) { n.Edges.PapersRef = []*ExamCalendar{} },
 			func(n *ExamPapers, e *ExamCalendar) { n.Edges.PapersRef = append(n.Edges.PapersRef, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := epq.withExamPaperEligibility; query != nil {
+		if err := epq.loadExamPaperEligibility(ctx, query, nodes,
+			func(n *ExamPapers) { n.Edges.ExamPaperEligibility = []*EligibilityMaster{} },
+			func(n *ExamPapers, e *EligibilityMaster) {
+				n.Edges.ExamPaperEligibility = append(n.Edges.ExamPaperEligibility, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := epq.withDisRef; query != nil {
+		if err := epq.loadDisRef(ctx, query, nodes,
+			func(n *ExamPapers) { n.Edges.DisRef = []*Disability{} },
+			func(n *ExamPapers, e *Disability) { n.Edges.DisRef = append(n.Edges.DisRef, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := epq.withPapersPsRef; query != nil {
+		if err := epq.loadPapersPsRef(ctx, query, nodes,
+			func(n *ExamPapers) { n.Edges.PapersPsRef = []*Exam_PS{} },
+			func(n *ExamPapers, e *Exam_PS) { n.Edges.PapersPsRef = append(n.Edges.PapersPsRef, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := epq.withPapersIPRef; query != nil {
+		if err := epq.loadPapersIPRef(ctx, query, nodes,
+			func(n *ExamPapers) { n.Edges.PapersIPRef = []*Exam_IP{} },
+			func(n *ExamPapers, e *Exam_IP) { n.Edges.PapersIPRef = append(n.Edges.PapersIPRef, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -633,6 +816,7 @@ func (epq *ExamPapersQuery) loadPapersRef(ctx context.Context, query *ExamCalend
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(examcalendar.FieldPaperCode)
 	}
@@ -648,6 +832,130 @@ func (epq *ExamPapersQuery) loadPapersRef(ctx context.Context, query *ExamCalend
 		node, ok := nodeids[fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "PaperCode" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (epq *ExamPapersQuery) loadExamPaperEligibility(ctx context.Context, query *EligibilityMasterQuery, nodes []*ExamPapers, init func(*ExamPapers), assign func(*ExamPapers, *EligibilityMaster)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*ExamPapers)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(eligibilitymaster.FieldPaperCode)
+	}
+	query.Where(predicate.EligibilityMaster(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(exampapers.ExamPaperEligibilityColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PaperCode
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "PaperCode" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (epq *ExamPapersQuery) loadDisRef(ctx context.Context, query *DisabilityQuery, nodes []*ExamPapers, init func(*ExamPapers), assign func(*ExamPapers, *Disability)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*ExamPapers)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Disability(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(exampapers.DisRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.exam_papers_dis_ref
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "exam_papers_dis_ref" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "exam_papers_dis_ref" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (epq *ExamPapersQuery) loadPapersPsRef(ctx context.Context, query *ExamPSQuery, nodes []*ExamPapers, init func(*ExamPapers), assign func(*ExamPapers, *Exam_PS)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*ExamPapers)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Exam_PS(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(exampapers.PapersPsRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.exam_papers_papers_ps_ref
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "exam_papers_papers_ps_ref" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "exam_papers_papers_ps_ref" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (epq *ExamPapersQuery) loadPapersIPRef(ctx context.Context, query *ExamIPQuery, nodes []*ExamPapers, init func(*ExamPapers), assign func(*ExamPapers, *Exam_IP)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*ExamPapers)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Exam_IP(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(exampapers.PapersIPRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.exam_papers_papers_ip_ref
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "exam_papers_papers_ip_ref" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "exam_papers_papers_ip_ref" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

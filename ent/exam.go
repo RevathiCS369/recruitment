@@ -25,11 +25,27 @@ type Exam struct {
 	// ConductedBy holds the value of the "ConductedBy" field.
 	ConductedBy string `json:"ConductedBy,omitempty"`
 	// NodalOfficerLevel holds the value of the "NodalOfficerLevel" field.
-	NodalOfficerLevel int32 `json:"NodalOfficerLevel,omitempty"`
+	NodalOfficerLevel string `json:"NodalOfficerLevel,omitempty"`
 	// CalendarCode holds the value of the "CalendarCode" field.
 	CalendarCode int32 `json:"CalendarCode,omitempty"`
 	// PaperCode holds the value of the "PaperCode" field.
 	PaperCode int32 `json:"PaperCode,omitempty"`
+	// ExamType holds the value of the "ExamType" field.
+	ExamType string `json:"ExamType,omitempty"`
+	// TentativeNotificationMandatoryDate holds the value of the "TentativeNotificationMandatoryDate" field.
+	TentativeNotificationMandatoryDate bool `json:"TentativeNotificationMandatoryDate,omitempty"`
+	// LocalLanguage holds the value of the "LocalLanguage" field.
+	LocalLanguage bool `json:"LocalLanguage,omitempty"`
+	// OptionForPost holds the value of the "OptionForPost" field.
+	OptionForPost bool `json:"OptionForPost,omitempty"`
+	// OptionToWriteExamOtherThanParent holds the value of the "OptionToWriteExamOtherThanParent" field.
+	OptionToWriteExamOtherThanParent bool `json:"OptionToWriteExamOtherThanParent,omitempty"`
+	// OrderNumber holds the value of the "OrderNumber" field.
+	OrderNumber string `json:"OrderNumber,omitempty"`
+	// Status holds the value of the "Status" field.
+	Status string `json:"Status,omitempty"`
+	// ExamTypeCode holds the value of the "ExamTypeCode" field.
+	ExamTypeCode int32 `json:"ExamTypeCode,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ExamQuery when eager-loading is set.
 	Edges              ExamEdges `json:"edges"`
@@ -47,9 +63,13 @@ type ExamEdges struct {
 	ExamsRef []*ExamCalendar `json:"exams_ref,omitempty"`
 	// Papers holds the value of the papers edge.
 	Papers []*ExamPapers `json:"papers,omitempty"`
+	// ExamEligibility holds the value of the ExamEligibility edge.
+	ExamEligibility []*EligibilityMaster `json:"ExamEligibility,omitempty"`
+	// ExamsType holds the value of the exams_type edge.
+	ExamsType []*ExamType `json:"exams_type,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 }
 
 // NodalOfficersOrErr returns the NodalOfficers value or an error if the edge
@@ -88,14 +108,34 @@ func (e ExamEdges) PapersOrErr() ([]*ExamPapers, error) {
 	return nil, &NotLoadedError{edge: "papers"}
 }
 
+// ExamEligibilityOrErr returns the ExamEligibility value or an error if the edge
+// was not loaded in eager-loading.
+func (e ExamEdges) ExamEligibilityOrErr() ([]*EligibilityMaster, error) {
+	if e.loadedTypes[4] {
+		return e.ExamEligibility, nil
+	}
+	return nil, &NotLoadedError{edge: "ExamEligibility"}
+}
+
+// ExamsTypeOrErr returns the ExamsType value or an error if the edge
+// was not loaded in eager-loading.
+func (e ExamEdges) ExamsTypeOrErr() ([]*ExamType, error) {
+	if e.loadedTypes[5] {
+		return e.ExamsType, nil
+	}
+	return nil, &NotLoadedError{edge: "exams_type"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Exam) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case exam.FieldID, exam.FieldNumOfPapers, exam.FieldNodalOfficerLevel, exam.FieldCalendarCode, exam.FieldPaperCode:
+		case exam.FieldTentativeNotificationMandatoryDate, exam.FieldLocalLanguage, exam.FieldOptionForPost, exam.FieldOptionToWriteExamOtherThanParent:
+			values[i] = new(sql.NullBool)
+		case exam.FieldID, exam.FieldNumOfPapers, exam.FieldCalendarCode, exam.FieldPaperCode, exam.FieldExamTypeCode:
 			values[i] = new(sql.NullInt64)
-		case exam.FieldExamName, exam.FieldNotificationBy, exam.FieldConductedBy:
+		case exam.FieldExamName, exam.FieldNotificationBy, exam.FieldConductedBy, exam.FieldNodalOfficerLevel, exam.FieldExamType, exam.FieldOrderNumber, exam.FieldStatus:
 			values[i] = new(sql.NullString)
 		case exam.ForeignKeys[0]: // vacancy_year_exams
 			values[i] = new(sql.NullInt64)
@@ -145,10 +185,10 @@ func (e *Exam) assignValues(columns []string, values []any) error {
 				e.ConductedBy = value.String
 			}
 		case exam.FieldNodalOfficerLevel:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field NodalOfficerLevel", values[i])
 			} else if value.Valid {
-				e.NodalOfficerLevel = int32(value.Int64)
+				e.NodalOfficerLevel = value.String
 			}
 		case exam.FieldCalendarCode:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -161,6 +201,54 @@ func (e *Exam) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field PaperCode", values[i])
 			} else if value.Valid {
 				e.PaperCode = int32(value.Int64)
+			}
+		case exam.FieldExamType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ExamType", values[i])
+			} else if value.Valid {
+				e.ExamType = value.String
+			}
+		case exam.FieldTentativeNotificationMandatoryDate:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field TentativeNotificationMandatoryDate", values[i])
+			} else if value.Valid {
+				e.TentativeNotificationMandatoryDate = value.Bool
+			}
+		case exam.FieldLocalLanguage:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field LocalLanguage", values[i])
+			} else if value.Valid {
+				e.LocalLanguage = value.Bool
+			}
+		case exam.FieldOptionForPost:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field OptionForPost", values[i])
+			} else if value.Valid {
+				e.OptionForPost = value.Bool
+			}
+		case exam.FieldOptionToWriteExamOtherThanParent:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field OptionToWriteExamOtherThanParent", values[i])
+			} else if value.Valid {
+				e.OptionToWriteExamOtherThanParent = value.Bool
+			}
+		case exam.FieldOrderNumber:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field OrderNumber", values[i])
+			} else if value.Valid {
+				e.OrderNumber = value.String
+			}
+		case exam.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field Status", values[i])
+			} else if value.Valid {
+				e.Status = value.String
+			}
+		case exam.FieldExamTypeCode:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ExamTypeCode", values[i])
+			} else if value.Valid {
+				e.ExamTypeCode = int32(value.Int64)
 			}
 		case exam.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -202,6 +290,16 @@ func (e *Exam) QueryPapers() *ExamPapersQuery {
 	return NewExamClient(e.config).QueryPapers(e)
 }
 
+// QueryExamEligibility queries the "ExamEligibility" edge of the Exam entity.
+func (e *Exam) QueryExamEligibility() *EligibilityMasterQuery {
+	return NewExamClient(e.config).QueryExamEligibility(e)
+}
+
+// QueryExamsType queries the "exams_type" edge of the Exam entity.
+func (e *Exam) QueryExamsType() *ExamTypeQuery {
+	return NewExamClient(e.config).QueryExamsType(e)
+}
+
 // Update returns a builder for updating this Exam.
 // Note that you need to call Exam.Unwrap() before calling this method if this Exam
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -238,13 +336,37 @@ func (e *Exam) String() string {
 	builder.WriteString(e.ConductedBy)
 	builder.WriteString(", ")
 	builder.WriteString("NodalOfficerLevel=")
-	builder.WriteString(fmt.Sprintf("%v", e.NodalOfficerLevel))
+	builder.WriteString(e.NodalOfficerLevel)
 	builder.WriteString(", ")
 	builder.WriteString("CalendarCode=")
 	builder.WriteString(fmt.Sprintf("%v", e.CalendarCode))
 	builder.WriteString(", ")
 	builder.WriteString("PaperCode=")
 	builder.WriteString(fmt.Sprintf("%v", e.PaperCode))
+	builder.WriteString(", ")
+	builder.WriteString("ExamType=")
+	builder.WriteString(e.ExamType)
+	builder.WriteString(", ")
+	builder.WriteString("TentativeNotificationMandatoryDate=")
+	builder.WriteString(fmt.Sprintf("%v", e.TentativeNotificationMandatoryDate))
+	builder.WriteString(", ")
+	builder.WriteString("LocalLanguage=")
+	builder.WriteString(fmt.Sprintf("%v", e.LocalLanguage))
+	builder.WriteString(", ")
+	builder.WriteString("OptionForPost=")
+	builder.WriteString(fmt.Sprintf("%v", e.OptionForPost))
+	builder.WriteString(", ")
+	builder.WriteString("OptionToWriteExamOtherThanParent=")
+	builder.WriteString(fmt.Sprintf("%v", e.OptionToWriteExamOtherThanParent))
+	builder.WriteString(", ")
+	builder.WriteString("OrderNumber=")
+	builder.WriteString(e.OrderNumber)
+	builder.WriteString(", ")
+	builder.WriteString("Status=")
+	builder.WriteString(e.Status)
+	builder.WriteString(", ")
+	builder.WriteString("ExamTypeCode=")
+	builder.WriteString(fmt.Sprintf("%v", e.ExamTypeCode))
 	builder.WriteByte(')')
 	return builder.String()
 }

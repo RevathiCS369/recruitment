@@ -493,6 +493,9 @@ func (cmq *CircleMasterQuery) loadCircleRef(ctx context.Context, query *Facility
 		}
 	}
 	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(facility.FieldCircleID)
+	}
 	query.Where(predicate.Facility(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(circlemaster.CircleRefColumn), fks...))
 	}))
@@ -501,13 +504,10 @@ func (cmq *CircleMasterQuery) loadCircleRef(ctx context.Context, query *Facility
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.circle_master_circle_ref
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "circle_master_circle_ref" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.CircleID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "circle_master_circle_ref" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "CircleID" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

@@ -36,6 +36,14 @@ const (
 	FieldCalendarCode = "calendar_code"
 	// FieldCreatedDate holds the string denoting the createddate field in the database.
 	FieldCreatedDate = "created_date"
+	// FieldPaperTypeCode holds the string denoting the papertypecode field in the database.
+	FieldPaperTypeCode = "paper_type_code"
+	// FieldPaperTypeName holds the string denoting the papertypename field in the database.
+	FieldPaperTypeName = "paper_type_name"
+	// FieldDisabilityTypeID holds the string denoting the disabilitytypeid field in the database.
+	FieldDisabilityTypeID = "disability_type_id"
+	// FieldExamCodePS holds the string denoting the examcodeps field in the database.
+	FieldExamCodePS = "exam_code_ps"
 	// EdgeCenters holds the string denoting the centers edge name in mutations.
 	EdgeCenters = "centers"
 	// EdgeExam holds the string denoting the exam edge name in mutations.
@@ -44,6 +52,14 @@ const (
 	EdgeExampapersTypes = "exampapers_types"
 	// EdgePapersRef holds the string denoting the papers_ref edge name in mutations.
 	EdgePapersRef = "papers_ref"
+	// EdgeExamPaperEligibility holds the string denoting the exampapereligibility edge name in mutations.
+	EdgeExamPaperEligibility = "ExamPaperEligibility"
+	// EdgeDisRef holds the string denoting the dis_ref edge name in mutations.
+	EdgeDisRef = "dis_ref"
+	// EdgePapersPsRef holds the string denoting the papers_ps_ref edge name in mutations.
+	EdgePapersPsRef = "papers_ps_ref"
+	// EdgePapersIPRef holds the string denoting the papers_ip_ref edge name in mutations.
+	EdgePapersIPRef = "papers_ip_ref"
 	// CenterFieldID holds the string denoting the ID field of the Center.
 	CenterFieldID = "CenterCode"
 	// ExamFieldID holds the string denoting the ID field of the Exam.
@@ -52,6 +68,14 @@ const (
 	PaperTypesFieldID = "PaperTypeCode"
 	// ExamCalendarFieldID holds the string denoting the ID field of the ExamCalendar.
 	ExamCalendarFieldID = "CalendarCode"
+	// EligibilityMasterFieldID holds the string denoting the ID field of the EligibilityMaster.
+	EligibilityMasterFieldID = "EligibilityCode"
+	// DisabilityFieldID holds the string denoting the ID field of the Disability.
+	DisabilityFieldID = "DisabilityTypeID"
+	// Exam_PSFieldID holds the string denoting the ID field of the Exam_PS.
+	Exam_PSFieldID = "ExamCodePS"
+	// Exam_IPFieldID holds the string denoting the ID field of the Exam_IP.
+	Exam_IPFieldID = "ExamCodeIP"
 	// Table holds the table name of the exampapers in the database.
 	Table = "ExamPapers"
 	// CentersTable is the table that holds the centers relation/edge.
@@ -82,6 +106,34 @@ const (
 	PapersRefInverseTable = "ExamCalendar"
 	// PapersRefColumn is the table column denoting the papers_ref relation/edge.
 	PapersRefColumn = "paper_code"
+	// ExamPaperEligibilityTable is the table that holds the ExamPaperEligibility relation/edge.
+	ExamPaperEligibilityTable = "EligibilityMaster"
+	// ExamPaperEligibilityInverseTable is the table name for the EligibilityMaster entity.
+	// It exists in this package in order to avoid circular dependency with the "eligibilitymaster" package.
+	ExamPaperEligibilityInverseTable = "EligibilityMaster"
+	// ExamPaperEligibilityColumn is the table column denoting the ExamPaperEligibility relation/edge.
+	ExamPaperEligibilityColumn = "paper_code"
+	// DisRefTable is the table that holds the dis_ref relation/edge.
+	DisRefTable = "Disability"
+	// DisRefInverseTable is the table name for the Disability entity.
+	// It exists in this package in order to avoid circular dependency with the "disability" package.
+	DisRefInverseTable = "Disability"
+	// DisRefColumn is the table column denoting the dis_ref relation/edge.
+	DisRefColumn = "exam_papers_dis_ref"
+	// PapersPsRefTable is the table that holds the papers_ps_ref relation/edge.
+	PapersPsRefTable = "Exam_PS"
+	// PapersPsRefInverseTable is the table name for the Exam_PS entity.
+	// It exists in this package in order to avoid circular dependency with the "exam_ps" package.
+	PapersPsRefInverseTable = "Exam_PS"
+	// PapersPsRefColumn is the table column denoting the papers_ps_ref relation/edge.
+	PapersPsRefColumn = "exam_papers_papers_ps_ref"
+	// PapersIPRefTable is the table that holds the papers_ip_ref relation/edge.
+	PapersIPRefTable = "Exam_IP"
+	// PapersIPRefInverseTable is the table name for the Exam_IP entity.
+	// It exists in this package in order to avoid circular dependency with the "exam_ip" package.
+	PapersIPRefInverseTable = "Exam_IP"
+	// PapersIPRefColumn is the table column denoting the papers_ip_ref relation/edge.
+	PapersIPRefColumn = "exam_papers_papers_ip_ref"
 )
 
 // Columns holds all SQL columns for exampapers fields.
@@ -99,6 +151,19 @@ var Columns = []string{
 	FieldPaperStatus,
 	FieldCalendarCode,
 	FieldCreatedDate,
+	FieldPaperTypeCode,
+	FieldPaperTypeName,
+	FieldDisabilityTypeID,
+	FieldExamCodePS,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "ExamPapers"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"disability_dis_ref",
+	"exam_ip_papers_ip_ref",
+	"exam_pa_papers_ps_ref",
+	"exam_ps_papers_ps_ref",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -108,16 +173,21 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
 var (
 	// PaperDescriptionValidator is a validator for the "PaperDescription" field. It is called by the builders before save.
 	PaperDescriptionValidator func(string) error
-	// CompetitiveQualifyingValidator is a validator for the "competitiveQualifying" field. It is called by the builders before save.
-	CompetitiveQualifyingValidator func(string) error
-	// ExceptionForDisabilityValidator is a validator for the "exceptionForDisability" field. It is called by the builders before save.
-	ExceptionForDisabilityValidator func(string) error
+	// DefaultCompetitiveQualifying holds the default value on creation for the "CompetitiveQualifying" field.
+	DefaultCompetitiveQualifying bool
+	// DefaultExceptionForDisability holds the default value on creation for the "ExceptionForDisability" field.
+	DefaultExceptionForDisability bool
 	// MaximumMarksValidator is a validator for the "MaximumMarks" field. It is called by the builders before save.
 	MaximumMarksValidator func(int) error
 	// DurationValidator is a validator for the "Duration" field. It is called by the builders before save.
@@ -150,12 +220,12 @@ func ByExamCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExamCode, opts...).ToFunc()
 }
 
-// ByCompetitiveQualifying orders the results by the competitiveQualifying field.
+// ByCompetitiveQualifying orders the results by the CompetitiveQualifying field.
 func ByCompetitiveQualifying(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompetitiveQualifying, opts...).ToFunc()
 }
 
-// ByExceptionForDisability orders the results by the exceptionForDisability field.
+// ByExceptionForDisability orders the results by the ExceptionForDisability field.
 func ByExceptionForDisability(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExceptionForDisability, opts...).ToFunc()
 }
@@ -198,6 +268,26 @@ func ByCalendarCode(opts ...sql.OrderTermOption) OrderOption {
 // ByCreatedDate orders the results by the CreatedDate field.
 func ByCreatedDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedDate, opts...).ToFunc()
+}
+
+// ByPaperTypeCode orders the results by the PaperTypeCode field.
+func ByPaperTypeCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPaperTypeCode, opts...).ToFunc()
+}
+
+// ByPaperTypeName orders the results by the PaperTypeName field.
+func ByPaperTypeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPaperTypeName, opts...).ToFunc()
+}
+
+// ByDisabilityTypeID orders the results by the DisabilityTypeID field.
+func ByDisabilityTypeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisabilityTypeID, opts...).ToFunc()
+}
+
+// ByExamCodePS orders the results by the ExamCodePS field.
+func ByExamCodePS(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExamCodePS, opts...).ToFunc()
 }
 
 // ByCentersCount orders the results by centers count.
@@ -248,6 +338,62 @@ func ByPapersRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newPapersRefStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByExamPaperEligibilityCount orders the results by ExamPaperEligibility count.
+func ByExamPaperEligibilityCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newExamPaperEligibilityStep(), opts...)
+	}
+}
+
+// ByExamPaperEligibility orders the results by ExamPaperEligibility terms.
+func ByExamPaperEligibility(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newExamPaperEligibilityStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDisRefCount orders the results by dis_ref count.
+func ByDisRefCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDisRefStep(), opts...)
+	}
+}
+
+// ByDisRef orders the results by dis_ref terms.
+func ByDisRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDisRefStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPapersPsRefCount orders the results by papers_ps_ref count.
+func ByPapersPsRefCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPapersPsRefStep(), opts...)
+	}
+}
+
+// ByPapersPsRef orders the results by papers_ps_ref terms.
+func ByPapersPsRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPapersPsRefStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPapersIPRefCount orders the results by papers_ip_ref count.
+func ByPapersIPRefCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPapersIPRefStep(), opts...)
+	}
+}
+
+// ByPapersIPRef orders the results by papers_ip_ref terms.
+func ByPapersIPRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPapersIPRefStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newCentersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -274,5 +420,33 @@ func newPapersRefStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PapersRefInverseTable, ExamCalendarFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PapersRefTable, PapersRefColumn),
+	)
+}
+func newExamPaperEligibilityStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ExamPaperEligibilityInverseTable, EligibilityMasterFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ExamPaperEligibilityTable, ExamPaperEligibilityColumn),
+	)
+}
+func newDisRefStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DisRefInverseTable, DisabilityFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DisRefTable, DisRefColumn),
+	)
+}
+func newPapersPsRefStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PapersPsRefInverseTable, Exam_PSFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PapersPsRefTable, PapersPsRefColumn),
+	)
+}
+func newPapersIPRefStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PapersIPRefInverseTable, Exam_IPFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PapersIPRefTable, PapersIPRefColumn),
 	)
 }

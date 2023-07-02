@@ -4,9 +4,11 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 	"recruit/ent/disability"
+	"recruit/ent/exampapers"
 	"recruit/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -21,6 +23,8 @@ type DisabilityQuery struct {
 	order      []disability.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Disability
+	withDisRef *ExamPapersQuery
+	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +59,28 @@ func (dq *DisabilityQuery) Unique(unique bool) *DisabilityQuery {
 func (dq *DisabilityQuery) Order(o ...disability.OrderOption) *DisabilityQuery {
 	dq.order = append(dq.order, o...)
 	return dq
+}
+
+// QueryDisRef chains the current query on the "dis_ref" edge.
+func (dq *DisabilityQuery) QueryDisRef() *ExamPapersQuery {
+	query := (&ExamPapersClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(disability.Table, disability.FieldID, selector),
+			sqlgraph.To(exampapers.Table, exampapers.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, disability.DisRefTable, disability.DisRefColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Disability entity from the query.
@@ -249,10 +275,22 @@ func (dq *DisabilityQuery) Clone() *DisabilityQuery {
 		order:      append([]disability.OrderOption{}, dq.order...),
 		inters:     append([]Interceptor{}, dq.inters...),
 		predicates: append([]predicate.Disability{}, dq.predicates...),
+		withDisRef: dq.withDisRef.Clone(),
 		// clone intermediate query.
 		sql:  dq.sql.Clone(),
 		path: dq.path,
 	}
+}
+
+// WithDisRef tells the query-builder to eager-load the nodes that are connected to
+// the "dis_ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DisabilityQuery) WithDisRef(opts ...func(*ExamPapersQuery)) *DisabilityQuery {
+	query := (&ExamPapersClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withDisRef = query
+	return dq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,15 +369,23 @@ func (dq *DisabilityQuery) prepareQuery(ctx context.Context) error {
 
 func (dq *DisabilityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Disability, error) {
 	var (
-		nodes = []*Disability{}
-		_spec = dq.querySpec()
+		nodes       = []*Disability{}
+		withFKs     = dq.withFKs
+		_spec       = dq.querySpec()
+		loadedTypes = [1]bool{
+			dq.withDisRef != nil,
+		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, disability.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Disability).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Disability{config: dq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +397,46 @@ func (dq *DisabilityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*D
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := dq.withDisRef; query != nil {
+		if err := dq.loadDisRef(ctx, query, nodes,
+			func(n *Disability) { n.Edges.DisRef = []*ExamPapers{} },
+			func(n *Disability, e *ExamPapers) { n.Edges.DisRef = append(n.Edges.DisRef, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (dq *DisabilityQuery) loadDisRef(ctx context.Context, query *ExamPapersQuery, nodes []*Disability, init func(*Disability), assign func(*Disability, *ExamPapers)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*Disability)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ExamPapers(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(disability.DisRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.disability_dis_ref
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "disability_dis_ref" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "disability_dis_ref" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (dq *DisabilityQuery) sqlCount(ctx context.Context) (int, error) {

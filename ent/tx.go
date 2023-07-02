@@ -12,24 +12,46 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// AdminLogin is the client for interacting with the AdminLogin builders.
+	AdminLogin *AdminLoginClient
 	// AgeEligibility is the client for interacting with the AgeEligibility builders.
 	AgeEligibility *AgeEligibilityClient
 	// Application is the client for interacting with the Application builders.
 	Application *ApplicationClient
+	// Cadre_Choice_IP is the client for interacting with the Cadre_Choice_IP builders.
+	Cadre_Choice_IP *CadreChoiceIPClient
+	// Cadre_Choice_PA is the client for interacting with the Cadre_Choice_PA builders.
+	Cadre_Choice_PA *CadreChoicePAClient
+	// Cadre_Choice_PM is the client for interacting with the Cadre_Choice_PM builders.
+	Cadre_Choice_PM *CadreChoicePMClient
+	// Cadre_Choice_PS is the client for interacting with the Cadre_Choice_PS builders.
+	Cadre_Choice_PS *CadreChoicePSClient
 	// Center is the client for interacting with the Center builders.
 	Center *CenterClient
 	// CircleMaster is the client for interacting with the CircleMaster builders.
 	CircleMaster *CircleMasterClient
+	// DirectorateUsers is the client for interacting with the DirectorateUsers builders.
+	DirectorateUsers *DirectorateUsersClient
 	// Disability is the client for interacting with the Disability builders.
 	Disability *DisabilityClient
 	// DivisionMaster is the client for interacting with the DivisionMaster builders.
 	DivisionMaster *DivisionMasterClient
+	// Division_Choice_PA is the client for interacting with the Division_Choice_PA builders.
+	Division_Choice_PA *DivisionChoicePAClient
+	// Division_Choice_PM is the client for interacting with the Division_Choice_PM builders.
+	Division_Choice_PM *DivisionChoicePMClient
+	// Division_Choice_PS is the client for interacting with the Division_Choice_PS builders.
+	Division_Choice_PS *DivisionChoicePSClient
+	// EligibilityMaster is the client for interacting with the EligibilityMaster builders.
+	EligibilityMaster *EligibilityMasterClient
 	// EmployeeCadre is the client for interacting with the EmployeeCadre builders.
 	EmployeeCadre *EmployeeCadreClient
 	// EmployeeCategory is the client for interacting with the EmployeeCategory builders.
 	EmployeeCategory *EmployeeCategoryClient
 	// EmployeeDesignation is the client for interacting with the EmployeeDesignation builders.
 	EmployeeDesignation *EmployeeDesignationClient
+	// EmployeeMaster is the client for interacting with the EmployeeMaster builders.
+	EmployeeMaster *EmployeeMasterClient
 	// EmployeePosts is the client for interacting with the EmployeePosts builders.
 	EmployeePosts *EmployeePostsClient
 	// Employees is the client for interacting with the Employees builders.
@@ -38,22 +60,46 @@ type Tx struct {
 	Exam *ExamClient
 	// ExamCalendar is the client for interacting with the ExamCalendar builders.
 	ExamCalendar *ExamCalendarClient
-	// ExamEligibility is the client for interacting with the ExamEligibility builders.
-	ExamEligibility *ExamEligibilityClient
 	// ExamPapers is the client for interacting with the ExamPapers builders.
 	ExamPapers *ExamPapersClient
+	// ExamType is the client for interacting with the ExamType builders.
+	ExamType *ExamTypeClient
+	// Exam_Applications_IP is the client for interacting with the Exam_Applications_IP builders.
+	Exam_Applications_IP *ExamApplicationsIPClient
+	// Exam_Applications_PS is the client for interacting with the Exam_Applications_PS builders.
+	Exam_Applications_PS *ExamApplicationsPSClient
+	// Exam_IP is the client for interacting with the Exam_IP builders.
+	Exam_IP *ExamIPClient
+	// Exam_PA is the client for interacting with the Exam_PA builders.
+	Exam_PA *ExamPAClient
+	// Exam_PM is the client for interacting with the Exam_PM builders.
+	Exam_PM *ExamPMClient
+	// Exam_PS is the client for interacting with the Exam_PS builders.
+	Exam_PS *ExamPSClient
 	// Facility is the client for interacting with the Facility builders.
 	Facility *FacilityClient
+	// Login is the client for interacting with the Login builders.
+	Login *LoginClient
 	// NodalOfficer is the client for interacting with the NodalOfficer builders.
 	NodalOfficer *NodalOfficerClient
 	// Notification is the client for interacting with the Notification builders.
 	Notification *NotificationClient
 	// PaperTypes is the client for interacting with the PaperTypes builders.
 	PaperTypes *PaperTypesClient
+	// PlaceOfPreferenceIP is the client for interacting with the PlaceOfPreferenceIP builders.
+	PlaceOfPreferenceIP *PlaceOfPreferenceIPClient
+	// RecommendationsIPApplications is the client for interacting with the RecommendationsIPApplications builders.
+	RecommendationsIPApplications *RecommendationsIPApplicationsClient
 	// RegionMaster is the client for interacting with the RegionMaster builders.
 	RegionMaster *RegionMasterClient
+	// Reversal_Application_IP is the client for interacting with the Reversal_Application_IP builders.
+	Reversal_Application_IP *ReversalApplicationIPClient
+	// RoleMaster is the client for interacting with the RoleMaster builders.
+	RoleMaster *RoleMasterClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserMaster is the client for interacting with the UserMaster builders.
+	UserMaster *UserMasterClient
 	// VacancyYear is the client for interacting with the VacancyYear builders.
 	VacancyYear *VacancyYearClient
 
@@ -187,27 +233,50 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.AdminLogin = NewAdminLoginClient(tx.config)
 	tx.AgeEligibility = NewAgeEligibilityClient(tx.config)
 	tx.Application = NewApplicationClient(tx.config)
+	tx.Cadre_Choice_IP = NewCadreChoiceIPClient(tx.config)
+	tx.Cadre_Choice_PA = NewCadreChoicePAClient(tx.config)
+	tx.Cadre_Choice_PM = NewCadreChoicePMClient(tx.config)
+	tx.Cadre_Choice_PS = NewCadreChoicePSClient(tx.config)
 	tx.Center = NewCenterClient(tx.config)
 	tx.CircleMaster = NewCircleMasterClient(tx.config)
+	tx.DirectorateUsers = NewDirectorateUsersClient(tx.config)
 	tx.Disability = NewDisabilityClient(tx.config)
 	tx.DivisionMaster = NewDivisionMasterClient(tx.config)
+	tx.Division_Choice_PA = NewDivisionChoicePAClient(tx.config)
+	tx.Division_Choice_PM = NewDivisionChoicePMClient(tx.config)
+	tx.Division_Choice_PS = NewDivisionChoicePSClient(tx.config)
+	tx.EligibilityMaster = NewEligibilityMasterClient(tx.config)
 	tx.EmployeeCadre = NewEmployeeCadreClient(tx.config)
 	tx.EmployeeCategory = NewEmployeeCategoryClient(tx.config)
 	tx.EmployeeDesignation = NewEmployeeDesignationClient(tx.config)
+	tx.EmployeeMaster = NewEmployeeMasterClient(tx.config)
 	tx.EmployeePosts = NewEmployeePostsClient(tx.config)
 	tx.Employees = NewEmployeesClient(tx.config)
 	tx.Exam = NewExamClient(tx.config)
 	tx.ExamCalendar = NewExamCalendarClient(tx.config)
-	tx.ExamEligibility = NewExamEligibilityClient(tx.config)
 	tx.ExamPapers = NewExamPapersClient(tx.config)
+	tx.ExamType = NewExamTypeClient(tx.config)
+	tx.Exam_Applications_IP = NewExamApplicationsIPClient(tx.config)
+	tx.Exam_Applications_PS = NewExamApplicationsPSClient(tx.config)
+	tx.Exam_IP = NewExamIPClient(tx.config)
+	tx.Exam_PA = NewExamPAClient(tx.config)
+	tx.Exam_PM = NewExamPMClient(tx.config)
+	tx.Exam_PS = NewExamPSClient(tx.config)
 	tx.Facility = NewFacilityClient(tx.config)
+	tx.Login = NewLoginClient(tx.config)
 	tx.NodalOfficer = NewNodalOfficerClient(tx.config)
 	tx.Notification = NewNotificationClient(tx.config)
 	tx.PaperTypes = NewPaperTypesClient(tx.config)
+	tx.PlaceOfPreferenceIP = NewPlaceOfPreferenceIPClient(tx.config)
+	tx.RecommendationsIPApplications = NewRecommendationsIPApplicationsClient(tx.config)
 	tx.RegionMaster = NewRegionMasterClient(tx.config)
+	tx.Reversal_Application_IP = NewReversalApplicationIPClient(tx.config)
+	tx.RoleMaster = NewRoleMasterClient(tx.config)
 	tx.User = NewUserClient(tx.config)
+	tx.UserMaster = NewUserMasterClient(tx.config)
 	tx.VacancyYear = NewVacancyYearClient(tx.config)
 }
 
@@ -218,7 +287,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: AgeEligibility.QueryXXX(), the query will be executed
+// applies a query, for example: AdminLogin.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

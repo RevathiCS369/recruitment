@@ -48,6 +48,7 @@ func (ExamCalendar) Fields() []ent.Field {
 			Optional(),
 		field.Int32("VacancyYearCode").Optional(),
 		field.Int32("PaperCode").Optional(),
+		field.Int32("ExamCodePS").Optional(),
 	}
 
 }
@@ -56,7 +57,11 @@ func (ExamCalendar) Edges() []ent.Edge {
 		edge.From("vcy_years", VacancyYear.Type).Ref("vacancy_ref").Unique().Field("VacancyYearCode"),
 		edge.From("exams", Exam.Type).Ref("exams_ref").Unique().Field("ExamCode"),
 		edge.From("papers", ExamPapers.Type).Ref("papers_ref").Unique().Field("PaperCode"),
-		edge.To("Notify_ref", Notification.Type)}
+		//edge.From("exams", Exam_PS.Type).Ref("exams_ref").Unique().Field("ExamCode"),
+		edge.To("Notify_ref", Notification.Type),
+		//edge.From("exams_cal_ps", Exam_PS.Type).Ref("examcal_ps_ref").Unique().Field("ExamCodePS"),
+		edge.To("examcal_ps_ref", Exam_PS.Type),
+		edge.To("examcal_ip_ref", Exam_IP.Type)}
 }
 func (ExamCalendar) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "ExamCalendar"}}

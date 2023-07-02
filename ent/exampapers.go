@@ -22,10 +22,10 @@ type ExamPapers struct {
 	PaperDescription string `json:"PaperDescription,omitempty"`
 	// ExamCode holds the value of the "ExamCode" field.
 	ExamCode int32 `json:"ExamCode,omitempty"`
-	// CompetitiveQualifying holds the value of the "competitiveQualifying" field.
-	CompetitiveQualifying string `json:"competitiveQualifying,omitempty"`
-	// ExceptionForDisability holds the value of the "exceptionForDisability" field.
-	ExceptionForDisability string `json:"exceptionForDisability,omitempty"`
+	// CompetitiveQualifying holds the value of the "CompetitiveQualifying" field.
+	CompetitiveQualifying bool `json:"CompetitiveQualifying,omitempty"`
+	// ExceptionForDisability holds the value of the "ExceptionForDisability" field.
+	ExceptionForDisability bool `json:"ExceptionForDisability,omitempty"`
 	// MaximumMarks holds the value of the "MaximumMarks" field.
 	MaximumMarks int `json:"MaximumMarks,omitempty"`
 	// Duration holds the value of the "Duration" field.
@@ -42,10 +42,22 @@ type ExamPapers struct {
 	CalendarCode int32 `json:"CalendarCode,omitempty"`
 	// CreatedDate holds the value of the "CreatedDate" field.
 	CreatedDate time.Time `json:"CreatedDate,omitempty"`
+	// PaperTypeCode holds the value of the "PaperTypeCode" field.
+	PaperTypeCode int32 `json:"PaperTypeCode,omitempty"`
+	// PaperTypeName holds the value of the "PaperTypeName" field.
+	PaperTypeName string `json:"PaperTypeName,omitempty"`
+	// DisabilityTypeID holds the value of the "DisabilityTypeID" field.
+	DisabilityTypeID int32 `json:"DisabilityTypeID,omitempty"`
+	// ExamCodePS holds the value of the "ExamCodePS" field.
+	ExamCodePS int32 `json:"ExamCodePS,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ExamPapersQuery when eager-loading is set.
-	Edges        ExamPapersEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                 ExamPapersEdges `json:"edges"`
+	disability_dis_ref    *int32
+	exam_ip_papers_ip_ref *int32
+	exam_pa_papers_ps_ref *int32
+	exam_ps_papers_ps_ref *int32
+	selectValues          sql.SelectValues
 }
 
 // ExamPapersEdges holds the relations/edges for other nodes in the graph.
@@ -58,9 +70,17 @@ type ExamPapersEdges struct {
 	ExampapersTypes []*PaperTypes `json:"exampapers_types,omitempty"`
 	// PapersRef holds the value of the papers_ref edge.
 	PapersRef []*ExamCalendar `json:"papers_ref,omitempty"`
+	// ExamPaperEligibility holds the value of the ExamPaperEligibility edge.
+	ExamPaperEligibility []*EligibilityMaster `json:"ExamPaperEligibility,omitempty"`
+	// DisRef holds the value of the dis_ref edge.
+	DisRef []*Disability `json:"dis_ref,omitempty"`
+	// PapersPsRef holds the value of the papers_ps_ref edge.
+	PapersPsRef []*Exam_PS `json:"papers_ps_ref,omitempty"`
+	// PapersIPRef holds the value of the papers_ip_ref edge.
+	PapersIPRef []*Exam_IP `json:"papers_ip_ref,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [8]bool
 }
 
 // CentersOrErr returns the Centers value or an error if the edge
@@ -103,17 +123,63 @@ func (e ExamPapersEdges) PapersRefOrErr() ([]*ExamCalendar, error) {
 	return nil, &NotLoadedError{edge: "papers_ref"}
 }
 
+// ExamPaperEligibilityOrErr returns the ExamPaperEligibility value or an error if the edge
+// was not loaded in eager-loading.
+func (e ExamPapersEdges) ExamPaperEligibilityOrErr() ([]*EligibilityMaster, error) {
+	if e.loadedTypes[4] {
+		return e.ExamPaperEligibility, nil
+	}
+	return nil, &NotLoadedError{edge: "ExamPaperEligibility"}
+}
+
+// DisRefOrErr returns the DisRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e ExamPapersEdges) DisRefOrErr() ([]*Disability, error) {
+	if e.loadedTypes[5] {
+		return e.DisRef, nil
+	}
+	return nil, &NotLoadedError{edge: "dis_ref"}
+}
+
+// PapersPsRefOrErr returns the PapersPsRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e ExamPapersEdges) PapersPsRefOrErr() ([]*Exam_PS, error) {
+	if e.loadedTypes[6] {
+		return e.PapersPsRef, nil
+	}
+	return nil, &NotLoadedError{edge: "papers_ps_ref"}
+}
+
+// PapersIPRefOrErr returns the PapersIPRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e ExamPapersEdges) PapersIPRefOrErr() ([]*Exam_IP, error) {
+	if e.loadedTypes[7] {
+		return e.PapersIPRef, nil
+	}
+	return nil, &NotLoadedError{edge: "papers_ip_ref"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ExamPapers) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case exampapers.FieldID, exampapers.FieldExamCode, exampapers.FieldMaximumMarks, exampapers.FieldDuration, exampapers.FieldCalendarCode:
+		case exampapers.FieldCompetitiveQualifying, exampapers.FieldExceptionForDisability:
+			values[i] = new(sql.NullBool)
+		case exampapers.FieldID, exampapers.FieldExamCode, exampapers.FieldMaximumMarks, exampapers.FieldDuration, exampapers.FieldCalendarCode, exampapers.FieldPaperTypeCode, exampapers.FieldDisabilityTypeID, exampapers.FieldExamCodePS:
 			values[i] = new(sql.NullInt64)
-		case exampapers.FieldPaperDescription, exampapers.FieldCompetitiveQualifying, exampapers.FieldExceptionForDisability, exampapers.FieldLocalLanguageAllowedQuestionPaper, exampapers.FieldLocalLanguageAllowedAnswerPaper, exampapers.FieldOrderNumber, exampapers.FieldPaperStatus:
+		case exampapers.FieldPaperDescription, exampapers.FieldLocalLanguageAllowedQuestionPaper, exampapers.FieldLocalLanguageAllowedAnswerPaper, exampapers.FieldOrderNumber, exampapers.FieldPaperStatus, exampapers.FieldPaperTypeName:
 			values[i] = new(sql.NullString)
 		case exampapers.FieldCreatedDate:
 			values[i] = new(sql.NullTime)
+		case exampapers.ForeignKeys[0]: // disability_dis_ref
+			values[i] = new(sql.NullInt64)
+		case exampapers.ForeignKeys[1]: // exam_ip_papers_ip_ref
+			values[i] = new(sql.NullInt64)
+		case exampapers.ForeignKeys[2]: // exam_pa_papers_ps_ref
+			values[i] = new(sql.NullInt64)
+		case exampapers.ForeignKeys[3]: // exam_ps_papers_ps_ref
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -148,16 +214,16 @@ func (ep *ExamPapers) assignValues(columns []string, values []any) error {
 				ep.ExamCode = int32(value.Int64)
 			}
 		case exampapers.FieldCompetitiveQualifying:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field competitiveQualifying", values[i])
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field CompetitiveQualifying", values[i])
 			} else if value.Valid {
-				ep.CompetitiveQualifying = value.String
+				ep.CompetitiveQualifying = value.Bool
 			}
 		case exampapers.FieldExceptionForDisability:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field exceptionForDisability", values[i])
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field ExceptionForDisability", values[i])
 			} else if value.Valid {
-				ep.ExceptionForDisability = value.String
+				ep.ExceptionForDisability = value.Bool
 			}
 		case exampapers.FieldMaximumMarks:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -207,6 +273,58 @@ func (ep *ExamPapers) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ep.CreatedDate = value.Time
 			}
+		case exampapers.FieldPaperTypeCode:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field PaperTypeCode", values[i])
+			} else if value.Valid {
+				ep.PaperTypeCode = int32(value.Int64)
+			}
+		case exampapers.FieldPaperTypeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field PaperTypeName", values[i])
+			} else if value.Valid {
+				ep.PaperTypeName = value.String
+			}
+		case exampapers.FieldDisabilityTypeID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field DisabilityTypeID", values[i])
+			} else if value.Valid {
+				ep.DisabilityTypeID = int32(value.Int64)
+			}
+		case exampapers.FieldExamCodePS:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ExamCodePS", values[i])
+			} else if value.Valid {
+				ep.ExamCodePS = int32(value.Int64)
+			}
+		case exampapers.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field disability_dis_ref", value)
+			} else if value.Valid {
+				ep.disability_dis_ref = new(int32)
+				*ep.disability_dis_ref = int32(value.Int64)
+			}
+		case exampapers.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_ip_papers_ip_ref", value)
+			} else if value.Valid {
+				ep.exam_ip_papers_ip_ref = new(int32)
+				*ep.exam_ip_papers_ip_ref = int32(value.Int64)
+			}
+		case exampapers.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_pa_papers_ps_ref", value)
+			} else if value.Valid {
+				ep.exam_pa_papers_ps_ref = new(int32)
+				*ep.exam_pa_papers_ps_ref = int32(value.Int64)
+			}
+		case exampapers.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_ps_papers_ps_ref", value)
+			} else if value.Valid {
+				ep.exam_ps_papers_ps_ref = new(int32)
+				*ep.exam_ps_papers_ps_ref = int32(value.Int64)
+			}
 		default:
 			ep.selectValues.Set(columns[i], values[i])
 		}
@@ -240,6 +358,26 @@ func (ep *ExamPapers) QueryPapersRef() *ExamCalendarQuery {
 	return NewExamPapersClient(ep.config).QueryPapersRef(ep)
 }
 
+// QueryExamPaperEligibility queries the "ExamPaperEligibility" edge of the ExamPapers entity.
+func (ep *ExamPapers) QueryExamPaperEligibility() *EligibilityMasterQuery {
+	return NewExamPapersClient(ep.config).QueryExamPaperEligibility(ep)
+}
+
+// QueryDisRef queries the "dis_ref" edge of the ExamPapers entity.
+func (ep *ExamPapers) QueryDisRef() *DisabilityQuery {
+	return NewExamPapersClient(ep.config).QueryDisRef(ep)
+}
+
+// QueryPapersPsRef queries the "papers_ps_ref" edge of the ExamPapers entity.
+func (ep *ExamPapers) QueryPapersPsRef() *ExamPSQuery {
+	return NewExamPapersClient(ep.config).QueryPapersPsRef(ep)
+}
+
+// QueryPapersIPRef queries the "papers_ip_ref" edge of the ExamPapers entity.
+func (ep *ExamPapers) QueryPapersIPRef() *ExamIPQuery {
+	return NewExamPapersClient(ep.config).QueryPapersIPRef(ep)
+}
+
 // Update returns a builder for updating this ExamPapers.
 // Note that you need to call ExamPapers.Unwrap() before calling this method if this ExamPapers
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -269,11 +407,11 @@ func (ep *ExamPapers) String() string {
 	builder.WriteString("ExamCode=")
 	builder.WriteString(fmt.Sprintf("%v", ep.ExamCode))
 	builder.WriteString(", ")
-	builder.WriteString("competitiveQualifying=")
-	builder.WriteString(ep.CompetitiveQualifying)
+	builder.WriteString("CompetitiveQualifying=")
+	builder.WriteString(fmt.Sprintf("%v", ep.CompetitiveQualifying))
 	builder.WriteString(", ")
-	builder.WriteString("exceptionForDisability=")
-	builder.WriteString(ep.ExceptionForDisability)
+	builder.WriteString("ExceptionForDisability=")
+	builder.WriteString(fmt.Sprintf("%v", ep.ExceptionForDisability))
 	builder.WriteString(", ")
 	builder.WriteString("MaximumMarks=")
 	builder.WriteString(fmt.Sprintf("%v", ep.MaximumMarks))
@@ -298,6 +436,18 @@ func (ep *ExamPapers) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("CreatedDate=")
 	builder.WriteString(ep.CreatedDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("PaperTypeCode=")
+	builder.WriteString(fmt.Sprintf("%v", ep.PaperTypeCode))
+	builder.WriteString(", ")
+	builder.WriteString("PaperTypeName=")
+	builder.WriteString(ep.PaperTypeName)
+	builder.WriteString(", ")
+	builder.WriteString("DisabilityTypeID=")
+	builder.WriteString(fmt.Sprintf("%v", ep.DisabilityTypeID))
+	builder.WriteString(", ")
+	builder.WriteString("ExamCodePS=")
+	builder.WriteString(fmt.Sprintf("%v", ep.ExamCodePS))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -17,7 +17,7 @@ type DivisionMaster struct {
 func (DivisionMaster) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int32("id").StorageKey("DivisionID"), 
-		field.Int32("DivisionCode"),
+		field.Int32("DivisionCode").Unique(),
 		field.String("OfficeType"),
 		field.String("DivisionOfficeID"),
 		field.String("DivisionOfficeName"),		
@@ -30,10 +30,10 @@ func (DivisionMaster) Fields() []ent.Field {
 func (DivisionMaster) Edges() []ent.Edge {
 	return []ent.Edge{
 	edge.To("regions", RegionMaster.Type),
-	//edge.To("divisions_ref", Facility.Type),
+	edge.To("divisions_ref", Facility.Type),
 }
 }
 
 func (DivisionMaster) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "DivisionMaster"}}
-}
+} 

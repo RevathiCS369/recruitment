@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"recruit/ent"
+	"recruit/ent/employeemaster"
 )
 
 func CreateEmployeeProfile(client *ent.Client, newEmployeeprofile *ent.Employees) (*ent.Employees, error) {
@@ -30,6 +31,14 @@ func CreateEmployeeProfile(client *ent.Client, newEmployeeprofile *ent.Employees
 		SetGenderVerified(newEmployeeprofile.GenderVerified).
 		SetGenderRemStatus(newEmployeeprofile.GenderRemStatus).
 		SetGenderRemarks(newEmployeeprofile.GenderRemarks).
+		SetMobileNumber(newEmployeeprofile.MobileNumber).
+		SetMobileNumberVerified(newEmployeeprofile.MobileNumberVerified).
+		SetMobileNumberRemStatus(newEmployeeprofile.MobileNumberRemStatus).
+		SetMobileNumberRemarks(newEmployeeprofile.MobileNumberRemarks).
+		SetEmailID(newEmployeeprofile.EmailID).
+		SetEmailIDVerified(newEmployeeprofile.EmailIDVerified).
+		SetEmailIDRemStatus(newEmployeeprofile.EmailIDRemStatus).
+		SetEmailIDRemarks(newEmployeeprofile.EmailIDRemarks).
 		SetCategoryid(newEmployeeprofile.Categoryid).
 		SetEmployeeCategoryCode(newEmployeeprofile.EmployeeCategoryCode).
 		SetEmployeeCategory(newEmployeeprofile.EmployeeCategory).
@@ -57,11 +66,12 @@ func CreateEmployeeProfile(client *ent.Client, newEmployeeprofile *ent.Employees
 		SetPhotoVerified(newEmployeeprofile.PhotoVerified).
 		SetPhotoRemStatus(newEmployeeprofile.PhotoRemStatus).
 		SetPhotoRemarks(newEmployeeprofile.PhotoRemarks).
-		SetCadreid(newEmployeeprofile.Cadreid).
-		SetEmployeeCadre(newEmployeeprofile.EmployeeCadre).
-		SetEmployeeCadreVerified(newEmployeeprofile.EmployeeCadreVerified).
-		SetEmployeeCadreRemStatus(newEmployeeprofile.EmployeeCadreRemStatus).
-		SetEmployeeCadreRemarks(newEmployeeprofile.EmployeeCadreRemarks).
+		SetPostID(newEmployeeprofile.PostID).
+		SetPostCode(newEmployeeprofile.PostCode).
+		SetEmployeePost(newEmployeeprofile.EmployeePost).
+		SetEmployeePostRemarks(newEmployeeprofile.EmployeePostRemarks).
+		SetEmployeePostRemStatus(newEmployeeprofile.EmployeePostRemStatus).
+		SetEmployeePostVerified(newEmployeeprofile.EmployeePostVerified).
 		SetDesignationID(newEmployeeprofile.DesignationID).
 		SetEmployeeDesignation(newEmployeeprofile.EmployeeDesignation).
 		SetEmployeeDesignationVerified(newEmployeeprofile.EmployeeDesignationVerified).
@@ -133,9 +143,9 @@ func QueryEmployees(ctx context.Context, client *ent.Client) ([]*ent.Employees, 
 		All(ctx)
 	if err != nil {
 		log.Println("error at ExamCalendarID: ", err)
-		return nil, fmt.Errorf("failed querying ExamCalendar: %w", err)
+		return nil, fmt.Errorf("failed querying Employees: %w", err)
 	}
-	log.Println("Exam Employees data returned: ", newemployee)
+	log.Println(" Employees data returned: ", newemployee)
 	return newemployee, nil
 }
 
@@ -173,8 +183,13 @@ func UpdateVerificationDetails(client *ent.Client, id int32, newEmployeeprofile 
 		SetSignatureRemarks(newEmployeeprofile.SignatureRemarks).
 		SetPhotoVerified(newEmployeeprofile.PhotoVerified).
 		SetPhotoRemarks(newEmployeeprofile.PhotoRemarks).
-		SetEmployeeCadreVerified(newEmployeeprofile.EmployeeCadreVerified).
-		SetEmployeeCadreRemarks(newEmployeeprofile.EmployeeCadreRemarks).
+		//SetPostID(newEmployeeprofile.PostID).
+		//SetPostCode(newEmployeeprofile.PostCode).
+		SetEmployeePostVerified(newEmployeeprofile.EmployeePostVerified).
+		SetEmployeePostRemarks(newEmployeeprofile.EmployeePostRemarks).
+
+		//SetPostCodeRemStatus(newEmployeeprofile.PostCodeRemStatus).
+		//SetPostCodeRemarks(newEmployeeprofile.PostCodeRemarks).
 		SetEmployeeDesignationVerified(newEmployeeprofile.EmployeeDesignationVerified).
 		SetEmployeeDesignationRemarks(newEmployeeprofile.EmployeeDesignationRemarks).
 		SetCircleVerified(newEmployeeprofile.CircleVerified).
@@ -204,14 +219,19 @@ func UpdateVerificationDetails(client *ent.Client, id int32, newEmployeeprofile 
 }
 
 // ResubmitDetails by Candidate
-func ResubmitCandidateDetails(client *ent.Client, id int32, newEmployeeprofile *ent.Employees) (*ent.Employees, error) {
-
+func UpdateEmpDetailsByEmpID(client *ent.Client, empid int32, newEmployeeprofile *ent.Employees) (*ent.Employees, error) {
 	ctx := context.Background()
-	_, err := QueryEmployeesWithID(ctx, client, id)
+	emps, err := QueryEmployeesWithID(ctx, client, empid)
+	/*emps, err := client.Employees.Query().
+	Where(employees.EmployeedIDEQ(empid)).
+	All(ctx)*/
+
 	if err != nil {
 		return nil, err
 	}
-	updatedEmployee, err := client.Employees.UpdateOneID(id).
+
+	updatedEmployee, err := client.Employees.UpdateOneID(emps.EmployeedID).
+		//.UpdateOneID(empid).
 		SetIDVerified(newEmployeeprofile.IDVerified).
 		SetIDRemarks(newEmployeeprofile.IDRemarks).
 		SetNameVerified(newEmployeeprofile.NameVerified).
@@ -233,9 +253,12 @@ func ResubmitCandidateDetails(client *ent.Client, id int32, newEmployeeprofile *
 		SetSignatureVerified(newEmployeeprofile.SignatureVerified).
 		SetSignatureRemarks(newEmployeeprofile.SignatureRemarks).
 		SetPhotoVerified(newEmployeeprofile.PhotoVerified).
-		SetPhotoRemarks(newEmployeeprofile.PhotoRemarks).
-		SetEmployeeCadreVerified(newEmployeeprofile.EmployeeCadreVerified).
-		SetEmployeeCadreRemarks(newEmployeeprofile.EmployeeCadreRemarks).
+		SetPhotoRemarks(newEmployeeprofile.PhotoRemarks).SetPostID(newEmployeeprofile.PostID).
+		//SetPostCode(newEmployeeprofile.PostCode).
+		//SetPostCodeVerified(newEmployeeprofile.PostCodeVerified).
+		SetEmployeePost(newEmployeeprofile.EmployeePost).
+		//SetPostCodeRemStatus(newEmployeeprofile.PostCodeRemStatus).
+		//SetPostCodeRemarks(newEmployeeprofile.PostCodeRemarks).
 		SetEmployeeDesignationVerified(newEmployeeprofile.EmployeeDesignationVerified).
 		SetEmployeeDesignationRemarks(newEmployeeprofile.EmployeeDesignationRemarks).
 		SetCircleVerified(newEmployeeprofile.CircleVerified).
@@ -262,4 +285,36 @@ func ResubmitCandidateDetails(client *ent.Client, id int32, newEmployeeprofile *
 		return nil, err
 	}
 	return updatedEmployee, nil
+}
+
+/*
+func QueryEmployeeMasterByEmpID(ctx context.Context, client *ent.Client, empID int32) ([]*ent.Employees, error) {
+	//Can use GetX as well
+
+	emps, err := client.Employees.Query().
+		Where(employees.EmployeedIDEQ(empID)).
+		All(ctx)
+
+	if err != nil {
+		log.Println("error at gettting employees from employee master: ", err)
+		return nil, fmt.Errorf("failed at employee  master: %w", err)
+	}
+	log.Println("Employee details returned by Employee master : ", emps)
+	return emps, nil
+}*/
+
+// This is added fro Querying EmpID from Employee Master
+func QueryEmployeeMasterByEmpID(ctx context.Context, client *ent.Client, empID int64) ([]*ent.EmployeeMaster, error) {
+	//Can use GetX as well
+
+	emps, err := client.EmployeeMaster.Query().
+		Where(employeemaster.EmployeeIDEQ(empID)).
+		All(ctx)
+
+	if err != nil {
+		log.Println("error at gettting employees from employee master: ", err)
+		return nil, fmt.Errorf("failed at employee  master: %w", err)
+	}
+	log.Println("Employee details returned by Employee master : ", emps)
+	return emps, nil
 }

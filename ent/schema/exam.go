@@ -20,14 +20,19 @@ type Exam struct {
 /// Fields of the Exam.
 func (Exam) Fields() []ent.Field {
 	return []ent.Field{field.Int32("id").StorageKey("ExamCode"), field.String("ExamName"), field.Int32("NumOfPapers"),
-
-		/*field.UUID("id", uuid.UUID{}).
-		Default(uuid.New).*/
-
 		field.String("NotificationBy"),
-		field.String("ConductedBy"), field.Int32("NodalOfficerLevel").Optional(),
+		field.String("ConductedBy"), field.String("NodalOfficerLevel").Optional(),
 		field.Int32("CalendarCode").Optional(),
-		field.Int32("PaperCode").Optional(),}
+		field.Int32("PaperCode").Optional(),
+		field.String("ExamType"),
+		field.Bool("TentativeNotificationMandatoryDate").Default(false),
+		field.Bool("LocalLanguage").Default(false),
+		field.Bool("OptionForPost").Default(false),
+		field.Bool("OptionToWriteExamOtherThanParent").Default(false),
+		field.String("OrderNumber").Optional(),
+		field.String("Status"),
+		field.Int32("ExamTypeCode").Optional()}
+
 
 }
 
@@ -40,7 +45,11 @@ func (Exam) Edges() []ent.Edge {
 	//edge.To("exam", Exam.Type).Ref("papers").Unique().Field("ExamCode"),
 	edge.To("exams_ref", ExamCalendar.Type),
 	edge.To("papers", ExamPapers.Type),
-	}
+	edge.To("ExamEligibility", EligibilityMaster.Type),
+	edge.To("exams_type", ExamType.Type),
+	//edge.To("Exam_PS_Ref" , Exam_Applications_PS.Type),
+
+	} 
 
 }
 func (Exam) Annotations() []schema.Annotation {

@@ -306,14 +306,14 @@ func (eu *EmployeesUpdate) ClearGenderRemarks() *EmployeesUpdate {
 }
 
 // SetMobileNumber sets the "MobileNumber" field.
-func (eu *EmployeesUpdate) SetMobileNumber(i int32) *EmployeesUpdate {
+func (eu *EmployeesUpdate) SetMobileNumber(i int64) *EmployeesUpdate {
 	eu.mutation.ResetMobileNumber()
 	eu.mutation.SetMobileNumber(i)
 	return eu
 }
 
 // SetNillableMobileNumber sets the "MobileNumber" field if the given value is not nil.
-func (eu *EmployeesUpdate) SetNillableMobileNumber(i *int32) *EmployeesUpdate {
+func (eu *EmployeesUpdate) SetNillableMobileNumber(i *int64) *EmployeesUpdate {
 	if i != nil {
 		eu.SetMobileNumber(*i)
 	}
@@ -321,7 +321,7 @@ func (eu *EmployeesUpdate) SetNillableMobileNumber(i *int32) *EmployeesUpdate {
 }
 
 // AddMobileNumber adds i to the "MobileNumber" field.
-func (eu *EmployeesUpdate) AddMobileNumber(i int32) *EmployeesUpdate {
+func (eu *EmployeesUpdate) AddMobileNumber(i int64) *EmployeesUpdate {
 	eu.mutation.AddMobileNumber(i)
 	return eu
 }
@@ -329,6 +329,54 @@ func (eu *EmployeesUpdate) AddMobileNumber(i int32) *EmployeesUpdate {
 // ClearMobileNumber clears the value of the "MobileNumber" field.
 func (eu *EmployeesUpdate) ClearMobileNumber() *EmployeesUpdate {
 	eu.mutation.ClearMobileNumber()
+	return eu
+}
+
+// SetMobileNumberVerified sets the "MobileNumberVerified" field.
+func (eu *EmployeesUpdate) SetMobileNumberVerified(b bool) *EmployeesUpdate {
+	eu.mutation.SetMobileNumberVerified(b)
+	return eu
+}
+
+// SetNillableMobileNumberVerified sets the "MobileNumberVerified" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableMobileNumberVerified(b *bool) *EmployeesUpdate {
+	if b != nil {
+		eu.SetMobileNumberVerified(*b)
+	}
+	return eu
+}
+
+// SetMobileNumberRemStatus sets the "MobileNumberRemStatus" field.
+func (eu *EmployeesUpdate) SetMobileNumberRemStatus(b bool) *EmployeesUpdate {
+	eu.mutation.SetMobileNumberRemStatus(b)
+	return eu
+}
+
+// SetNillableMobileNumberRemStatus sets the "MobileNumberRemStatus" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableMobileNumberRemStatus(b *bool) *EmployeesUpdate {
+	if b != nil {
+		eu.SetMobileNumberRemStatus(*b)
+	}
+	return eu
+}
+
+// SetMobileNumberRemarks sets the "MobileNumberRemarks" field.
+func (eu *EmployeesUpdate) SetMobileNumberRemarks(s string) *EmployeesUpdate {
+	eu.mutation.SetMobileNumberRemarks(s)
+	return eu
+}
+
+// SetNillableMobileNumberRemarks sets the "MobileNumberRemarks" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableMobileNumberRemarks(s *string) *EmployeesUpdate {
+	if s != nil {
+		eu.SetMobileNumberRemarks(*s)
+	}
+	return eu
+}
+
+// ClearMobileNumberRemarks clears the value of the "MobileNumberRemarks" field.
+func (eu *EmployeesUpdate) ClearMobileNumberRemarks() *EmployeesUpdate {
+	eu.mutation.ClearMobileNumberRemarks()
 	return eu
 }
 
@@ -349,6 +397,54 @@ func (eu *EmployeesUpdate) SetNillableEmailID(s *string) *EmployeesUpdate {
 // ClearEmailID clears the value of the "EmailID" field.
 func (eu *EmployeesUpdate) ClearEmailID() *EmployeesUpdate {
 	eu.mutation.ClearEmailID()
+	return eu
+}
+
+// SetEmailIDVerified sets the "EmailIDVerified" field.
+func (eu *EmployeesUpdate) SetEmailIDVerified(b bool) *EmployeesUpdate {
+	eu.mutation.SetEmailIDVerified(b)
+	return eu
+}
+
+// SetNillableEmailIDVerified sets the "EmailIDVerified" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableEmailIDVerified(b *bool) *EmployeesUpdate {
+	if b != nil {
+		eu.SetEmailIDVerified(*b)
+	}
+	return eu
+}
+
+// SetEmailIDRemStatus sets the "EmailIDRemStatus" field.
+func (eu *EmployeesUpdate) SetEmailIDRemStatus(b bool) *EmployeesUpdate {
+	eu.mutation.SetEmailIDRemStatus(b)
+	return eu
+}
+
+// SetNillableEmailIDRemStatus sets the "EmailIDRemStatus" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableEmailIDRemStatus(b *bool) *EmployeesUpdate {
+	if b != nil {
+		eu.SetEmailIDRemStatus(*b)
+	}
+	return eu
+}
+
+// SetEmailIDRemarks sets the "EmailIDRemarks" field.
+func (eu *EmployeesUpdate) SetEmailIDRemarks(s string) *EmployeesUpdate {
+	eu.mutation.SetEmailIDRemarks(s)
+	return eu
+}
+
+// SetNillableEmailIDRemarks sets the "EmailIDRemarks" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableEmailIDRemarks(s *string) *EmployeesUpdate {
+	if s != nil {
+		eu.SetEmailIDRemarks(*s)
+	}
+	return eu
+}
+
+// ClearEmailIDRemarks clears the value of the "EmailIDRemarks" field.
+func (eu *EmployeesUpdate) ClearEmailIDRemarks() *EmployeesUpdate {
+	eu.mutation.ClearEmailIDRemarks()
 	return eu
 }
 
@@ -758,84 +854,104 @@ func (eu *EmployeesUpdate) ClearPhotoRemarks() *EmployeesUpdate {
 	return eu
 }
 
-// SetCadreid sets the "Cadreid" field.
-func (eu *EmployeesUpdate) SetCadreid(i int32) *EmployeesUpdate {
-	eu.mutation.ResetCadreid()
-	eu.mutation.SetCadreid(i)
+// SetPostID sets the "PostID" field.
+func (eu *EmployeesUpdate) SetPostID(i int32) *EmployeesUpdate {
+	eu.mutation.ResetPostID()
+	eu.mutation.SetPostID(i)
 	return eu
 }
 
-// SetNillableCadreid sets the "Cadreid" field if the given value is not nil.
-func (eu *EmployeesUpdate) SetNillableCadreid(i *int32) *EmployeesUpdate {
+// SetNillablePostID sets the "PostID" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillablePostID(i *int32) *EmployeesUpdate {
 	if i != nil {
-		eu.SetCadreid(*i)
+		eu.SetPostID(*i)
 	}
 	return eu
 }
 
-// AddCadreid adds i to the "Cadreid" field.
-func (eu *EmployeesUpdate) AddCadreid(i int32) *EmployeesUpdate {
-	eu.mutation.AddCadreid(i)
+// AddPostID adds i to the "PostID" field.
+func (eu *EmployeesUpdate) AddPostID(i int32) *EmployeesUpdate {
+	eu.mutation.AddPostID(i)
 	return eu
 }
 
-// ClearCadreid clears the value of the "Cadreid" field.
-func (eu *EmployeesUpdate) ClearCadreid() *EmployeesUpdate {
-	eu.mutation.ClearCadreid()
+// ClearPostID clears the value of the "PostID" field.
+func (eu *EmployeesUpdate) ClearPostID() *EmployeesUpdate {
+	eu.mutation.ClearPostID()
 	return eu
 }
 
-// SetEmployeeCadre sets the "EmployeeCadre" field.
-func (eu *EmployeesUpdate) SetEmployeeCadre(s string) *EmployeesUpdate {
-	eu.mutation.SetEmployeeCadre(s)
+// SetPostCode sets the "PostCode" field.
+func (eu *EmployeesUpdate) SetPostCode(s string) *EmployeesUpdate {
+	eu.mutation.SetPostCode(s)
 	return eu
 }
 
-// SetEmployeeCadreVerified sets the "EmployeeCadreVerified" field.
-func (eu *EmployeesUpdate) SetEmployeeCadreVerified(b bool) *EmployeesUpdate {
-	eu.mutation.SetEmployeeCadreVerified(b)
-	return eu
-}
-
-// SetNillableEmployeeCadreVerified sets the "EmployeeCadreVerified" field if the given value is not nil.
-func (eu *EmployeesUpdate) SetNillableEmployeeCadreVerified(b *bool) *EmployeesUpdate {
-	if b != nil {
-		eu.SetEmployeeCadreVerified(*b)
-	}
-	return eu
-}
-
-// SetEmployeeCadreRemStatus sets the "EmployeeCadreRemStatus" field.
-func (eu *EmployeesUpdate) SetEmployeeCadreRemStatus(b bool) *EmployeesUpdate {
-	eu.mutation.SetEmployeeCadreRemStatus(b)
-	return eu
-}
-
-// SetNillableEmployeeCadreRemStatus sets the "EmployeeCadreRemStatus" field if the given value is not nil.
-func (eu *EmployeesUpdate) SetNillableEmployeeCadreRemStatus(b *bool) *EmployeesUpdate {
-	if b != nil {
-		eu.SetEmployeeCadreRemStatus(*b)
-	}
-	return eu
-}
-
-// SetEmployeeCadreRemarks sets the "EmployeeCadreRemarks" field.
-func (eu *EmployeesUpdate) SetEmployeeCadreRemarks(s string) *EmployeesUpdate {
-	eu.mutation.SetEmployeeCadreRemarks(s)
-	return eu
-}
-
-// SetNillableEmployeeCadreRemarks sets the "EmployeeCadreRemarks" field if the given value is not nil.
-func (eu *EmployeesUpdate) SetNillableEmployeeCadreRemarks(s *string) *EmployeesUpdate {
+// SetNillablePostCode sets the "PostCode" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillablePostCode(s *string) *EmployeesUpdate {
 	if s != nil {
-		eu.SetEmployeeCadreRemarks(*s)
+		eu.SetPostCode(*s)
 	}
 	return eu
 }
 
-// ClearEmployeeCadreRemarks clears the value of the "EmployeeCadreRemarks" field.
-func (eu *EmployeesUpdate) ClearEmployeeCadreRemarks() *EmployeesUpdate {
-	eu.mutation.ClearEmployeeCadreRemarks()
+// ClearPostCode clears the value of the "PostCode" field.
+func (eu *EmployeesUpdate) ClearPostCode() *EmployeesUpdate {
+	eu.mutation.ClearPostCode()
+	return eu
+}
+
+// SetEmployeePost sets the "EmployeePost" field.
+func (eu *EmployeesUpdate) SetEmployeePost(s string) *EmployeesUpdate {
+	eu.mutation.SetEmployeePost(s)
+	return eu
+}
+
+// SetEmployeePostVerified sets the "EmployeePostVerified" field.
+func (eu *EmployeesUpdate) SetEmployeePostVerified(b bool) *EmployeesUpdate {
+	eu.mutation.SetEmployeePostVerified(b)
+	return eu
+}
+
+// SetNillableEmployeePostVerified sets the "EmployeePostVerified" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableEmployeePostVerified(b *bool) *EmployeesUpdate {
+	if b != nil {
+		eu.SetEmployeePostVerified(*b)
+	}
+	return eu
+}
+
+// SetEmployeePostRemStatus sets the "EmployeePostRemStatus" field.
+func (eu *EmployeesUpdate) SetEmployeePostRemStatus(b bool) *EmployeesUpdate {
+	eu.mutation.SetEmployeePostRemStatus(b)
+	return eu
+}
+
+// SetNillableEmployeePostRemStatus sets the "EmployeePostRemStatus" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableEmployeePostRemStatus(b *bool) *EmployeesUpdate {
+	if b != nil {
+		eu.SetEmployeePostRemStatus(*b)
+	}
+	return eu
+}
+
+// SetEmployeePostRemarks sets the "EmployeePostRemarks" field.
+func (eu *EmployeesUpdate) SetEmployeePostRemarks(s string) *EmployeesUpdate {
+	eu.mutation.SetEmployeePostRemarks(s)
+	return eu
+}
+
+// SetNillableEmployeePostRemarks sets the "EmployeePostRemarks" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableEmployeePostRemarks(s *string) *EmployeesUpdate {
+	if s != nil {
+		eu.SetEmployeePostRemarks(*s)
+	}
+	return eu
+}
+
+// ClearEmployeePostRemarks clears the value of the "EmployeePostRemarks" field.
+func (eu *EmployeesUpdate) ClearEmployeePostRemarks() *EmployeesUpdate {
+	eu.mutation.ClearEmployeePostRemarks()
 	return eu
 }
 
@@ -1034,6 +1150,20 @@ func (eu *EmployeesUpdate) SetRegionName(s string) *EmployeesUpdate {
 	return eu
 }
 
+// SetNillableRegionName sets the "RegionName" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableRegionName(s *string) *EmployeesUpdate {
+	if s != nil {
+		eu.SetRegionName(*s)
+	}
+	return eu
+}
+
+// ClearRegionName clears the value of the "RegionName" field.
+func (eu *EmployeesUpdate) ClearRegionName() *EmployeesUpdate {
+	eu.mutation.ClearRegionName()
+	return eu
+}
+
 // SetRegionVerified sets the "RegionVerified" field.
 func (eu *EmployeesUpdate) SetRegionVerified(b bool) *EmployeesUpdate {
 	eu.mutation.SetRegionVerified(b)
@@ -1112,6 +1242,20 @@ func (eu *EmployeesUpdate) ClearDivisionID() *EmployeesUpdate {
 // SetDivisionName sets the "DivisionName" field.
 func (eu *EmployeesUpdate) SetDivisionName(s string) *EmployeesUpdate {
 	eu.mutation.SetDivisionName(s)
+	return eu
+}
+
+// SetNillableDivisionName sets the "DivisionName" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableDivisionName(s *string) *EmployeesUpdate {
+	if s != nil {
+		eu.SetDivisionName(*s)
+	}
+	return eu
+}
+
+// ClearDivisionName clears the value of the "DivisionName" field.
+func (eu *EmployeesUpdate) ClearDivisionName() *EmployeesUpdate {
+	eu.mutation.ClearDivisionName()
 	return eu
 }
 
@@ -1460,6 +1604,33 @@ func (eu *EmployeesUpdate) SetNillableProfilestatus(b *bool) *EmployeesUpdate {
 	return eu
 }
 
+// SetRoleUserCode sets the "RoleUserCode" field.
+func (eu *EmployeesUpdate) SetRoleUserCode(i int32) *EmployeesUpdate {
+	eu.mutation.ResetRoleUserCode()
+	eu.mutation.SetRoleUserCode(i)
+	return eu
+}
+
+// SetNillableRoleUserCode sets the "RoleUserCode" field if the given value is not nil.
+func (eu *EmployeesUpdate) SetNillableRoleUserCode(i *int32) *EmployeesUpdate {
+	if i != nil {
+		eu.SetRoleUserCode(*i)
+	}
+	return eu
+}
+
+// AddRoleUserCode adds i to the "RoleUserCode" field.
+func (eu *EmployeesUpdate) AddRoleUserCode(i int32) *EmployeesUpdate {
+	eu.mutation.AddRoleUserCode(i)
+	return eu
+}
+
+// ClearRoleUserCode clears the value of the "RoleUserCode" field.
+func (eu *EmployeesUpdate) ClearRoleUserCode() *EmployeesUpdate {
+	eu.mutation.ClearRoleUserCode()
+	return eu
+}
+
 // Mutation returns the EmployeesMutation object of the builder.
 func (eu *EmployeesUpdate) Mutation() *EmployeesMutation {
 	return eu.mutation
@@ -1593,19 +1764,43 @@ func (eu *EmployeesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(employees.FieldGenderRemarks, field.TypeString)
 	}
 	if value, ok := eu.mutation.MobileNumber(); ok {
-		_spec.SetField(employees.FieldMobileNumber, field.TypeInt32, value)
+		_spec.SetField(employees.FieldMobileNumber, field.TypeInt64, value)
 	}
 	if value, ok := eu.mutation.AddedMobileNumber(); ok {
-		_spec.AddField(employees.FieldMobileNumber, field.TypeInt32, value)
+		_spec.AddField(employees.FieldMobileNumber, field.TypeInt64, value)
 	}
 	if eu.mutation.MobileNumberCleared() {
-		_spec.ClearField(employees.FieldMobileNumber, field.TypeInt32)
+		_spec.ClearField(employees.FieldMobileNumber, field.TypeInt64)
+	}
+	if value, ok := eu.mutation.MobileNumberVerified(); ok {
+		_spec.SetField(employees.FieldMobileNumberVerified, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.MobileNumberRemStatus(); ok {
+		_spec.SetField(employees.FieldMobileNumberRemStatus, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.MobileNumberRemarks(); ok {
+		_spec.SetField(employees.FieldMobileNumberRemarks, field.TypeString, value)
+	}
+	if eu.mutation.MobileNumberRemarksCleared() {
+		_spec.ClearField(employees.FieldMobileNumberRemarks, field.TypeString)
 	}
 	if value, ok := eu.mutation.EmailID(); ok {
 		_spec.SetField(employees.FieldEmailID, field.TypeString, value)
 	}
 	if eu.mutation.EmailIDCleared() {
 		_spec.ClearField(employees.FieldEmailID, field.TypeString)
+	}
+	if value, ok := eu.mutation.EmailIDVerified(); ok {
+		_spec.SetField(employees.FieldEmailIDVerified, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.EmailIDRemStatus(); ok {
+		_spec.SetField(employees.FieldEmailIDRemStatus, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.EmailIDRemarks(); ok {
+		_spec.SetField(employees.FieldEmailIDRemarks, field.TypeString, value)
+	}
+	if eu.mutation.EmailIDRemarksCleared() {
+		_spec.ClearField(employees.FieldEmailIDRemarks, field.TypeString)
 	}
 	if value, ok := eu.mutation.Categoryid(); ok {
 		_spec.SetField(employees.FieldCategoryid, field.TypeInt32, value)
@@ -1721,29 +1916,35 @@ func (eu *EmployeesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if eu.mutation.PhotoRemarksCleared() {
 		_spec.ClearField(employees.FieldPhotoRemarks, field.TypeString)
 	}
-	if value, ok := eu.mutation.Cadreid(); ok {
-		_spec.SetField(employees.FieldCadreid, field.TypeInt32, value)
+	if value, ok := eu.mutation.PostID(); ok {
+		_spec.SetField(employees.FieldPostID, field.TypeInt32, value)
 	}
-	if value, ok := eu.mutation.AddedCadreid(); ok {
-		_spec.AddField(employees.FieldCadreid, field.TypeInt32, value)
+	if value, ok := eu.mutation.AddedPostID(); ok {
+		_spec.AddField(employees.FieldPostID, field.TypeInt32, value)
 	}
-	if eu.mutation.CadreidCleared() {
-		_spec.ClearField(employees.FieldCadreid, field.TypeInt32)
+	if eu.mutation.PostIDCleared() {
+		_spec.ClearField(employees.FieldPostID, field.TypeInt32)
 	}
-	if value, ok := eu.mutation.EmployeeCadre(); ok {
-		_spec.SetField(employees.FieldEmployeeCadre, field.TypeString, value)
+	if value, ok := eu.mutation.PostCode(); ok {
+		_spec.SetField(employees.FieldPostCode, field.TypeString, value)
 	}
-	if value, ok := eu.mutation.EmployeeCadreVerified(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreVerified, field.TypeBool, value)
+	if eu.mutation.PostCodeCleared() {
+		_spec.ClearField(employees.FieldPostCode, field.TypeString)
 	}
-	if value, ok := eu.mutation.EmployeeCadreRemStatus(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreRemStatus, field.TypeBool, value)
+	if value, ok := eu.mutation.EmployeePost(); ok {
+		_spec.SetField(employees.FieldEmployeePost, field.TypeString, value)
 	}
-	if value, ok := eu.mutation.EmployeeCadreRemarks(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreRemarks, field.TypeString, value)
+	if value, ok := eu.mutation.EmployeePostVerified(); ok {
+		_spec.SetField(employees.FieldEmployeePostVerified, field.TypeBool, value)
 	}
-	if eu.mutation.EmployeeCadreRemarksCleared() {
-		_spec.ClearField(employees.FieldEmployeeCadreRemarks, field.TypeString)
+	if value, ok := eu.mutation.EmployeePostRemStatus(); ok {
+		_spec.SetField(employees.FieldEmployeePostRemStatus, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.EmployeePostRemarks(); ok {
+		_spec.SetField(employees.FieldEmployeePostRemarks, field.TypeString, value)
+	}
+	if eu.mutation.EmployeePostRemarksCleared() {
+		_spec.ClearField(employees.FieldEmployeePostRemarks, field.TypeString)
 	}
 	if value, ok := eu.mutation.DesignationID(); ok {
 		_spec.SetField(employees.FieldDesignationID, field.TypeInt32, value)
@@ -1805,6 +2006,9 @@ func (eu *EmployeesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := eu.mutation.RegionName(); ok {
 		_spec.SetField(employees.FieldRegionName, field.TypeString, value)
 	}
+	if eu.mutation.RegionNameCleared() {
+		_spec.ClearField(employees.FieldRegionName, field.TypeString)
+	}
 	if value, ok := eu.mutation.RegionVerified(); ok {
 		_spec.SetField(employees.FieldRegionVerified, field.TypeBool, value)
 	}
@@ -1828,6 +2032,9 @@ func (eu *EmployeesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := eu.mutation.DivisionName(); ok {
 		_spec.SetField(employees.FieldDivisionName, field.TypeString, value)
+	}
+	if eu.mutation.DivisionNameCleared() {
+		_spec.ClearField(employees.FieldDivisionName, field.TypeString)
 	}
 	if value, ok := eu.mutation.DivisionVerified(); ok {
 		_spec.SetField(employees.FieldDivisionVerified, field.TypeBool, value)
@@ -1924,6 +2131,15 @@ func (eu *EmployeesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := eu.mutation.Profilestatus(); ok {
 		_spec.SetField(employees.FieldProfilestatus, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.RoleUserCode(); ok {
+		_spec.SetField(employees.FieldRoleUserCode, field.TypeInt32, value)
+	}
+	if value, ok := eu.mutation.AddedRoleUserCode(); ok {
+		_spec.AddField(employees.FieldRoleUserCode, field.TypeInt32, value)
+	}
+	if eu.mutation.RoleUserCodeCleared() {
+		_spec.ClearField(employees.FieldRoleUserCode, field.TypeInt32)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -2223,14 +2439,14 @@ func (euo *EmployeesUpdateOne) ClearGenderRemarks() *EmployeesUpdateOne {
 }
 
 // SetMobileNumber sets the "MobileNumber" field.
-func (euo *EmployeesUpdateOne) SetMobileNumber(i int32) *EmployeesUpdateOne {
+func (euo *EmployeesUpdateOne) SetMobileNumber(i int64) *EmployeesUpdateOne {
 	euo.mutation.ResetMobileNumber()
 	euo.mutation.SetMobileNumber(i)
 	return euo
 }
 
 // SetNillableMobileNumber sets the "MobileNumber" field if the given value is not nil.
-func (euo *EmployeesUpdateOne) SetNillableMobileNumber(i *int32) *EmployeesUpdateOne {
+func (euo *EmployeesUpdateOne) SetNillableMobileNumber(i *int64) *EmployeesUpdateOne {
 	if i != nil {
 		euo.SetMobileNumber(*i)
 	}
@@ -2238,7 +2454,7 @@ func (euo *EmployeesUpdateOne) SetNillableMobileNumber(i *int32) *EmployeesUpdat
 }
 
 // AddMobileNumber adds i to the "MobileNumber" field.
-func (euo *EmployeesUpdateOne) AddMobileNumber(i int32) *EmployeesUpdateOne {
+func (euo *EmployeesUpdateOne) AddMobileNumber(i int64) *EmployeesUpdateOne {
 	euo.mutation.AddMobileNumber(i)
 	return euo
 }
@@ -2246,6 +2462,54 @@ func (euo *EmployeesUpdateOne) AddMobileNumber(i int32) *EmployeesUpdateOne {
 // ClearMobileNumber clears the value of the "MobileNumber" field.
 func (euo *EmployeesUpdateOne) ClearMobileNumber() *EmployeesUpdateOne {
 	euo.mutation.ClearMobileNumber()
+	return euo
+}
+
+// SetMobileNumberVerified sets the "MobileNumberVerified" field.
+func (euo *EmployeesUpdateOne) SetMobileNumberVerified(b bool) *EmployeesUpdateOne {
+	euo.mutation.SetMobileNumberVerified(b)
+	return euo
+}
+
+// SetNillableMobileNumberVerified sets the "MobileNumberVerified" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableMobileNumberVerified(b *bool) *EmployeesUpdateOne {
+	if b != nil {
+		euo.SetMobileNumberVerified(*b)
+	}
+	return euo
+}
+
+// SetMobileNumberRemStatus sets the "MobileNumberRemStatus" field.
+func (euo *EmployeesUpdateOne) SetMobileNumberRemStatus(b bool) *EmployeesUpdateOne {
+	euo.mutation.SetMobileNumberRemStatus(b)
+	return euo
+}
+
+// SetNillableMobileNumberRemStatus sets the "MobileNumberRemStatus" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableMobileNumberRemStatus(b *bool) *EmployeesUpdateOne {
+	if b != nil {
+		euo.SetMobileNumberRemStatus(*b)
+	}
+	return euo
+}
+
+// SetMobileNumberRemarks sets the "MobileNumberRemarks" field.
+func (euo *EmployeesUpdateOne) SetMobileNumberRemarks(s string) *EmployeesUpdateOne {
+	euo.mutation.SetMobileNumberRemarks(s)
+	return euo
+}
+
+// SetNillableMobileNumberRemarks sets the "MobileNumberRemarks" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableMobileNumberRemarks(s *string) *EmployeesUpdateOne {
+	if s != nil {
+		euo.SetMobileNumberRemarks(*s)
+	}
+	return euo
+}
+
+// ClearMobileNumberRemarks clears the value of the "MobileNumberRemarks" field.
+func (euo *EmployeesUpdateOne) ClearMobileNumberRemarks() *EmployeesUpdateOne {
+	euo.mutation.ClearMobileNumberRemarks()
 	return euo
 }
 
@@ -2266,6 +2530,54 @@ func (euo *EmployeesUpdateOne) SetNillableEmailID(s *string) *EmployeesUpdateOne
 // ClearEmailID clears the value of the "EmailID" field.
 func (euo *EmployeesUpdateOne) ClearEmailID() *EmployeesUpdateOne {
 	euo.mutation.ClearEmailID()
+	return euo
+}
+
+// SetEmailIDVerified sets the "EmailIDVerified" field.
+func (euo *EmployeesUpdateOne) SetEmailIDVerified(b bool) *EmployeesUpdateOne {
+	euo.mutation.SetEmailIDVerified(b)
+	return euo
+}
+
+// SetNillableEmailIDVerified sets the "EmailIDVerified" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableEmailIDVerified(b *bool) *EmployeesUpdateOne {
+	if b != nil {
+		euo.SetEmailIDVerified(*b)
+	}
+	return euo
+}
+
+// SetEmailIDRemStatus sets the "EmailIDRemStatus" field.
+func (euo *EmployeesUpdateOne) SetEmailIDRemStatus(b bool) *EmployeesUpdateOne {
+	euo.mutation.SetEmailIDRemStatus(b)
+	return euo
+}
+
+// SetNillableEmailIDRemStatus sets the "EmailIDRemStatus" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableEmailIDRemStatus(b *bool) *EmployeesUpdateOne {
+	if b != nil {
+		euo.SetEmailIDRemStatus(*b)
+	}
+	return euo
+}
+
+// SetEmailIDRemarks sets the "EmailIDRemarks" field.
+func (euo *EmployeesUpdateOne) SetEmailIDRemarks(s string) *EmployeesUpdateOne {
+	euo.mutation.SetEmailIDRemarks(s)
+	return euo
+}
+
+// SetNillableEmailIDRemarks sets the "EmailIDRemarks" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableEmailIDRemarks(s *string) *EmployeesUpdateOne {
+	if s != nil {
+		euo.SetEmailIDRemarks(*s)
+	}
+	return euo
+}
+
+// ClearEmailIDRemarks clears the value of the "EmailIDRemarks" field.
+func (euo *EmployeesUpdateOne) ClearEmailIDRemarks() *EmployeesUpdateOne {
+	euo.mutation.ClearEmailIDRemarks()
 	return euo
 }
 
@@ -2675,84 +2987,104 @@ func (euo *EmployeesUpdateOne) ClearPhotoRemarks() *EmployeesUpdateOne {
 	return euo
 }
 
-// SetCadreid sets the "Cadreid" field.
-func (euo *EmployeesUpdateOne) SetCadreid(i int32) *EmployeesUpdateOne {
-	euo.mutation.ResetCadreid()
-	euo.mutation.SetCadreid(i)
+// SetPostID sets the "PostID" field.
+func (euo *EmployeesUpdateOne) SetPostID(i int32) *EmployeesUpdateOne {
+	euo.mutation.ResetPostID()
+	euo.mutation.SetPostID(i)
 	return euo
 }
 
-// SetNillableCadreid sets the "Cadreid" field if the given value is not nil.
-func (euo *EmployeesUpdateOne) SetNillableCadreid(i *int32) *EmployeesUpdateOne {
+// SetNillablePostID sets the "PostID" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillablePostID(i *int32) *EmployeesUpdateOne {
 	if i != nil {
-		euo.SetCadreid(*i)
+		euo.SetPostID(*i)
 	}
 	return euo
 }
 
-// AddCadreid adds i to the "Cadreid" field.
-func (euo *EmployeesUpdateOne) AddCadreid(i int32) *EmployeesUpdateOne {
-	euo.mutation.AddCadreid(i)
+// AddPostID adds i to the "PostID" field.
+func (euo *EmployeesUpdateOne) AddPostID(i int32) *EmployeesUpdateOne {
+	euo.mutation.AddPostID(i)
 	return euo
 }
 
-// ClearCadreid clears the value of the "Cadreid" field.
-func (euo *EmployeesUpdateOne) ClearCadreid() *EmployeesUpdateOne {
-	euo.mutation.ClearCadreid()
+// ClearPostID clears the value of the "PostID" field.
+func (euo *EmployeesUpdateOne) ClearPostID() *EmployeesUpdateOne {
+	euo.mutation.ClearPostID()
 	return euo
 }
 
-// SetEmployeeCadre sets the "EmployeeCadre" field.
-func (euo *EmployeesUpdateOne) SetEmployeeCadre(s string) *EmployeesUpdateOne {
-	euo.mutation.SetEmployeeCadre(s)
+// SetPostCode sets the "PostCode" field.
+func (euo *EmployeesUpdateOne) SetPostCode(s string) *EmployeesUpdateOne {
+	euo.mutation.SetPostCode(s)
 	return euo
 }
 
-// SetEmployeeCadreVerified sets the "EmployeeCadreVerified" field.
-func (euo *EmployeesUpdateOne) SetEmployeeCadreVerified(b bool) *EmployeesUpdateOne {
-	euo.mutation.SetEmployeeCadreVerified(b)
-	return euo
-}
-
-// SetNillableEmployeeCadreVerified sets the "EmployeeCadreVerified" field if the given value is not nil.
-func (euo *EmployeesUpdateOne) SetNillableEmployeeCadreVerified(b *bool) *EmployeesUpdateOne {
-	if b != nil {
-		euo.SetEmployeeCadreVerified(*b)
-	}
-	return euo
-}
-
-// SetEmployeeCadreRemStatus sets the "EmployeeCadreRemStatus" field.
-func (euo *EmployeesUpdateOne) SetEmployeeCadreRemStatus(b bool) *EmployeesUpdateOne {
-	euo.mutation.SetEmployeeCadreRemStatus(b)
-	return euo
-}
-
-// SetNillableEmployeeCadreRemStatus sets the "EmployeeCadreRemStatus" field if the given value is not nil.
-func (euo *EmployeesUpdateOne) SetNillableEmployeeCadreRemStatus(b *bool) *EmployeesUpdateOne {
-	if b != nil {
-		euo.SetEmployeeCadreRemStatus(*b)
-	}
-	return euo
-}
-
-// SetEmployeeCadreRemarks sets the "EmployeeCadreRemarks" field.
-func (euo *EmployeesUpdateOne) SetEmployeeCadreRemarks(s string) *EmployeesUpdateOne {
-	euo.mutation.SetEmployeeCadreRemarks(s)
-	return euo
-}
-
-// SetNillableEmployeeCadreRemarks sets the "EmployeeCadreRemarks" field if the given value is not nil.
-func (euo *EmployeesUpdateOne) SetNillableEmployeeCadreRemarks(s *string) *EmployeesUpdateOne {
+// SetNillablePostCode sets the "PostCode" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillablePostCode(s *string) *EmployeesUpdateOne {
 	if s != nil {
-		euo.SetEmployeeCadreRemarks(*s)
+		euo.SetPostCode(*s)
 	}
 	return euo
 }
 
-// ClearEmployeeCadreRemarks clears the value of the "EmployeeCadreRemarks" field.
-func (euo *EmployeesUpdateOne) ClearEmployeeCadreRemarks() *EmployeesUpdateOne {
-	euo.mutation.ClearEmployeeCadreRemarks()
+// ClearPostCode clears the value of the "PostCode" field.
+func (euo *EmployeesUpdateOne) ClearPostCode() *EmployeesUpdateOne {
+	euo.mutation.ClearPostCode()
+	return euo
+}
+
+// SetEmployeePost sets the "EmployeePost" field.
+func (euo *EmployeesUpdateOne) SetEmployeePost(s string) *EmployeesUpdateOne {
+	euo.mutation.SetEmployeePost(s)
+	return euo
+}
+
+// SetEmployeePostVerified sets the "EmployeePostVerified" field.
+func (euo *EmployeesUpdateOne) SetEmployeePostVerified(b bool) *EmployeesUpdateOne {
+	euo.mutation.SetEmployeePostVerified(b)
+	return euo
+}
+
+// SetNillableEmployeePostVerified sets the "EmployeePostVerified" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableEmployeePostVerified(b *bool) *EmployeesUpdateOne {
+	if b != nil {
+		euo.SetEmployeePostVerified(*b)
+	}
+	return euo
+}
+
+// SetEmployeePostRemStatus sets the "EmployeePostRemStatus" field.
+func (euo *EmployeesUpdateOne) SetEmployeePostRemStatus(b bool) *EmployeesUpdateOne {
+	euo.mutation.SetEmployeePostRemStatus(b)
+	return euo
+}
+
+// SetNillableEmployeePostRemStatus sets the "EmployeePostRemStatus" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableEmployeePostRemStatus(b *bool) *EmployeesUpdateOne {
+	if b != nil {
+		euo.SetEmployeePostRemStatus(*b)
+	}
+	return euo
+}
+
+// SetEmployeePostRemarks sets the "EmployeePostRemarks" field.
+func (euo *EmployeesUpdateOne) SetEmployeePostRemarks(s string) *EmployeesUpdateOne {
+	euo.mutation.SetEmployeePostRemarks(s)
+	return euo
+}
+
+// SetNillableEmployeePostRemarks sets the "EmployeePostRemarks" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableEmployeePostRemarks(s *string) *EmployeesUpdateOne {
+	if s != nil {
+		euo.SetEmployeePostRemarks(*s)
+	}
+	return euo
+}
+
+// ClearEmployeePostRemarks clears the value of the "EmployeePostRemarks" field.
+func (euo *EmployeesUpdateOne) ClearEmployeePostRemarks() *EmployeesUpdateOne {
+	euo.mutation.ClearEmployeePostRemarks()
 	return euo
 }
 
@@ -2951,6 +3283,20 @@ func (euo *EmployeesUpdateOne) SetRegionName(s string) *EmployeesUpdateOne {
 	return euo
 }
 
+// SetNillableRegionName sets the "RegionName" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableRegionName(s *string) *EmployeesUpdateOne {
+	if s != nil {
+		euo.SetRegionName(*s)
+	}
+	return euo
+}
+
+// ClearRegionName clears the value of the "RegionName" field.
+func (euo *EmployeesUpdateOne) ClearRegionName() *EmployeesUpdateOne {
+	euo.mutation.ClearRegionName()
+	return euo
+}
+
 // SetRegionVerified sets the "RegionVerified" field.
 func (euo *EmployeesUpdateOne) SetRegionVerified(b bool) *EmployeesUpdateOne {
 	euo.mutation.SetRegionVerified(b)
@@ -3029,6 +3375,20 @@ func (euo *EmployeesUpdateOne) ClearDivisionID() *EmployeesUpdateOne {
 // SetDivisionName sets the "DivisionName" field.
 func (euo *EmployeesUpdateOne) SetDivisionName(s string) *EmployeesUpdateOne {
 	euo.mutation.SetDivisionName(s)
+	return euo
+}
+
+// SetNillableDivisionName sets the "DivisionName" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableDivisionName(s *string) *EmployeesUpdateOne {
+	if s != nil {
+		euo.SetDivisionName(*s)
+	}
+	return euo
+}
+
+// ClearDivisionName clears the value of the "DivisionName" field.
+func (euo *EmployeesUpdateOne) ClearDivisionName() *EmployeesUpdateOne {
+	euo.mutation.ClearDivisionName()
 	return euo
 }
 
@@ -3377,6 +3737,33 @@ func (euo *EmployeesUpdateOne) SetNillableProfilestatus(b *bool) *EmployeesUpdat
 	return euo
 }
 
+// SetRoleUserCode sets the "RoleUserCode" field.
+func (euo *EmployeesUpdateOne) SetRoleUserCode(i int32) *EmployeesUpdateOne {
+	euo.mutation.ResetRoleUserCode()
+	euo.mutation.SetRoleUserCode(i)
+	return euo
+}
+
+// SetNillableRoleUserCode sets the "RoleUserCode" field if the given value is not nil.
+func (euo *EmployeesUpdateOne) SetNillableRoleUserCode(i *int32) *EmployeesUpdateOne {
+	if i != nil {
+		euo.SetRoleUserCode(*i)
+	}
+	return euo
+}
+
+// AddRoleUserCode adds i to the "RoleUserCode" field.
+func (euo *EmployeesUpdateOne) AddRoleUserCode(i int32) *EmployeesUpdateOne {
+	euo.mutation.AddRoleUserCode(i)
+	return euo
+}
+
+// ClearRoleUserCode clears the value of the "RoleUserCode" field.
+func (euo *EmployeesUpdateOne) ClearRoleUserCode() *EmployeesUpdateOne {
+	euo.mutation.ClearRoleUserCode()
+	return euo
+}
+
 // Mutation returns the EmployeesMutation object of the builder.
 func (euo *EmployeesUpdateOne) Mutation() *EmployeesMutation {
 	return euo.mutation
@@ -3540,19 +3927,43 @@ func (euo *EmployeesUpdateOne) sqlSave(ctx context.Context) (_node *Employees, e
 		_spec.ClearField(employees.FieldGenderRemarks, field.TypeString)
 	}
 	if value, ok := euo.mutation.MobileNumber(); ok {
-		_spec.SetField(employees.FieldMobileNumber, field.TypeInt32, value)
+		_spec.SetField(employees.FieldMobileNumber, field.TypeInt64, value)
 	}
 	if value, ok := euo.mutation.AddedMobileNumber(); ok {
-		_spec.AddField(employees.FieldMobileNumber, field.TypeInt32, value)
+		_spec.AddField(employees.FieldMobileNumber, field.TypeInt64, value)
 	}
 	if euo.mutation.MobileNumberCleared() {
-		_spec.ClearField(employees.FieldMobileNumber, field.TypeInt32)
+		_spec.ClearField(employees.FieldMobileNumber, field.TypeInt64)
+	}
+	if value, ok := euo.mutation.MobileNumberVerified(); ok {
+		_spec.SetField(employees.FieldMobileNumberVerified, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.MobileNumberRemStatus(); ok {
+		_spec.SetField(employees.FieldMobileNumberRemStatus, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.MobileNumberRemarks(); ok {
+		_spec.SetField(employees.FieldMobileNumberRemarks, field.TypeString, value)
+	}
+	if euo.mutation.MobileNumberRemarksCleared() {
+		_spec.ClearField(employees.FieldMobileNumberRemarks, field.TypeString)
 	}
 	if value, ok := euo.mutation.EmailID(); ok {
 		_spec.SetField(employees.FieldEmailID, field.TypeString, value)
 	}
 	if euo.mutation.EmailIDCleared() {
 		_spec.ClearField(employees.FieldEmailID, field.TypeString)
+	}
+	if value, ok := euo.mutation.EmailIDVerified(); ok {
+		_spec.SetField(employees.FieldEmailIDVerified, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.EmailIDRemStatus(); ok {
+		_spec.SetField(employees.FieldEmailIDRemStatus, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.EmailIDRemarks(); ok {
+		_spec.SetField(employees.FieldEmailIDRemarks, field.TypeString, value)
+	}
+	if euo.mutation.EmailIDRemarksCleared() {
+		_spec.ClearField(employees.FieldEmailIDRemarks, field.TypeString)
 	}
 	if value, ok := euo.mutation.Categoryid(); ok {
 		_spec.SetField(employees.FieldCategoryid, field.TypeInt32, value)
@@ -3668,29 +4079,35 @@ func (euo *EmployeesUpdateOne) sqlSave(ctx context.Context) (_node *Employees, e
 	if euo.mutation.PhotoRemarksCleared() {
 		_spec.ClearField(employees.FieldPhotoRemarks, field.TypeString)
 	}
-	if value, ok := euo.mutation.Cadreid(); ok {
-		_spec.SetField(employees.FieldCadreid, field.TypeInt32, value)
+	if value, ok := euo.mutation.PostID(); ok {
+		_spec.SetField(employees.FieldPostID, field.TypeInt32, value)
 	}
-	if value, ok := euo.mutation.AddedCadreid(); ok {
-		_spec.AddField(employees.FieldCadreid, field.TypeInt32, value)
+	if value, ok := euo.mutation.AddedPostID(); ok {
+		_spec.AddField(employees.FieldPostID, field.TypeInt32, value)
 	}
-	if euo.mutation.CadreidCleared() {
-		_spec.ClearField(employees.FieldCadreid, field.TypeInt32)
+	if euo.mutation.PostIDCleared() {
+		_spec.ClearField(employees.FieldPostID, field.TypeInt32)
 	}
-	if value, ok := euo.mutation.EmployeeCadre(); ok {
-		_spec.SetField(employees.FieldEmployeeCadre, field.TypeString, value)
+	if value, ok := euo.mutation.PostCode(); ok {
+		_spec.SetField(employees.FieldPostCode, field.TypeString, value)
 	}
-	if value, ok := euo.mutation.EmployeeCadreVerified(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreVerified, field.TypeBool, value)
+	if euo.mutation.PostCodeCleared() {
+		_spec.ClearField(employees.FieldPostCode, field.TypeString)
 	}
-	if value, ok := euo.mutation.EmployeeCadreRemStatus(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreRemStatus, field.TypeBool, value)
+	if value, ok := euo.mutation.EmployeePost(); ok {
+		_spec.SetField(employees.FieldEmployeePost, field.TypeString, value)
 	}
-	if value, ok := euo.mutation.EmployeeCadreRemarks(); ok {
-		_spec.SetField(employees.FieldEmployeeCadreRemarks, field.TypeString, value)
+	if value, ok := euo.mutation.EmployeePostVerified(); ok {
+		_spec.SetField(employees.FieldEmployeePostVerified, field.TypeBool, value)
 	}
-	if euo.mutation.EmployeeCadreRemarksCleared() {
-		_spec.ClearField(employees.FieldEmployeeCadreRemarks, field.TypeString)
+	if value, ok := euo.mutation.EmployeePostRemStatus(); ok {
+		_spec.SetField(employees.FieldEmployeePostRemStatus, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.EmployeePostRemarks(); ok {
+		_spec.SetField(employees.FieldEmployeePostRemarks, field.TypeString, value)
+	}
+	if euo.mutation.EmployeePostRemarksCleared() {
+		_spec.ClearField(employees.FieldEmployeePostRemarks, field.TypeString)
 	}
 	if value, ok := euo.mutation.DesignationID(); ok {
 		_spec.SetField(employees.FieldDesignationID, field.TypeInt32, value)
@@ -3752,6 +4169,9 @@ func (euo *EmployeesUpdateOne) sqlSave(ctx context.Context) (_node *Employees, e
 	if value, ok := euo.mutation.RegionName(); ok {
 		_spec.SetField(employees.FieldRegionName, field.TypeString, value)
 	}
+	if euo.mutation.RegionNameCleared() {
+		_spec.ClearField(employees.FieldRegionName, field.TypeString)
+	}
 	if value, ok := euo.mutation.RegionVerified(); ok {
 		_spec.SetField(employees.FieldRegionVerified, field.TypeBool, value)
 	}
@@ -3775,6 +4195,9 @@ func (euo *EmployeesUpdateOne) sqlSave(ctx context.Context) (_node *Employees, e
 	}
 	if value, ok := euo.mutation.DivisionName(); ok {
 		_spec.SetField(employees.FieldDivisionName, field.TypeString, value)
+	}
+	if euo.mutation.DivisionNameCleared() {
+		_spec.ClearField(employees.FieldDivisionName, field.TypeString)
 	}
 	if value, ok := euo.mutation.DivisionVerified(); ok {
 		_spec.SetField(employees.FieldDivisionVerified, field.TypeBool, value)
@@ -3871,6 +4294,15 @@ func (euo *EmployeesUpdateOne) sqlSave(ctx context.Context) (_node *Employees, e
 	}
 	if value, ok := euo.mutation.Profilestatus(); ok {
 		_spec.SetField(employees.FieldProfilestatus, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.RoleUserCode(); ok {
+		_spec.SetField(employees.FieldRoleUserCode, field.TypeInt32, value)
+	}
+	if value, ok := euo.mutation.AddedRoleUserCode(); ok {
+		_spec.AddField(employees.FieldRoleUserCode, field.TypeInt32, value)
+	}
+	if euo.mutation.RoleUserCodeCleared() {
+		_spec.ClearField(employees.FieldRoleUserCode, field.TypeInt32)
 	}
 	_node = &Employees{config: euo.config}
 	_spec.Assign = _node.assignValues

@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/exam"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
+	"recruit/ent/examtype"
 	"recruit/ent/nodalofficer"
 	"recruit/ent/notification"
 	"recruit/ent/predicate"
@@ -63,23 +65,16 @@ func (eu *ExamUpdate) SetConductedBy(s string) *ExamUpdate {
 }
 
 // SetNodalOfficerLevel sets the "NodalOfficerLevel" field.
-func (eu *ExamUpdate) SetNodalOfficerLevel(i int32) *ExamUpdate {
-	eu.mutation.ResetNodalOfficerLevel()
-	eu.mutation.SetNodalOfficerLevel(i)
+func (eu *ExamUpdate) SetNodalOfficerLevel(s string) *ExamUpdate {
+	eu.mutation.SetNodalOfficerLevel(s)
 	return eu
 }
 
 // SetNillableNodalOfficerLevel sets the "NodalOfficerLevel" field if the given value is not nil.
-func (eu *ExamUpdate) SetNillableNodalOfficerLevel(i *int32) *ExamUpdate {
-	if i != nil {
-		eu.SetNodalOfficerLevel(*i)
+func (eu *ExamUpdate) SetNillableNodalOfficerLevel(s *string) *ExamUpdate {
+	if s != nil {
+		eu.SetNodalOfficerLevel(*s)
 	}
-	return eu
-}
-
-// AddNodalOfficerLevel adds i to the "NodalOfficerLevel" field.
-func (eu *ExamUpdate) AddNodalOfficerLevel(i int32) *ExamUpdate {
-	eu.mutation.AddNodalOfficerLevel(i)
 	return eu
 }
 
@@ -143,6 +138,121 @@ func (eu *ExamUpdate) ClearPaperCode() *ExamUpdate {
 	return eu
 }
 
+// SetExamType sets the "ExamType" field.
+func (eu *ExamUpdate) SetExamType(s string) *ExamUpdate {
+	eu.mutation.SetExamType(s)
+	return eu
+}
+
+// SetTentativeNotificationMandatoryDate sets the "TentativeNotificationMandatoryDate" field.
+func (eu *ExamUpdate) SetTentativeNotificationMandatoryDate(b bool) *ExamUpdate {
+	eu.mutation.SetTentativeNotificationMandatoryDate(b)
+	return eu
+}
+
+// SetNillableTentativeNotificationMandatoryDate sets the "TentativeNotificationMandatoryDate" field if the given value is not nil.
+func (eu *ExamUpdate) SetNillableTentativeNotificationMandatoryDate(b *bool) *ExamUpdate {
+	if b != nil {
+		eu.SetTentativeNotificationMandatoryDate(*b)
+	}
+	return eu
+}
+
+// SetLocalLanguage sets the "LocalLanguage" field.
+func (eu *ExamUpdate) SetLocalLanguage(b bool) *ExamUpdate {
+	eu.mutation.SetLocalLanguage(b)
+	return eu
+}
+
+// SetNillableLocalLanguage sets the "LocalLanguage" field if the given value is not nil.
+func (eu *ExamUpdate) SetNillableLocalLanguage(b *bool) *ExamUpdate {
+	if b != nil {
+		eu.SetLocalLanguage(*b)
+	}
+	return eu
+}
+
+// SetOptionForPost sets the "OptionForPost" field.
+func (eu *ExamUpdate) SetOptionForPost(b bool) *ExamUpdate {
+	eu.mutation.SetOptionForPost(b)
+	return eu
+}
+
+// SetNillableOptionForPost sets the "OptionForPost" field if the given value is not nil.
+func (eu *ExamUpdate) SetNillableOptionForPost(b *bool) *ExamUpdate {
+	if b != nil {
+		eu.SetOptionForPost(*b)
+	}
+	return eu
+}
+
+// SetOptionToWriteExamOtherThanParent sets the "OptionToWriteExamOtherThanParent" field.
+func (eu *ExamUpdate) SetOptionToWriteExamOtherThanParent(b bool) *ExamUpdate {
+	eu.mutation.SetOptionToWriteExamOtherThanParent(b)
+	return eu
+}
+
+// SetNillableOptionToWriteExamOtherThanParent sets the "OptionToWriteExamOtherThanParent" field if the given value is not nil.
+func (eu *ExamUpdate) SetNillableOptionToWriteExamOtherThanParent(b *bool) *ExamUpdate {
+	if b != nil {
+		eu.SetOptionToWriteExamOtherThanParent(*b)
+	}
+	return eu
+}
+
+// SetOrderNumber sets the "OrderNumber" field.
+func (eu *ExamUpdate) SetOrderNumber(s string) *ExamUpdate {
+	eu.mutation.SetOrderNumber(s)
+	return eu
+}
+
+// SetNillableOrderNumber sets the "OrderNumber" field if the given value is not nil.
+func (eu *ExamUpdate) SetNillableOrderNumber(s *string) *ExamUpdate {
+	if s != nil {
+		eu.SetOrderNumber(*s)
+	}
+	return eu
+}
+
+// ClearOrderNumber clears the value of the "OrderNumber" field.
+func (eu *ExamUpdate) ClearOrderNumber() *ExamUpdate {
+	eu.mutation.ClearOrderNumber()
+	return eu
+}
+
+// SetStatus sets the "Status" field.
+func (eu *ExamUpdate) SetStatus(s string) *ExamUpdate {
+	eu.mutation.SetStatus(s)
+	return eu
+}
+
+// SetExamTypeCode sets the "ExamTypeCode" field.
+func (eu *ExamUpdate) SetExamTypeCode(i int32) *ExamUpdate {
+	eu.mutation.ResetExamTypeCode()
+	eu.mutation.SetExamTypeCode(i)
+	return eu
+}
+
+// SetNillableExamTypeCode sets the "ExamTypeCode" field if the given value is not nil.
+func (eu *ExamUpdate) SetNillableExamTypeCode(i *int32) *ExamUpdate {
+	if i != nil {
+		eu.SetExamTypeCode(*i)
+	}
+	return eu
+}
+
+// AddExamTypeCode adds i to the "ExamTypeCode" field.
+func (eu *ExamUpdate) AddExamTypeCode(i int32) *ExamUpdate {
+	eu.mutation.AddExamTypeCode(i)
+	return eu
+}
+
+// ClearExamTypeCode clears the value of the "ExamTypeCode" field.
+func (eu *ExamUpdate) ClearExamTypeCode() *ExamUpdate {
+	eu.mutation.ClearExamTypeCode()
+	return eu
+}
+
 // AddNodalOfficerIDs adds the "nodal_officers" edge to the NodalOfficer entity by IDs.
 func (eu *ExamUpdate) AddNodalOfficerIDs(ids ...int32) *ExamUpdate {
 	eu.mutation.AddNodalOfficerIDs(ids...)
@@ -201,6 +311,36 @@ func (eu *ExamUpdate) AddPapers(e ...*ExamPapers) *ExamUpdate {
 		ids[i] = e[i].ID
 	}
 	return eu.AddPaperIDs(ids...)
+}
+
+// AddExamEligibilityIDs adds the "ExamEligibility" edge to the EligibilityMaster entity by IDs.
+func (eu *ExamUpdate) AddExamEligibilityIDs(ids ...int32) *ExamUpdate {
+	eu.mutation.AddExamEligibilityIDs(ids...)
+	return eu
+}
+
+// AddExamEligibility adds the "ExamEligibility" edges to the EligibilityMaster entity.
+func (eu *ExamUpdate) AddExamEligibility(e ...*EligibilityMaster) *ExamUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return eu.AddExamEligibilityIDs(ids...)
+}
+
+// AddExamsTypeIDs adds the "exams_type" edge to the ExamType entity by IDs.
+func (eu *ExamUpdate) AddExamsTypeIDs(ids ...int32) *ExamUpdate {
+	eu.mutation.AddExamsTypeIDs(ids...)
+	return eu
+}
+
+// AddExamsType adds the "exams_type" edges to the ExamType entity.
+func (eu *ExamUpdate) AddExamsType(e ...*ExamType) *ExamUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return eu.AddExamsTypeIDs(ids...)
 }
 
 // Mutation returns the ExamMutation object of the builder.
@@ -292,6 +432,48 @@ func (eu *ExamUpdate) RemovePapers(e ...*ExamPapers) *ExamUpdate {
 	return eu.RemovePaperIDs(ids...)
 }
 
+// ClearExamEligibility clears all "ExamEligibility" edges to the EligibilityMaster entity.
+func (eu *ExamUpdate) ClearExamEligibility() *ExamUpdate {
+	eu.mutation.ClearExamEligibility()
+	return eu
+}
+
+// RemoveExamEligibilityIDs removes the "ExamEligibility" edge to EligibilityMaster entities by IDs.
+func (eu *ExamUpdate) RemoveExamEligibilityIDs(ids ...int32) *ExamUpdate {
+	eu.mutation.RemoveExamEligibilityIDs(ids...)
+	return eu
+}
+
+// RemoveExamEligibility removes "ExamEligibility" edges to EligibilityMaster entities.
+func (eu *ExamUpdate) RemoveExamEligibility(e ...*EligibilityMaster) *ExamUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return eu.RemoveExamEligibilityIDs(ids...)
+}
+
+// ClearExamsType clears all "exams_type" edges to the ExamType entity.
+func (eu *ExamUpdate) ClearExamsType() *ExamUpdate {
+	eu.mutation.ClearExamsType()
+	return eu
+}
+
+// RemoveExamsTypeIDs removes the "exams_type" edge to ExamType entities by IDs.
+func (eu *ExamUpdate) RemoveExamsTypeIDs(ids ...int32) *ExamUpdate {
+	eu.mutation.RemoveExamsTypeIDs(ids...)
+	return eu
+}
+
+// RemoveExamsType removes "exams_type" edges to ExamType entities.
+func (eu *ExamUpdate) RemoveExamsType(e ...*ExamType) *ExamUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return eu.RemoveExamsTypeIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (eu *ExamUpdate) Save(ctx context.Context) (int, error) {
 	return withHooks(ctx, eu.sqlSave, eu.mutation, eu.hooks)
@@ -344,13 +526,10 @@ func (eu *ExamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(exam.FieldConductedBy, field.TypeString, value)
 	}
 	if value, ok := eu.mutation.NodalOfficerLevel(); ok {
-		_spec.SetField(exam.FieldNodalOfficerLevel, field.TypeInt32, value)
-	}
-	if value, ok := eu.mutation.AddedNodalOfficerLevel(); ok {
-		_spec.AddField(exam.FieldNodalOfficerLevel, field.TypeInt32, value)
+		_spec.SetField(exam.FieldNodalOfficerLevel, field.TypeString, value)
 	}
 	if eu.mutation.NodalOfficerLevelCleared() {
-		_spec.ClearField(exam.FieldNodalOfficerLevel, field.TypeInt32)
+		_spec.ClearField(exam.FieldNodalOfficerLevel, field.TypeString)
 	}
 	if value, ok := eu.mutation.CalendarCode(); ok {
 		_spec.SetField(exam.FieldCalendarCode, field.TypeInt32, value)
@@ -369,6 +548,39 @@ func (eu *ExamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if eu.mutation.PaperCodeCleared() {
 		_spec.ClearField(exam.FieldPaperCode, field.TypeInt32)
+	}
+	if value, ok := eu.mutation.ExamType(); ok {
+		_spec.SetField(exam.FieldExamType, field.TypeString, value)
+	}
+	if value, ok := eu.mutation.TentativeNotificationMandatoryDate(); ok {
+		_spec.SetField(exam.FieldTentativeNotificationMandatoryDate, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.LocalLanguage(); ok {
+		_spec.SetField(exam.FieldLocalLanguage, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.OptionForPost(); ok {
+		_spec.SetField(exam.FieldOptionForPost, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.OptionToWriteExamOtherThanParent(); ok {
+		_spec.SetField(exam.FieldOptionToWriteExamOtherThanParent, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.OrderNumber(); ok {
+		_spec.SetField(exam.FieldOrderNumber, field.TypeString, value)
+	}
+	if eu.mutation.OrderNumberCleared() {
+		_spec.ClearField(exam.FieldOrderNumber, field.TypeString)
+	}
+	if value, ok := eu.mutation.Status(); ok {
+		_spec.SetField(exam.FieldStatus, field.TypeString, value)
+	}
+	if value, ok := eu.mutation.ExamTypeCode(); ok {
+		_spec.SetField(exam.FieldExamTypeCode, field.TypeInt32, value)
+	}
+	if value, ok := eu.mutation.AddedExamTypeCode(); ok {
+		_spec.AddField(exam.FieldExamTypeCode, field.TypeInt32, value)
+	}
+	if eu.mutation.ExamTypeCodeCleared() {
+		_spec.ClearField(exam.FieldExamTypeCode, field.TypeInt32)
 	}
 	if eu.mutation.NodalOfficersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -550,6 +762,96 @@ func (eu *ExamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if eu.mutation.ExamEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamEligibilityTable,
+			Columns: []string{exam.ExamEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.RemovedExamEligibilityIDs(); len(nodes) > 0 && !eu.mutation.ExamEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamEligibilityTable,
+			Columns: []string{exam.ExamEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.ExamEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamEligibilityTable,
+			Columns: []string{exam.ExamEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eu.mutation.ExamsTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamsTypeTable,
+			Columns: []string{exam.ExamsTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(examtype.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.RemovedExamsTypeIDs(); len(nodes) > 0 && !eu.mutation.ExamsTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamsTypeTable,
+			Columns: []string{exam.ExamsTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(examtype.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.ExamsTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamsTypeTable,
+			Columns: []string{exam.ExamsTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(examtype.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{exam.Label}
@@ -602,23 +904,16 @@ func (euo *ExamUpdateOne) SetConductedBy(s string) *ExamUpdateOne {
 }
 
 // SetNodalOfficerLevel sets the "NodalOfficerLevel" field.
-func (euo *ExamUpdateOne) SetNodalOfficerLevel(i int32) *ExamUpdateOne {
-	euo.mutation.ResetNodalOfficerLevel()
-	euo.mutation.SetNodalOfficerLevel(i)
+func (euo *ExamUpdateOne) SetNodalOfficerLevel(s string) *ExamUpdateOne {
+	euo.mutation.SetNodalOfficerLevel(s)
 	return euo
 }
 
 // SetNillableNodalOfficerLevel sets the "NodalOfficerLevel" field if the given value is not nil.
-func (euo *ExamUpdateOne) SetNillableNodalOfficerLevel(i *int32) *ExamUpdateOne {
-	if i != nil {
-		euo.SetNodalOfficerLevel(*i)
+func (euo *ExamUpdateOne) SetNillableNodalOfficerLevel(s *string) *ExamUpdateOne {
+	if s != nil {
+		euo.SetNodalOfficerLevel(*s)
 	}
-	return euo
-}
-
-// AddNodalOfficerLevel adds i to the "NodalOfficerLevel" field.
-func (euo *ExamUpdateOne) AddNodalOfficerLevel(i int32) *ExamUpdateOne {
-	euo.mutation.AddNodalOfficerLevel(i)
 	return euo
 }
 
@@ -682,6 +977,121 @@ func (euo *ExamUpdateOne) ClearPaperCode() *ExamUpdateOne {
 	return euo
 }
 
+// SetExamType sets the "ExamType" field.
+func (euo *ExamUpdateOne) SetExamType(s string) *ExamUpdateOne {
+	euo.mutation.SetExamType(s)
+	return euo
+}
+
+// SetTentativeNotificationMandatoryDate sets the "TentativeNotificationMandatoryDate" field.
+func (euo *ExamUpdateOne) SetTentativeNotificationMandatoryDate(b bool) *ExamUpdateOne {
+	euo.mutation.SetTentativeNotificationMandatoryDate(b)
+	return euo
+}
+
+// SetNillableTentativeNotificationMandatoryDate sets the "TentativeNotificationMandatoryDate" field if the given value is not nil.
+func (euo *ExamUpdateOne) SetNillableTentativeNotificationMandatoryDate(b *bool) *ExamUpdateOne {
+	if b != nil {
+		euo.SetTentativeNotificationMandatoryDate(*b)
+	}
+	return euo
+}
+
+// SetLocalLanguage sets the "LocalLanguage" field.
+func (euo *ExamUpdateOne) SetLocalLanguage(b bool) *ExamUpdateOne {
+	euo.mutation.SetLocalLanguage(b)
+	return euo
+}
+
+// SetNillableLocalLanguage sets the "LocalLanguage" field if the given value is not nil.
+func (euo *ExamUpdateOne) SetNillableLocalLanguage(b *bool) *ExamUpdateOne {
+	if b != nil {
+		euo.SetLocalLanguage(*b)
+	}
+	return euo
+}
+
+// SetOptionForPost sets the "OptionForPost" field.
+func (euo *ExamUpdateOne) SetOptionForPost(b bool) *ExamUpdateOne {
+	euo.mutation.SetOptionForPost(b)
+	return euo
+}
+
+// SetNillableOptionForPost sets the "OptionForPost" field if the given value is not nil.
+func (euo *ExamUpdateOne) SetNillableOptionForPost(b *bool) *ExamUpdateOne {
+	if b != nil {
+		euo.SetOptionForPost(*b)
+	}
+	return euo
+}
+
+// SetOptionToWriteExamOtherThanParent sets the "OptionToWriteExamOtherThanParent" field.
+func (euo *ExamUpdateOne) SetOptionToWriteExamOtherThanParent(b bool) *ExamUpdateOne {
+	euo.mutation.SetOptionToWriteExamOtherThanParent(b)
+	return euo
+}
+
+// SetNillableOptionToWriteExamOtherThanParent sets the "OptionToWriteExamOtherThanParent" field if the given value is not nil.
+func (euo *ExamUpdateOne) SetNillableOptionToWriteExamOtherThanParent(b *bool) *ExamUpdateOne {
+	if b != nil {
+		euo.SetOptionToWriteExamOtherThanParent(*b)
+	}
+	return euo
+}
+
+// SetOrderNumber sets the "OrderNumber" field.
+func (euo *ExamUpdateOne) SetOrderNumber(s string) *ExamUpdateOne {
+	euo.mutation.SetOrderNumber(s)
+	return euo
+}
+
+// SetNillableOrderNumber sets the "OrderNumber" field if the given value is not nil.
+func (euo *ExamUpdateOne) SetNillableOrderNumber(s *string) *ExamUpdateOne {
+	if s != nil {
+		euo.SetOrderNumber(*s)
+	}
+	return euo
+}
+
+// ClearOrderNumber clears the value of the "OrderNumber" field.
+func (euo *ExamUpdateOne) ClearOrderNumber() *ExamUpdateOne {
+	euo.mutation.ClearOrderNumber()
+	return euo
+}
+
+// SetStatus sets the "Status" field.
+func (euo *ExamUpdateOne) SetStatus(s string) *ExamUpdateOne {
+	euo.mutation.SetStatus(s)
+	return euo
+}
+
+// SetExamTypeCode sets the "ExamTypeCode" field.
+func (euo *ExamUpdateOne) SetExamTypeCode(i int32) *ExamUpdateOne {
+	euo.mutation.ResetExamTypeCode()
+	euo.mutation.SetExamTypeCode(i)
+	return euo
+}
+
+// SetNillableExamTypeCode sets the "ExamTypeCode" field if the given value is not nil.
+func (euo *ExamUpdateOne) SetNillableExamTypeCode(i *int32) *ExamUpdateOne {
+	if i != nil {
+		euo.SetExamTypeCode(*i)
+	}
+	return euo
+}
+
+// AddExamTypeCode adds i to the "ExamTypeCode" field.
+func (euo *ExamUpdateOne) AddExamTypeCode(i int32) *ExamUpdateOne {
+	euo.mutation.AddExamTypeCode(i)
+	return euo
+}
+
+// ClearExamTypeCode clears the value of the "ExamTypeCode" field.
+func (euo *ExamUpdateOne) ClearExamTypeCode() *ExamUpdateOne {
+	euo.mutation.ClearExamTypeCode()
+	return euo
+}
+
 // AddNodalOfficerIDs adds the "nodal_officers" edge to the NodalOfficer entity by IDs.
 func (euo *ExamUpdateOne) AddNodalOfficerIDs(ids ...int32) *ExamUpdateOne {
 	euo.mutation.AddNodalOfficerIDs(ids...)
@@ -740,6 +1150,36 @@ func (euo *ExamUpdateOne) AddPapers(e ...*ExamPapers) *ExamUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return euo.AddPaperIDs(ids...)
+}
+
+// AddExamEligibilityIDs adds the "ExamEligibility" edge to the EligibilityMaster entity by IDs.
+func (euo *ExamUpdateOne) AddExamEligibilityIDs(ids ...int32) *ExamUpdateOne {
+	euo.mutation.AddExamEligibilityIDs(ids...)
+	return euo
+}
+
+// AddExamEligibility adds the "ExamEligibility" edges to the EligibilityMaster entity.
+func (euo *ExamUpdateOne) AddExamEligibility(e ...*EligibilityMaster) *ExamUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return euo.AddExamEligibilityIDs(ids...)
+}
+
+// AddExamsTypeIDs adds the "exams_type" edge to the ExamType entity by IDs.
+func (euo *ExamUpdateOne) AddExamsTypeIDs(ids ...int32) *ExamUpdateOne {
+	euo.mutation.AddExamsTypeIDs(ids...)
+	return euo
+}
+
+// AddExamsType adds the "exams_type" edges to the ExamType entity.
+func (euo *ExamUpdateOne) AddExamsType(e ...*ExamType) *ExamUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return euo.AddExamsTypeIDs(ids...)
 }
 
 // Mutation returns the ExamMutation object of the builder.
@@ -831,6 +1271,48 @@ func (euo *ExamUpdateOne) RemovePapers(e ...*ExamPapers) *ExamUpdateOne {
 	return euo.RemovePaperIDs(ids...)
 }
 
+// ClearExamEligibility clears all "ExamEligibility" edges to the EligibilityMaster entity.
+func (euo *ExamUpdateOne) ClearExamEligibility() *ExamUpdateOne {
+	euo.mutation.ClearExamEligibility()
+	return euo
+}
+
+// RemoveExamEligibilityIDs removes the "ExamEligibility" edge to EligibilityMaster entities by IDs.
+func (euo *ExamUpdateOne) RemoveExamEligibilityIDs(ids ...int32) *ExamUpdateOne {
+	euo.mutation.RemoveExamEligibilityIDs(ids...)
+	return euo
+}
+
+// RemoveExamEligibility removes "ExamEligibility" edges to EligibilityMaster entities.
+func (euo *ExamUpdateOne) RemoveExamEligibility(e ...*EligibilityMaster) *ExamUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return euo.RemoveExamEligibilityIDs(ids...)
+}
+
+// ClearExamsType clears all "exams_type" edges to the ExamType entity.
+func (euo *ExamUpdateOne) ClearExamsType() *ExamUpdateOne {
+	euo.mutation.ClearExamsType()
+	return euo
+}
+
+// RemoveExamsTypeIDs removes the "exams_type" edge to ExamType entities by IDs.
+func (euo *ExamUpdateOne) RemoveExamsTypeIDs(ids ...int32) *ExamUpdateOne {
+	euo.mutation.RemoveExamsTypeIDs(ids...)
+	return euo
+}
+
+// RemoveExamsType removes "exams_type" edges to ExamType entities.
+func (euo *ExamUpdateOne) RemoveExamsType(e ...*ExamType) *ExamUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return euo.RemoveExamsTypeIDs(ids...)
+}
+
 // Where appends a list predicates to the ExamUpdate builder.
 func (euo *ExamUpdateOne) Where(ps ...predicate.Exam) *ExamUpdateOne {
 	euo.mutation.Where(ps...)
@@ -913,13 +1395,10 @@ func (euo *ExamUpdateOne) sqlSave(ctx context.Context) (_node *Exam, err error) 
 		_spec.SetField(exam.FieldConductedBy, field.TypeString, value)
 	}
 	if value, ok := euo.mutation.NodalOfficerLevel(); ok {
-		_spec.SetField(exam.FieldNodalOfficerLevel, field.TypeInt32, value)
-	}
-	if value, ok := euo.mutation.AddedNodalOfficerLevel(); ok {
-		_spec.AddField(exam.FieldNodalOfficerLevel, field.TypeInt32, value)
+		_spec.SetField(exam.FieldNodalOfficerLevel, field.TypeString, value)
 	}
 	if euo.mutation.NodalOfficerLevelCleared() {
-		_spec.ClearField(exam.FieldNodalOfficerLevel, field.TypeInt32)
+		_spec.ClearField(exam.FieldNodalOfficerLevel, field.TypeString)
 	}
 	if value, ok := euo.mutation.CalendarCode(); ok {
 		_spec.SetField(exam.FieldCalendarCode, field.TypeInt32, value)
@@ -938,6 +1417,39 @@ func (euo *ExamUpdateOne) sqlSave(ctx context.Context) (_node *Exam, err error) 
 	}
 	if euo.mutation.PaperCodeCleared() {
 		_spec.ClearField(exam.FieldPaperCode, field.TypeInt32)
+	}
+	if value, ok := euo.mutation.ExamType(); ok {
+		_spec.SetField(exam.FieldExamType, field.TypeString, value)
+	}
+	if value, ok := euo.mutation.TentativeNotificationMandatoryDate(); ok {
+		_spec.SetField(exam.FieldTentativeNotificationMandatoryDate, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.LocalLanguage(); ok {
+		_spec.SetField(exam.FieldLocalLanguage, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.OptionForPost(); ok {
+		_spec.SetField(exam.FieldOptionForPost, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.OptionToWriteExamOtherThanParent(); ok {
+		_spec.SetField(exam.FieldOptionToWriteExamOtherThanParent, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.OrderNumber(); ok {
+		_spec.SetField(exam.FieldOrderNumber, field.TypeString, value)
+	}
+	if euo.mutation.OrderNumberCleared() {
+		_spec.ClearField(exam.FieldOrderNumber, field.TypeString)
+	}
+	if value, ok := euo.mutation.Status(); ok {
+		_spec.SetField(exam.FieldStatus, field.TypeString, value)
+	}
+	if value, ok := euo.mutation.ExamTypeCode(); ok {
+		_spec.SetField(exam.FieldExamTypeCode, field.TypeInt32, value)
+	}
+	if value, ok := euo.mutation.AddedExamTypeCode(); ok {
+		_spec.AddField(exam.FieldExamTypeCode, field.TypeInt32, value)
+	}
+	if euo.mutation.ExamTypeCodeCleared() {
+		_spec.ClearField(exam.FieldExamTypeCode, field.TypeInt32)
 	}
 	if euo.mutation.NodalOfficersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1112,6 +1624,96 @@ func (euo *ExamUpdateOne) sqlSave(ctx context.Context) (_node *Exam, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(exampapers.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.ExamEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamEligibilityTable,
+			Columns: []string{exam.ExamEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.RemovedExamEligibilityIDs(); len(nodes) > 0 && !euo.mutation.ExamEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamEligibilityTable,
+			Columns: []string{exam.ExamEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.ExamEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamEligibilityTable,
+			Columns: []string{exam.ExamEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.ExamsTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamsTypeTable,
+			Columns: []string{exam.ExamsTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(examtype.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.RemovedExamsTypeIDs(); len(nodes) > 0 && !euo.mutation.ExamsTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamsTypeTable,
+			Columns: []string{exam.ExamsTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(examtype.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.ExamsTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exam.ExamsTypeTable,
+			Columns: []string{exam.ExamsTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(examtype.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {

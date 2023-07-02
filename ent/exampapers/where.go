@@ -65,13 +65,13 @@ func ExamCode(v int32) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldEQ(FieldExamCode, v))
 }
 
-// CompetitiveQualifying applies equality check predicate on the "competitiveQualifying" field. It's identical to CompetitiveQualifyingEQ.
-func CompetitiveQualifying(v string) predicate.ExamPapers {
+// CompetitiveQualifying applies equality check predicate on the "CompetitiveQualifying" field. It's identical to CompetitiveQualifyingEQ.
+func CompetitiveQualifying(v bool) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldEQ(FieldCompetitiveQualifying, v))
 }
 
-// ExceptionForDisability applies equality check predicate on the "exceptionForDisability" field. It's identical to ExceptionForDisabilityEQ.
-func ExceptionForDisability(v string) predicate.ExamPapers {
+// ExceptionForDisability applies equality check predicate on the "ExceptionForDisability" field. It's identical to ExceptionForDisabilityEQ.
+func ExceptionForDisability(v bool) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldEQ(FieldExceptionForDisability, v))
 }
 
@@ -113,6 +113,26 @@ func CalendarCode(v int32) predicate.ExamPapers {
 // CreatedDate applies equality check predicate on the "CreatedDate" field. It's identical to CreatedDateEQ.
 func CreatedDate(v time.Time) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldEQ(FieldCreatedDate, v))
+}
+
+// PaperTypeCode applies equality check predicate on the "PaperTypeCode" field. It's identical to PaperTypeCodeEQ.
+func PaperTypeCode(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEQ(FieldPaperTypeCode, v))
+}
+
+// PaperTypeName applies equality check predicate on the "PaperTypeName" field. It's identical to PaperTypeNameEQ.
+func PaperTypeName(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEQ(FieldPaperTypeName, v))
+}
+
+// DisabilityTypeID applies equality check predicate on the "DisabilityTypeID" field. It's identical to DisabilityTypeIDEQ.
+func DisabilityTypeID(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEQ(FieldDisabilityTypeID, v))
+}
+
+// ExamCodePS applies equality check predicate on the "ExamCodePS" field. It's identical to ExamCodePSEQ.
+func ExamCodePS(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEQ(FieldExamCodePS, v))
 }
 
 // PaperDescriptionEQ applies the EQ predicate on the "PaperDescription" field.
@@ -210,134 +230,24 @@ func ExamCodeNotNil() predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldNotNull(FieldExamCode))
 }
 
-// CompetitiveQualifyingEQ applies the EQ predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingEQ(v string) predicate.ExamPapers {
+// CompetitiveQualifyingEQ applies the EQ predicate on the "CompetitiveQualifying" field.
+func CompetitiveQualifyingEQ(v bool) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldEQ(FieldCompetitiveQualifying, v))
 }
 
-// CompetitiveQualifyingNEQ applies the NEQ predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingNEQ(v string) predicate.ExamPapers {
+// CompetitiveQualifyingNEQ applies the NEQ predicate on the "CompetitiveQualifying" field.
+func CompetitiveQualifyingNEQ(v bool) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldNEQ(FieldCompetitiveQualifying, v))
 }
 
-// CompetitiveQualifyingIn applies the In predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingIn(vs ...string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldIn(FieldCompetitiveQualifying, vs...))
-}
-
-// CompetitiveQualifyingNotIn applies the NotIn predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingNotIn(vs ...string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldNotIn(FieldCompetitiveQualifying, vs...))
-}
-
-// CompetitiveQualifyingGT applies the GT predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingGT(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldGT(FieldCompetitiveQualifying, v))
-}
-
-// CompetitiveQualifyingGTE applies the GTE predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingGTE(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldGTE(FieldCompetitiveQualifying, v))
-}
-
-// CompetitiveQualifyingLT applies the LT predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingLT(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldLT(FieldCompetitiveQualifying, v))
-}
-
-// CompetitiveQualifyingLTE applies the LTE predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingLTE(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldLTE(FieldCompetitiveQualifying, v))
-}
-
-// CompetitiveQualifyingContains applies the Contains predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingContains(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldContains(FieldCompetitiveQualifying, v))
-}
-
-// CompetitiveQualifyingHasPrefix applies the HasPrefix predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingHasPrefix(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldHasPrefix(FieldCompetitiveQualifying, v))
-}
-
-// CompetitiveQualifyingHasSuffix applies the HasSuffix predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingHasSuffix(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldHasSuffix(FieldCompetitiveQualifying, v))
-}
-
-// CompetitiveQualifyingEqualFold applies the EqualFold predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingEqualFold(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldEqualFold(FieldCompetitiveQualifying, v))
-}
-
-// CompetitiveQualifyingContainsFold applies the ContainsFold predicate on the "competitiveQualifying" field.
-func CompetitiveQualifyingContainsFold(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldContainsFold(FieldCompetitiveQualifying, v))
-}
-
-// ExceptionForDisabilityEQ applies the EQ predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityEQ(v string) predicate.ExamPapers {
+// ExceptionForDisabilityEQ applies the EQ predicate on the "ExceptionForDisability" field.
+func ExceptionForDisabilityEQ(v bool) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldEQ(FieldExceptionForDisability, v))
 }
 
-// ExceptionForDisabilityNEQ applies the NEQ predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityNEQ(v string) predicate.ExamPapers {
+// ExceptionForDisabilityNEQ applies the NEQ predicate on the "ExceptionForDisability" field.
+func ExceptionForDisabilityNEQ(v bool) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldNEQ(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityIn applies the In predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityIn(vs ...string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldIn(FieldExceptionForDisability, vs...))
-}
-
-// ExceptionForDisabilityNotIn applies the NotIn predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityNotIn(vs ...string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldNotIn(FieldExceptionForDisability, vs...))
-}
-
-// ExceptionForDisabilityGT applies the GT predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityGT(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldGT(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityGTE applies the GTE predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityGTE(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldGTE(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityLT applies the LT predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityLT(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldLT(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityLTE applies the LTE predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityLTE(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldLTE(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityContains applies the Contains predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityContains(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldContains(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityHasPrefix applies the HasPrefix predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityHasPrefix(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldHasPrefix(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityHasSuffix applies the HasSuffix predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityHasSuffix(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldHasSuffix(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityEqualFold applies the EqualFold predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityEqualFold(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldEqualFold(FieldExceptionForDisability, v))
-}
-
-// ExceptionForDisabilityContainsFold applies the ContainsFold predicate on the "exceptionForDisability" field.
-func ExceptionForDisabilityContainsFold(v string) predicate.ExamPapers {
-	return predicate.ExamPapers(sql.FieldContainsFold(FieldExceptionForDisability, v))
 }
 
 // MaximumMarksEQ applies the EQ predicate on the "MaximumMarks" field.
@@ -770,6 +680,241 @@ func CreatedDateLTE(v time.Time) predicate.ExamPapers {
 	return predicate.ExamPapers(sql.FieldLTE(FieldCreatedDate, v))
 }
 
+// CreatedDateIsNil applies the IsNil predicate on the "CreatedDate" field.
+func CreatedDateIsNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIsNull(FieldCreatedDate))
+}
+
+// CreatedDateNotNil applies the NotNil predicate on the "CreatedDate" field.
+func CreatedDateNotNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotNull(FieldCreatedDate))
+}
+
+// PaperTypeCodeEQ applies the EQ predicate on the "PaperTypeCode" field.
+func PaperTypeCodeEQ(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEQ(FieldPaperTypeCode, v))
+}
+
+// PaperTypeCodeNEQ applies the NEQ predicate on the "PaperTypeCode" field.
+func PaperTypeCodeNEQ(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNEQ(FieldPaperTypeCode, v))
+}
+
+// PaperTypeCodeIn applies the In predicate on the "PaperTypeCode" field.
+func PaperTypeCodeIn(vs ...int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIn(FieldPaperTypeCode, vs...))
+}
+
+// PaperTypeCodeNotIn applies the NotIn predicate on the "PaperTypeCode" field.
+func PaperTypeCodeNotIn(vs ...int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotIn(FieldPaperTypeCode, vs...))
+}
+
+// PaperTypeCodeGT applies the GT predicate on the "PaperTypeCode" field.
+func PaperTypeCodeGT(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldGT(FieldPaperTypeCode, v))
+}
+
+// PaperTypeCodeGTE applies the GTE predicate on the "PaperTypeCode" field.
+func PaperTypeCodeGTE(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldGTE(FieldPaperTypeCode, v))
+}
+
+// PaperTypeCodeLT applies the LT predicate on the "PaperTypeCode" field.
+func PaperTypeCodeLT(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldLT(FieldPaperTypeCode, v))
+}
+
+// PaperTypeCodeLTE applies the LTE predicate on the "PaperTypeCode" field.
+func PaperTypeCodeLTE(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldLTE(FieldPaperTypeCode, v))
+}
+
+// PaperTypeCodeIsNil applies the IsNil predicate on the "PaperTypeCode" field.
+func PaperTypeCodeIsNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIsNull(FieldPaperTypeCode))
+}
+
+// PaperTypeCodeNotNil applies the NotNil predicate on the "PaperTypeCode" field.
+func PaperTypeCodeNotNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotNull(FieldPaperTypeCode))
+}
+
+// PaperTypeNameEQ applies the EQ predicate on the "PaperTypeName" field.
+func PaperTypeNameEQ(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEQ(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameNEQ applies the NEQ predicate on the "PaperTypeName" field.
+func PaperTypeNameNEQ(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNEQ(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameIn applies the In predicate on the "PaperTypeName" field.
+func PaperTypeNameIn(vs ...string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIn(FieldPaperTypeName, vs...))
+}
+
+// PaperTypeNameNotIn applies the NotIn predicate on the "PaperTypeName" field.
+func PaperTypeNameNotIn(vs ...string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotIn(FieldPaperTypeName, vs...))
+}
+
+// PaperTypeNameGT applies the GT predicate on the "PaperTypeName" field.
+func PaperTypeNameGT(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldGT(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameGTE applies the GTE predicate on the "PaperTypeName" field.
+func PaperTypeNameGTE(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldGTE(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameLT applies the LT predicate on the "PaperTypeName" field.
+func PaperTypeNameLT(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldLT(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameLTE applies the LTE predicate on the "PaperTypeName" field.
+func PaperTypeNameLTE(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldLTE(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameContains applies the Contains predicate on the "PaperTypeName" field.
+func PaperTypeNameContains(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldContains(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameHasPrefix applies the HasPrefix predicate on the "PaperTypeName" field.
+func PaperTypeNameHasPrefix(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldHasPrefix(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameHasSuffix applies the HasSuffix predicate on the "PaperTypeName" field.
+func PaperTypeNameHasSuffix(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldHasSuffix(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameIsNil applies the IsNil predicate on the "PaperTypeName" field.
+func PaperTypeNameIsNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIsNull(FieldPaperTypeName))
+}
+
+// PaperTypeNameNotNil applies the NotNil predicate on the "PaperTypeName" field.
+func PaperTypeNameNotNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotNull(FieldPaperTypeName))
+}
+
+// PaperTypeNameEqualFold applies the EqualFold predicate on the "PaperTypeName" field.
+func PaperTypeNameEqualFold(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEqualFold(FieldPaperTypeName, v))
+}
+
+// PaperTypeNameContainsFold applies the ContainsFold predicate on the "PaperTypeName" field.
+func PaperTypeNameContainsFold(v string) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldContainsFold(FieldPaperTypeName, v))
+}
+
+// DisabilityTypeIDEQ applies the EQ predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDEQ(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEQ(FieldDisabilityTypeID, v))
+}
+
+// DisabilityTypeIDNEQ applies the NEQ predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDNEQ(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNEQ(FieldDisabilityTypeID, v))
+}
+
+// DisabilityTypeIDIn applies the In predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDIn(vs ...int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIn(FieldDisabilityTypeID, vs...))
+}
+
+// DisabilityTypeIDNotIn applies the NotIn predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDNotIn(vs ...int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotIn(FieldDisabilityTypeID, vs...))
+}
+
+// DisabilityTypeIDGT applies the GT predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDGT(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldGT(FieldDisabilityTypeID, v))
+}
+
+// DisabilityTypeIDGTE applies the GTE predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDGTE(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldGTE(FieldDisabilityTypeID, v))
+}
+
+// DisabilityTypeIDLT applies the LT predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDLT(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldLT(FieldDisabilityTypeID, v))
+}
+
+// DisabilityTypeIDLTE applies the LTE predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDLTE(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldLTE(FieldDisabilityTypeID, v))
+}
+
+// DisabilityTypeIDIsNil applies the IsNil predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDIsNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIsNull(FieldDisabilityTypeID))
+}
+
+// DisabilityTypeIDNotNil applies the NotNil predicate on the "DisabilityTypeID" field.
+func DisabilityTypeIDNotNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotNull(FieldDisabilityTypeID))
+}
+
+// ExamCodePSEQ applies the EQ predicate on the "ExamCodePS" field.
+func ExamCodePSEQ(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldEQ(FieldExamCodePS, v))
+}
+
+// ExamCodePSNEQ applies the NEQ predicate on the "ExamCodePS" field.
+func ExamCodePSNEQ(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNEQ(FieldExamCodePS, v))
+}
+
+// ExamCodePSIn applies the In predicate on the "ExamCodePS" field.
+func ExamCodePSIn(vs ...int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIn(FieldExamCodePS, vs...))
+}
+
+// ExamCodePSNotIn applies the NotIn predicate on the "ExamCodePS" field.
+func ExamCodePSNotIn(vs ...int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotIn(FieldExamCodePS, vs...))
+}
+
+// ExamCodePSGT applies the GT predicate on the "ExamCodePS" field.
+func ExamCodePSGT(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldGT(FieldExamCodePS, v))
+}
+
+// ExamCodePSGTE applies the GTE predicate on the "ExamCodePS" field.
+func ExamCodePSGTE(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldGTE(FieldExamCodePS, v))
+}
+
+// ExamCodePSLT applies the LT predicate on the "ExamCodePS" field.
+func ExamCodePSLT(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldLT(FieldExamCodePS, v))
+}
+
+// ExamCodePSLTE applies the LTE predicate on the "ExamCodePS" field.
+func ExamCodePSLTE(v int32) predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldLTE(FieldExamCodePS, v))
+}
+
+// ExamCodePSIsNil applies the IsNil predicate on the "ExamCodePS" field.
+func ExamCodePSIsNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldIsNull(FieldExamCodePS))
+}
+
+// ExamCodePSNotNil applies the NotNil predicate on the "ExamCodePS" field.
+func ExamCodePSNotNil() predicate.ExamPapers {
+	return predicate.ExamPapers(sql.FieldNotNull(FieldExamCodePS))
+}
+
 // HasCenters applies the HasEdge predicate on the "centers" edge.
 func HasCenters() predicate.ExamPapers {
 	return predicate.ExamPapers(func(s *sql.Selector) {
@@ -854,6 +999,98 @@ func HasPapersRef() predicate.ExamPapers {
 func HasPapersRefWith(preds ...predicate.ExamCalendar) predicate.ExamPapers {
 	return predicate.ExamPapers(func(s *sql.Selector) {
 		step := newPapersRefStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasExamPaperEligibility applies the HasEdge predicate on the "ExamPaperEligibility" edge.
+func HasExamPaperEligibility() predicate.ExamPapers {
+	return predicate.ExamPapers(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ExamPaperEligibilityTable, ExamPaperEligibilityColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasExamPaperEligibilityWith applies the HasEdge predicate on the "ExamPaperEligibility" edge with a given conditions (other predicates).
+func HasExamPaperEligibilityWith(preds ...predicate.EligibilityMaster) predicate.ExamPapers {
+	return predicate.ExamPapers(func(s *sql.Selector) {
+		step := newExamPaperEligibilityStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDisRef applies the HasEdge predicate on the "dis_ref" edge.
+func HasDisRef() predicate.ExamPapers {
+	return predicate.ExamPapers(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DisRefTable, DisRefColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDisRefWith applies the HasEdge predicate on the "dis_ref" edge with a given conditions (other predicates).
+func HasDisRefWith(preds ...predicate.Disability) predicate.ExamPapers {
+	return predicate.ExamPapers(func(s *sql.Selector) {
+		step := newDisRefStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPapersPsRef applies the HasEdge predicate on the "papers_ps_ref" edge.
+func HasPapersPsRef() predicate.ExamPapers {
+	return predicate.ExamPapers(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PapersPsRefTable, PapersPsRefColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPapersPsRefWith applies the HasEdge predicate on the "papers_ps_ref" edge with a given conditions (other predicates).
+func HasPapersPsRefWith(preds ...predicate.Exam_PS) predicate.ExamPapers {
+	return predicate.ExamPapers(func(s *sql.Selector) {
+		step := newPapersPsRefStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPapersIPRef applies the HasEdge predicate on the "papers_ip_ref" edge.
+func HasPapersIPRef() predicate.ExamPapers {
+	return predicate.ExamPapers(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PapersIPRefTable, PapersIPRefColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPapersIPRefWith applies the HasEdge predicate on the "papers_ip_ref" edge with a given conditions (other predicates).
+func HasPapersIPRefWith(preds ...predicate.Exam_IP) predicate.ExamPapers {
+	return predicate.ExamPapers(func(s *sql.Selector) {
+		step := newPapersIPRefStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

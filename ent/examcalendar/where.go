@@ -115,6 +115,11 @@ func PaperCode(v int32) predicate.ExamCalendar {
 	return predicate.ExamCalendar(sql.FieldEQ(FieldPaperCode, v))
 }
 
+// ExamCodePS applies equality check predicate on the "ExamCodePS" field. It's identical to ExamCodePSEQ.
+func ExamCodePS(v int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldEQ(FieldExamCodePS, v))
+}
+
 // ExamYearEQ applies the EQ predicate on the "ExamYear" field.
 func ExamYearEQ(v int32) predicate.ExamCalendar {
 	return predicate.ExamCalendar(sql.FieldEQ(FieldExamYear, v))
@@ -645,6 +650,56 @@ func PaperCodeNotNil() predicate.ExamCalendar {
 	return predicate.ExamCalendar(sql.FieldNotNull(FieldPaperCode))
 }
 
+// ExamCodePSEQ applies the EQ predicate on the "ExamCodePS" field.
+func ExamCodePSEQ(v int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldEQ(FieldExamCodePS, v))
+}
+
+// ExamCodePSNEQ applies the NEQ predicate on the "ExamCodePS" field.
+func ExamCodePSNEQ(v int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldNEQ(FieldExamCodePS, v))
+}
+
+// ExamCodePSIn applies the In predicate on the "ExamCodePS" field.
+func ExamCodePSIn(vs ...int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldIn(FieldExamCodePS, vs...))
+}
+
+// ExamCodePSNotIn applies the NotIn predicate on the "ExamCodePS" field.
+func ExamCodePSNotIn(vs ...int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldNotIn(FieldExamCodePS, vs...))
+}
+
+// ExamCodePSGT applies the GT predicate on the "ExamCodePS" field.
+func ExamCodePSGT(v int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldGT(FieldExamCodePS, v))
+}
+
+// ExamCodePSGTE applies the GTE predicate on the "ExamCodePS" field.
+func ExamCodePSGTE(v int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldGTE(FieldExamCodePS, v))
+}
+
+// ExamCodePSLT applies the LT predicate on the "ExamCodePS" field.
+func ExamCodePSLT(v int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldLT(FieldExamCodePS, v))
+}
+
+// ExamCodePSLTE applies the LTE predicate on the "ExamCodePS" field.
+func ExamCodePSLTE(v int32) predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldLTE(FieldExamCodePS, v))
+}
+
+// ExamCodePSIsNil applies the IsNil predicate on the "ExamCodePS" field.
+func ExamCodePSIsNil() predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldIsNull(FieldExamCodePS))
+}
+
+// ExamCodePSNotNil applies the NotNil predicate on the "ExamCodePS" field.
+func ExamCodePSNotNil() predicate.ExamCalendar {
+	return predicate.ExamCalendar(sql.FieldNotNull(FieldExamCodePS))
+}
+
 // HasVcyYears applies the HasEdge predicate on the "vcy_years" edge.
 func HasVcyYears() predicate.ExamCalendar {
 	return predicate.ExamCalendar(func(s *sql.Selector) {
@@ -729,6 +784,52 @@ func HasNotifyRef() predicate.ExamCalendar {
 func HasNotifyRefWith(preds ...predicate.Notification) predicate.ExamCalendar {
 	return predicate.ExamCalendar(func(s *sql.Selector) {
 		step := newNotifyRefStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasExamcalPsRef applies the HasEdge predicate on the "examcal_ps_ref" edge.
+func HasExamcalPsRef() predicate.ExamCalendar {
+	return predicate.ExamCalendar(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ExamcalPsRefTable, ExamcalPsRefColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasExamcalPsRefWith applies the HasEdge predicate on the "examcal_ps_ref" edge with a given conditions (other predicates).
+func HasExamcalPsRefWith(preds ...predicate.Exam_PS) predicate.ExamCalendar {
+	return predicate.ExamCalendar(func(s *sql.Selector) {
+		step := newExamcalPsRefStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasExamcalIPRef applies the HasEdge predicate on the "examcal_ip_ref" edge.
+func HasExamcalIPRef() predicate.ExamCalendar {
+	return predicate.ExamCalendar(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ExamcalIPRefTable, ExamcalIPRefColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasExamcalIPRefWith applies the HasEdge predicate on the "examcal_ip_ref" edge with a given conditions (other predicates).
+func HasExamcalIPRefWith(preds ...predicate.Exam_IP) predicate.ExamCalendar {
+	return predicate.ExamCalendar(func(s *sql.Selector) {
+		step := newExamcalIPRefStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

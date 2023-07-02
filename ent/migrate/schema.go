@@ -9,26 +9,48 @@ import (
 )
 
 var (
+	// AdminLoginColumns holds the columns for the "AdminLogin" table.
+	AdminLoginColumns = []*schema.Column{
+		{Name: "LoginId", Type: field.TypeInt32, Increment: true},
+		{Name: "role_name", Type: field.TypeString, Nullable: true},
+		{Name: "created_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "employeed_id", Type: field.TypeInt32, Nullable: true},
+		{Name: "employee_name", Type: field.TypeString, Nullable: true},
+		{Name: "emailid", Type: field.TypeString, Nullable: true},
+		{Name: "mobile_number", Type: field.TypeInt64, Nullable: true},
+		{Name: "username", Type: field.TypeString},
+		{Name: "otp", Type: field.TypeInt32, Nullable: true},
+		{Name: "password", Type: field.TypeString},
+		{Name: "verify_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "role_user_code", Type: field.TypeInt32, Nullable: true},
+	}
+	// AdminLoginTable holds the schema information for the "AdminLogin" table.
+	AdminLoginTable = &schema.Table{
+		Name:       "AdminLogin",
+		Columns:    AdminLoginColumns,
+		PrimaryKey: []*schema.Column{AdminLoginColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "AdminLogin_RoleMaster_roles",
+				Columns:    []*schema.Column{AdminLoginColumns[12]},
+				RefColumns: []*schema.Column{RoleMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// AgeEligibilityColumns holds the columns for the "AgeEligibility" table.
 	AgeEligibilityColumns = []*schema.Column{
 		{Name: "AgeElibilityCode", Type: field.TypeInt32, Increment: true},
+		{Name: "eligibillity_code", Type: field.TypeInt32, Nullable: true},
 		{Name: "age", Type: field.TypeInt32, Nullable: true},
 		{Name: "category_id", Type: field.TypeInt32, Nullable: true},
-		{Name: "eligibility_code", Type: field.TypeInt32, Nullable: true},
 	}
 	// AgeEligibilityTable holds the schema information for the "AgeEligibility" table.
 	AgeEligibilityTable = &schema.Table{
 		Name:       "AgeEligibility",
 		Columns:    AgeEligibilityColumns,
 		PrimaryKey: []*schema.Column{AgeEligibilityColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "AgeEligibility_ExamEligibility_age_eligibilities",
-				Columns:    []*schema.Column{AgeEligibilityColumns[3]},
-				RefColumns: []*schema.Column{ExamEligibilityColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
 	}
 	// ApplicationColumns holds the columns for the "Application" table.
 	ApplicationColumns = []*schema.Column{
@@ -58,6 +80,78 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+	}
+	// CadreChoiceIPColumns holds the columns for the "Cadre_Choice_IP" table.
+	CadreChoiceIPColumns = []*schema.Column{
+		{Name: "CadrePrefId", Type: field.TypeInt32, Increment: true},
+		{Name: "cadre_pref_no", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_pref_value", Type: field.TypeString, Nullable: true},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "application_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// CadreChoiceIPTable holds the schema information for the "Cadre_Choice_IP" table.
+	CadreChoiceIPTable = &schema.Table{
+		Name:       "Cadre_Choice_IP",
+		Columns:    CadreChoiceIPColumns,
+		PrimaryKey: []*schema.Column{CadreChoiceIPColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "Cadre_Choice_IP_Exam_Applications_IP_CadrePref_Ref",
+				Columns:    []*schema.Column{CadreChoiceIPColumns[6]},
+				RefColumns: []*schema.Column{ExamApplicationsIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// CadreChoicePAColumns holds the columns for the "Cadre_Choice_PA" table.
+	CadreChoicePAColumns = []*schema.Column{
+		{Name: "CadrePrefId", Type: field.TypeInt32, Increment: true},
+		{Name: "application", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_pref_no", Type: field.TypeString},
+		{Name: "cadre_pref_value", Type: field.TypeString},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+	}
+	// CadreChoicePATable holds the schema information for the "Cadre_Choice_PA" table.
+	CadreChoicePATable = &schema.Table{
+		Name:       "Cadre_Choice_PA",
+		Columns:    CadreChoicePAColumns,
+		PrimaryKey: []*schema.Column{CadreChoicePAColumns[0]},
+	}
+	// CadreChoicePMColumns holds the columns for the "Cadre_Choice_PM" table.
+	CadreChoicePMColumns = []*schema.Column{
+		{Name: "CadrePrefId", Type: field.TypeInt32, Increment: true},
+		{Name: "application", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_pref_no", Type: field.TypeString},
+		{Name: "cadre_pref_value", Type: field.TypeString},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+	}
+	// CadreChoicePMTable holds the schema information for the "Cadre_Choice_PM" table.
+	CadreChoicePMTable = &schema.Table{
+		Name:       "Cadre_Choice_PM",
+		Columns:    CadreChoicePMColumns,
+		PrimaryKey: []*schema.Column{CadreChoicePMColumns[0]},
+	}
+	// CadreChoicePSColumns holds the columns for the "Cadre_Choice_PS" table.
+	CadreChoicePSColumns = []*schema.Column{
+		{Name: "CadrePrefId", Type: field.TypeInt32, Increment: true},
+		{Name: "application", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_pref_no", Type: field.TypeString},
+		{Name: "cadre_pref_value", Type: field.TypeString},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+	}
+	// CadreChoicePSTable holds the schema information for the "Cadre_Choice_PS" table.
+	CadreChoicePSTable = &schema.Table{
+		Name:       "Cadre_Choice_PS",
+		Columns:    CadreChoicePSColumns,
+		PrimaryKey: []*schema.Column{CadreChoicePSColumns[0]},
 	}
 	// CenterColumns holds the columns for the "Center" table.
 	CenterColumns = []*schema.Column{
@@ -96,7 +190,7 @@ var (
 	// CircleMasterColumns holds the columns for the "CircleMaster" table.
 	CircleMasterColumns = []*schema.Column{
 		{Name: "CircleID", Type: field.TypeInt32, Increment: true},
-		{Name: "circle_code", Type: field.TypeInt32},
+		{Name: "circle_code", Type: field.TypeInt32, Unique: true},
 		{Name: "circle_office_id", Type: field.TypeString},
 		{Name: "circle_office_name", Type: field.TypeString},
 		{Name: "office_type", Type: field.TypeString},
@@ -125,6 +219,23 @@ var (
 			},
 		},
 	}
+	// DirectorateUsersColumns holds the columns for the "DirectorateUsers" table.
+	DirectorateUsersColumns = []*schema.Column{
+		{Name: "RoleUserCode", Type: field.TypeInt32, Increment: true},
+		{Name: "role", Type: field.TypeString},
+		{Name: "employeed_id", Type: field.TypeInt32},
+		{Name: "employee_name", Type: field.TypeString},
+		{Name: "email_id", Type: field.TypeString},
+		{Name: "mobile_number", Type: field.TypeInt64},
+		{Name: "sequence_number", Type: field.TypeInt32, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true, Default: "active"},
+	}
+	// DirectorateUsersTable holds the schema information for the "DirectorateUsers" table.
+	DirectorateUsersTable = &schema.Table{
+		Name:       "DirectorateUsers",
+		Columns:    DirectorateUsersColumns,
+		PrimaryKey: []*schema.Column{DirectorateUsersColumns[0]},
+	}
 	// DisabilityColumns holds the columns for the "Disability" table.
 	DisabilityColumns = []*schema.Column{
 		{Name: "DisabilityTypeID", Type: field.TypeInt32, Increment: true},
@@ -132,17 +243,26 @@ var (
 		{Name: "disability_type_description", Type: field.TypeString},
 		{Name: "disability_percentage", Type: field.TypeInt32},
 		{Name: "disability_flag", Type: field.TypeEnum, Enums: []string{"Temporary", "Permanent"}},
+		{Name: "exam_papers_dis_ref", Type: field.TypeInt32, Nullable: true},
 	}
 	// DisabilityTable holds the schema information for the "Disability" table.
 	DisabilityTable = &schema.Table{
 		Name:       "Disability",
 		Columns:    DisabilityColumns,
 		PrimaryKey: []*schema.Column{DisabilityColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "Disability_ExamPapers_dis_ref",
+				Columns:    []*schema.Column{DisabilityColumns[5]},
+				RefColumns: []*schema.Column{ExamPapersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// DivisionMasterColumns holds the columns for the "DivisionMaster" table.
 	DivisionMasterColumns = []*schema.Column{
 		{Name: "DivisionID", Type: field.TypeInt32, Increment: true},
-		{Name: "division_code", Type: field.TypeInt32},
+		{Name: "division_code", Type: field.TypeInt32, Unique: true},
 		{Name: "office_type", Type: field.TypeString},
 		{Name: "division_office_id", Type: field.TypeString},
 		{Name: "division_office_name", Type: field.TypeString},
@@ -167,6 +287,100 @@ var (
 			},
 		},
 	}
+	// DivisionChoicePAColumns holds the columns for the "Division_Choice_PA" table.
+	DivisionChoicePAColumns = []*schema.Column{
+		{Name: "CadrePrefId", Type: field.TypeInt32, Increment: true},
+		{Name: "application", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_pref_no", Type: field.TypeString},
+		{Name: "cadre_pref_value", Type: field.TypeString},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+	}
+	// DivisionChoicePATable holds the schema information for the "Division_Choice_PA" table.
+	DivisionChoicePATable = &schema.Table{
+		Name:       "Division_Choice_PA",
+		Columns:    DivisionChoicePAColumns,
+		PrimaryKey: []*schema.Column{DivisionChoicePAColumns[0]},
+	}
+	// DivisionChoicePMColumns holds the columns for the "Division_Choice_PM" table.
+	DivisionChoicePMColumns = []*schema.Column{
+		{Name: "CadrePrefId", Type: field.TypeInt32, Increment: true},
+		{Name: "application", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_pref_no", Type: field.TypeString},
+		{Name: "cadre_pref_value", Type: field.TypeString},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+	}
+	// DivisionChoicePMTable holds the schema information for the "Division_Choice_PM" table.
+	DivisionChoicePMTable = &schema.Table{
+		Name:       "Division_Choice_PM",
+		Columns:    DivisionChoicePMColumns,
+		PrimaryKey: []*schema.Column{DivisionChoicePMColumns[0]},
+	}
+	// DivisionChoicePSColumns holds the columns for the "Division_Choice_PS" table.
+	DivisionChoicePSColumns = []*schema.Column{
+		{Name: "CadrePrefId", Type: field.TypeInt32, Increment: true},
+		{Name: "application", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_pref_no", Type: field.TypeString},
+		{Name: "cadre_pref_value", Type: field.TypeString},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+	}
+	// DivisionChoicePSTable holds the schema information for the "Division_Choice_PS" table.
+	DivisionChoicePSTable = &schema.Table{
+		Name:       "Division_Choice_PS",
+		Columns:    DivisionChoicePSColumns,
+		PrimaryKey: []*schema.Column{DivisionChoicePSColumns[0]},
+	}
+	// EligibilityMasterColumns holds the columns for the "EligibilityMaster" table.
+	EligibilityMasterColumns = []*schema.Column{
+		{Name: "EligibilityCode", Type: field.TypeInt32, Increment: true},
+		{Name: "exam_name", Type: field.TypeString},
+		{Name: "post_code", Type: field.TypeString, Nullable: true},
+		{Name: "gds_service", Type: field.TypeBool, Default: false},
+		{Name: "age_criteria", Type: field.TypeInt32, Nullable: true},
+		{Name: "service_criteria", Type: field.TypeInt32, Nullable: true},
+		{Name: "driving_license_criteria", Type: field.TypeBool, Default: false},
+		{Name: "computer_knowledge", Type: field.TypeBool, Default: false},
+		{Name: "level_of_pay_matrix_eligibility", Type: field.TypeBool, Default: false},
+		{Name: "education", Type: field.TypeString},
+		{Name: "notify_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "category_code", Type: field.TypeString, Nullable: true},
+		{Name: "paper_description", Type: field.TypeString},
+		{Name: "minimum_marks", Type: field.TypeInt32},
+		{Name: "employee_posts_post_eligibility", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "paper_code", Type: field.TypeInt32, Nullable: true},
+	}
+	// EligibilityMasterTable holds the schema information for the "EligibilityMaster" table.
+	EligibilityMasterTable = &schema.Table{
+		Name:       "EligibilityMaster",
+		Columns:    EligibilityMasterColumns,
+		PrimaryKey: []*schema.Column{EligibilityMasterColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "EligibilityMaster_EmployeePosts_PostEligibility",
+				Columns:    []*schema.Column{EligibilityMasterColumns[14]},
+				RefColumns: []*schema.Column{EmployeePostsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "EligibilityMaster_Exam_ExamEligibility",
+				Columns:    []*schema.Column{EligibilityMasterColumns[15]},
+				RefColumns: []*schema.Column{ExamColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "EligibilityMaster_ExamPapers_ExamPaperEligibility",
+				Columns:    []*schema.Column{EligibilityMasterColumns[16]},
+				RefColumns: []*schema.Column{ExamPapersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// EmployeeCadreColumns holds the columns for the "EmployeeCadre" table.
 	EmployeeCadreColumns = []*schema.Column{
 		{Name: "cadreid", Type: field.TypeInt32, Increment: true},
@@ -187,17 +401,26 @@ var (
 		{Name: "categrycode", Type: field.TypeString},
 		{Name: "category_description", Type: field.TypeString},
 		{Name: "minimum_marks", Type: field.TypeInt32, Nullable: true},
+		{Name: "eligibility_master_category_eligibility", Type: field.TypeInt32, Nullable: true},
 	}
 	// EmployeeCategoryTable holds the schema information for the "EmployeeCategory" table.
 	EmployeeCategoryTable = &schema.Table{
 		Name:       "EmployeeCategory",
 		Columns:    EmployeeCategoryColumns,
 		PrimaryKey: []*schema.Column{EmployeeCategoryColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "EmployeeCategory_EligibilityMaster_CategoryEligibility",
+				Columns:    []*schema.Column{EmployeeCategoryColumns[4]},
+				RefColumns: []*schema.Column{EligibilityMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// EmployeeDesignationColumns holds the columns for the "EmployeeDesignation" table.
 	EmployeeDesignationColumns = []*schema.Column{
 		{Name: "DesignationID", Type: field.TypeInt32, Increment: true},
-		{Name: "designation_code", Type: field.TypeString},
+		{Name: "designation_code", Type: field.TypeString, Unique: true},
 		{Name: "designation_description", Type: field.TypeString},
 	}
 	// EmployeeDesignationTable holds the schema information for the "EmployeeDesignation" table.
@@ -206,23 +429,67 @@ var (
 		Columns:    EmployeeDesignationColumns,
 		PrimaryKey: []*schema.Column{EmployeeDesignationColumns[0]},
 	}
+	// EmployeeMasterColumns holds the columns for the "EmployeeMaster" table.
+	EmployeeMasterColumns = []*schema.Column{
+		{Name: "EmpID", Type: field.TypeInt64, Increment: true},
+		{Name: "employee_id", Type: field.TypeInt64, Unique: true},
+		{Name: "employee_name", Type: field.TypeString, Nullable: true},
+		{Name: "dob", Type: field.TypeString, Nullable: true},
+		{Name: "gender", Type: field.TypeEnum, Enums: []string{"Male", "Female"}},
+		{Name: "mobile_number", Type: field.TypeString, Nullable: true},
+		{Name: "email_id", Type: field.TypeString, Nullable: true},
+		{Name: "employee_category_code", Type: field.TypeString, Nullable: true},
+		{Name: "employee_category", Type: field.TypeString, Nullable: true},
+		{Name: "post_code", Type: field.TypeString, Nullable: true},
+		{Name: "employee_post", Type: field.TypeString, Nullable: true},
+		{Name: "facility_id", Type: field.TypeString, Nullable: true},
+		{Name: "dccs", Type: field.TypeString, Nullable: true},
+		{Name: "dc_in_present_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "cadre", Type: field.TypeString, Nullable: true},
+		{Name: "user_master_usermaster_ref", Type: field.TypeInt64, Nullable: true},
+	}
+	// EmployeeMasterTable holds the schema information for the "EmployeeMaster" table.
+	EmployeeMasterTable = &schema.Table{
+		Name:       "EmployeeMaster",
+		Columns:    EmployeeMasterColumns,
+		PrimaryKey: []*schema.Column{EmployeeMasterColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "EmployeeMaster_UserMaster_UsermasterRef",
+				Columns:    []*schema.Column{EmployeeMasterColumns[17]},
+				RefColumns: []*schema.Column{UserMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// EmployeePostsColumns holds the columns for the "EmployeePosts" table.
 	EmployeePostsColumns = []*schema.Column{
 		{Name: "PostID", Type: field.TypeInt32, Increment: true},
-		{Name: "post_code", Type: field.TypeString},
+		{Name: "post_code", Type: field.TypeString, Unique: true},
 		{Name: "post_description", Type: field.TypeString},
 		{Name: "group", Type: field.TypeString},
 		{Name: "pay_level", Type: field.TypeString},
 		{Name: "scale", Type: field.TypeString},
 		{Name: "base_cadre_flag", Type: field.TypeBool},
+		{Name: "eligibility_master_post_eligibility", Type: field.TypeInt32, Nullable: true},
 	}
 	// EmployeePostsTable holds the schema information for the "EmployeePosts" table.
 	EmployeePostsTable = &schema.Table{
 		Name:       "EmployeePosts",
 		Columns:    EmployeePostsColumns,
 		PrimaryKey: []*schema.Column{EmployeePostsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "EmployeePosts_EligibilityMaster_PostEligibility",
+				Columns:    []*schema.Column{EmployeePostsColumns[7]},
+				RefColumns: []*schema.Column{EligibilityMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
-	// EmployeesColumns holds the columns for the "employees" table.
+	// EmployeesColumns holds the columns for the "Employees" table.
 	EmployeesColumns = []*schema.Column{
 		{Name: "RegistrationID", Type: field.TypeInt32, Increment: true},
 		{Name: "employeed_id", Type: field.TypeInt32},
@@ -245,8 +512,14 @@ var (
 		{Name: "gender_verified", Type: field.TypeBool, Default: false},
 		{Name: "gender_rem_status", Type: field.TypeBool, Default: false},
 		{Name: "gender_remarks", Type: field.TypeString, Nullable: true},
-		{Name: "mobile_number", Type: field.TypeInt32, Nullable: true},
+		{Name: "mobile_number", Type: field.TypeInt64, Nullable: true},
+		{Name: "mobile_number_verified", Type: field.TypeBool, Default: false},
+		{Name: "mobile_number_rem_status", Type: field.TypeBool, Default: false},
+		{Name: "mobile_number_remarks", Type: field.TypeString, Nullable: true},
 		{Name: "email_id", Type: field.TypeString, Nullable: true},
+		{Name: "email_id_verified", Type: field.TypeBool, Default: false},
+		{Name: "email_id_rem_status", Type: field.TypeBool, Default: false},
+		{Name: "email_id_remarks", Type: field.TypeString, Nullable: true},
 		{Name: "categoryid", Type: field.TypeInt32, Nullable: true},
 		{Name: "employee_category_code", Type: field.TypeString, Nullable: true},
 		{Name: "employee_category", Type: field.TypeString},
@@ -273,11 +546,12 @@ var (
 		{Name: "photo_verified", Type: field.TypeBool, Default: false},
 		{Name: "photo_rem_status", Type: field.TypeBool, Default: false},
 		{Name: "photo_remarks", Type: field.TypeString, Nullable: true},
-		{Name: "cadreid", Type: field.TypeInt32, Nullable: true},
-		{Name: "employee_cadre", Type: field.TypeString},
-		{Name: "employee_cadre_verified", Type: field.TypeBool, Default: false},
-		{Name: "employee_cadre_rem_status", Type: field.TypeBool, Default: false},
-		{Name: "employee_cadre_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "post_id", Type: field.TypeInt32, Nullable: true},
+		{Name: "post_code", Type: field.TypeString, Nullable: true},
+		{Name: "employee_post", Type: field.TypeString},
+		{Name: "employee_post_verified", Type: field.TypeBool, Default: false},
+		{Name: "employee_post_rem_status", Type: field.TypeBool, Default: false},
+		{Name: "employee_post_remarks", Type: field.TypeString, Nullable: true},
 		{Name: "designation_id", Type: field.TypeInt32, Nullable: true},
 		{Name: "employee_designation", Type: field.TypeString},
 		{Name: "employee_designation_verified", Type: field.TypeBool, Default: false},
@@ -289,12 +563,12 @@ var (
 		{Name: "circle_rem_status", Type: field.TypeBool, Default: false},
 		{Name: "circle_remarks", Type: field.TypeString, Nullable: true},
 		{Name: "region_id", Type: field.TypeInt32, Nullable: true},
-		{Name: "region_name", Type: field.TypeString},
+		{Name: "region_name", Type: field.TypeString, Nullable: true},
 		{Name: "region_verified", Type: field.TypeBool, Default: false},
 		{Name: "region_rem_status", Type: field.TypeBool, Default: false},
 		{Name: "region_remarks", Type: field.TypeString, Nullable: true},
 		{Name: "division_id", Type: field.TypeInt32, Nullable: true},
-		{Name: "division_name", Type: field.TypeString},
+		{Name: "division_name", Type: field.TypeString, Nullable: true},
 		{Name: "division_verified", Type: field.TypeBool, Default: false},
 		{Name: "division_rem_status", Type: field.TypeBool, Default: false},
 		{Name: "division_remarks", Type: field.TypeString},
@@ -320,12 +594,29 @@ var (
 		{Name: "aps_working_rem_status", Type: field.TypeBool, Default: false},
 		{Name: "aps_working_remarks", Type: field.TypeString, Nullable: true},
 		{Name: "profilestatus", Type: field.TypeBool, Default: false},
+		{Name: "role_user_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "directorate_users_employee_user", Type: field.TypeInt32, Nullable: true},
+		{Name: "employee_posts_emp_posts", Type: field.TypeInt32, Nullable: true},
 	}
-	// EmployeesTable holds the schema information for the "employees" table.
+	// EmployeesTable holds the schema information for the "Employees" table.
 	EmployeesTable = &schema.Table{
-		Name:       "employees",
+		Name:       "Employees",
 		Columns:    EmployeesColumns,
 		PrimaryKey: []*schema.Column{EmployeesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "Employees_DirectorateUsers_employee_user",
+				Columns:    []*schema.Column{EmployeesColumns[104]},
+				RefColumns: []*schema.Column{DirectorateUsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Employees_EmployeePosts_emp_posts",
+				Columns:    []*schema.Column{EmployeesColumns[105]},
+				RefColumns: []*schema.Column{EmployeePostsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// ExamColumns holds the columns for the "Exam" table.
 	ExamColumns = []*schema.Column{
@@ -334,9 +625,17 @@ var (
 		{Name: "num_of_papers", Type: field.TypeInt32},
 		{Name: "notification_by", Type: field.TypeString},
 		{Name: "conducted_by", Type: field.TypeString},
-		{Name: "nodal_officer_level", Type: field.TypeInt32, Nullable: true},
+		{Name: "nodal_officer_level", Type: field.TypeString, Nullable: true},
 		{Name: "calendar_code", Type: field.TypeInt32, Nullable: true},
 		{Name: "paper_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_type", Type: field.TypeString},
+		{Name: "tentative_notification_mandatory_date", Type: field.TypeBool, Default: false},
+		{Name: "local_language", Type: field.TypeBool, Default: false},
+		{Name: "option_for_post", Type: field.TypeBool, Default: false},
+		{Name: "option_to_write_exam_other_than_parent", Type: field.TypeBool, Default: false},
+		{Name: "order_number", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString},
+		{Name: "exam_type_code", Type: field.TypeInt32, Nullable: true},
 		{Name: "vacancy_year_exams", Type: field.TypeInt32, Nullable: true},
 	}
 	// ExamTable holds the schema information for the "Exam" table.
@@ -347,7 +646,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "Exam_VacancyYears_exams",
-				Columns:    []*schema.Column{ExamColumns[8]},
+				Columns:    []*schema.Column{ExamColumns[16]},
 				RefColumns: []*schema.Column{VacancyYearsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -367,8 +666,12 @@ var (
 		{Name: "approved_order_number", Type: field.TypeString},
 		{Name: "vacancy_years", Type: field.TypeJSON, Nullable: true},
 		{Name: "exam_papers", Type: field.TypeJSON, Nullable: true},
+		{Name: "exam_code_ps", Type: field.TypeInt32, Nullable: true},
 		{Name: "exam_code", Type: field.TypeInt32, Nullable: true},
 		{Name: "paper_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_ip_examcal_ip_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_pa_examcal_ps_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_ps_examcal_ps_ref", Type: field.TypeInt32, Nullable: true},
 		{Name: "vacancy_year_code", Type: field.TypeInt32, Nullable: true},
 	}
 	// ExamCalendarTable holds the schema information for the "ExamCalendar" table.
@@ -379,47 +682,48 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "ExamCalendar_Exam_exams_ref",
-				Columns:    []*schema.Column{ExamCalendarColumns[12]},
+				Columns:    []*schema.Column{ExamCalendarColumns[13]},
 				RefColumns: []*schema.Column{ExamColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "ExamCalendar_ExamPapers_papers_ref",
-				Columns:    []*schema.Column{ExamCalendarColumns[13]},
+				Columns:    []*schema.Column{ExamCalendarColumns[14]},
 				RefColumns: []*schema.Column{ExamPapersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "ExamCalendar_Exam_IP_examcal_ip_ref",
+				Columns:    []*schema.Column{ExamCalendarColumns[15]},
+				RefColumns: []*schema.Column{ExamIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "ExamCalendar_Exam_PA_examcal_ps_ref",
+				Columns:    []*schema.Column{ExamCalendarColumns[16]},
+				RefColumns: []*schema.Column{ExamPAColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "ExamCalendar_Exam_PS_examcal_ps_ref",
+				Columns:    []*schema.Column{ExamCalendarColumns[17]},
+				RefColumns: []*schema.Column{ExamPSColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "ExamCalendar_VacancyYears_vacancy_ref",
-				Columns:    []*schema.Column{ExamCalendarColumns[14]},
+				Columns:    []*schema.Column{ExamCalendarColumns[18]},
 				RefColumns: []*schema.Column{VacancyYearsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 	}
-	// ExamEligibilityColumns holds the columns for the "ExamEligibility" table.
-	ExamEligibilityColumns = []*schema.Column{
-		{Name: "EligibilityCode", Type: field.TypeInt32, Increment: true},
-		{Name: "examcode", Type: field.TypeInt32},
-		{Name: "age_criteria", Type: field.TypeString, Nullable: true},
-		{Name: "service_criteria", Type: field.TypeString, Nullable: true},
-		{Name: "driving_license_criteria", Type: field.TypeString, Nullable: true},
-		{Name: "notify_code", Type: field.TypeInt32, Nullable: true},
-		{Name: "employee_cadre_id", Type: field.TypeInt32, Nullable: true},
-		{Name: "category_id", Type: field.TypeInt32, Nullable: true},
-	}
-	// ExamEligibilityTable holds the schema information for the "ExamEligibility" table.
-	ExamEligibilityTable = &schema.Table{
-		Name:       "ExamEligibility",
-		Columns:    ExamEligibilityColumns,
-		PrimaryKey: []*schema.Column{ExamEligibilityColumns[0]},
-	}
 	// ExamPapersColumns holds the columns for the "ExamPapers" table.
 	ExamPapersColumns = []*schema.Column{
 		{Name: "PaperCode", Type: field.TypeInt32, Increment: true},
 		{Name: "paper_description", Type: field.TypeString, Size: 100},
-		{Name: "competitive_qualifying", Type: field.TypeString, Size: 10},
-		{Name: "exception_for_disability", Type: field.TypeString, Size: 50},
+		{Name: "competitive_qualifying", Type: field.TypeBool, Default: false},
+		{Name: "exception_for_disability", Type: field.TypeBool, Default: false},
 		{Name: "maximum_marks", Type: field.TypeInt},
 		{Name: "duration", Type: field.TypeInt},
 		{Name: "local_language_allowed_question_paper", Type: field.TypeString, Size: 10},
@@ -427,8 +731,16 @@ var (
 		{Name: "order_number", Type: field.TypeString, Size: 20},
 		{Name: "paper_status", Type: field.TypeString, Size: 10},
 		{Name: "calendar_code", Type: field.TypeInt32, Nullable: true},
-		{Name: "created_date", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "created_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "paper_type_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "paper_type_name", Type: field.TypeString, Nullable: true},
+		{Name: "disability_type_id", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_code_ps", Type: field.TypeInt32, Nullable: true},
+		{Name: "disability_dis_ref", Type: field.TypeInt32, Nullable: true},
 		{Name: "exam_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_ip_papers_ip_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_pa_papers_ps_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_ps_papers_ps_ref", Type: field.TypeInt32, Nullable: true},
 	}
 	// ExamPapersTable holds the schema information for the "ExamPapers" table.
 	ExamPapersTable = &schema.Table{
@@ -437,9 +749,507 @@ var (
 		PrimaryKey: []*schema.Column{ExamPapersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
+				Symbol:     "ExamPapers_Disability_dis_ref",
+				Columns:    []*schema.Column{ExamPapersColumns[16]},
+				RefColumns: []*schema.Column{DisabilityColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "ExamPapers_Exam_papers",
-				Columns:    []*schema.Column{ExamPapersColumns[12]},
+				Columns:    []*schema.Column{ExamPapersColumns[17]},
 				RefColumns: []*schema.Column{ExamColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "ExamPapers_Exam_IP_papers_ip_ref",
+				Columns:    []*schema.Column{ExamPapersColumns[18]},
+				RefColumns: []*schema.Column{ExamIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "ExamPapers_Exam_PA_papers_ps_ref",
+				Columns:    []*schema.Column{ExamPapersColumns[19]},
+				RefColumns: []*schema.Column{ExamPAColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "ExamPapers_Exam_PS_papers_ps_ref",
+				Columns:    []*schema.Column{ExamPapersColumns[20]},
+				RefColumns: []*schema.Column{ExamPSColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ExamTypeColumns holds the columns for the "ExamType" table.
+	ExamTypeColumns = []*schema.Column{
+		{Name: "ExamTypeCode", Type: field.TypeInt32, Increment: true},
+		{Name: "exam_type", Type: field.TypeString},
+		{Name: "status", Type: field.TypeString},
+		{Name: "exam_code", Type: field.TypeInt32, Nullable: true},
+	}
+	// ExamTypeTable holds the schema information for the "ExamType" table.
+	ExamTypeTable = &schema.Table{
+		Name:       "ExamType",
+		Columns:    ExamTypeColumns,
+		PrimaryKey: []*schema.Column{ExamTypeColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "ExamType_Exam_exams_type",
+				Columns:    []*schema.Column{ExamTypeColumns[3]},
+				RefColumns: []*schema.Column{ExamColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ExamApplicationsIPColumns holds the columns for the "Exam_Applications_IP" table.
+	ExamApplicationsIPColumns = []*schema.Column{
+		{Name: "ApplicationID", Type: field.TypeInt64, Increment: true},
+		{Name: "application_number", Type: field.TypeString, Nullable: true},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "employee_name", Type: field.TypeString, Nullable: true},
+		{Name: "dob", Type: field.TypeString, Nullable: true},
+		{Name: "gender", Type: field.TypeString, Nullable: true},
+		{Name: "mobile_number", Type: field.TypeString, Nullable: true},
+		{Name: "email_id", Type: field.TypeString, Nullable: true},
+		{Name: "employee_category", Type: field.TypeString, Nullable: true},
+		{Name: "cadre", Type: field.TypeString, Nullable: true},
+		{Name: "employee_post", Type: field.TypeString, Nullable: true},
+		{Name: "facility_id", Type: field.TypeString, Nullable: true},
+		{Name: "facility_name", Type: field.TypeString, Nullable: true},
+		{Name: "division_name", Type: field.TypeString, Nullable: true},
+		{Name: "region_name", Type: field.TypeString, Nullable: true},
+		{Name: "reporting_office_name", Type: field.TypeString, Nullable: true},
+		{Name: "circle_name", Type: field.TypeString, Nullable: true},
+		{Name: "entry_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "dccs", Type: field.TypeString, Nullable: true},
+		{Name: "dc_in_present_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "deputation_office_id", Type: field.TypeString, Nullable: true},
+		{Name: "disability_type", Type: field.TypeString, Nullable: true},
+		{Name: "disability_percentage", Type: field.TypeString, Nullable: true},
+		{Name: "education", Type: field.TypeString, Nullable: true},
+		{Name: "exam_name_code", Type: field.TypeString, Nullable: true},
+		{Name: "exam_year", Type: field.TypeString, Nullable: true},
+		{Name: "exam_name", Type: field.TypeString, Nullable: true},
+		{Name: "present_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "present_designation", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_cadre_date", Type: field.TypeString, Nullable: true},
+		{Name: "service_length", Type: field.TypeJSON, Nullable: true},
+		{Name: "centre_preference", Type: field.TypeString, Nullable: true},
+		{Name: "signature", Type: field.TypeString, Nullable: true},
+		{Name: "photo", Type: field.TypeString, Nullable: true},
+		{Name: "application_status", Type: field.TypeString, Nullable: true},
+		{Name: "appln_submitted_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "va_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "va_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "va_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "ca_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "ca_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "ca_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "application_wdl_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "na_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "na_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "na_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "appliaction_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_preferences", Type: field.TypeJSON, Nullable: true},
+		{Name: "division_preferences", Type: field.TypeJSON, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "ca_previous_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "exam_ip_exam_appln_ip_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "facility_office_ip_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "role_user_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "user_master_users_ip_ref", Type: field.TypeInt64, Nullable: true},
+	}
+	// ExamApplicationsIPTable holds the schema information for the "Exam_Applications_IP" table.
+	ExamApplicationsIPTable = &schema.Table{
+		Name:       "Exam_Applications_IP",
+		Columns:    ExamApplicationsIPColumns,
+		PrimaryKey: []*schema.Column{ExamApplicationsIPColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "Exam_Applications_IP_Exam_IP_ExamAppln_IP_Ref",
+				Columns:    []*schema.Column{ExamApplicationsIPColumns[53]},
+				RefColumns: []*schema.Column{ExamIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_Applications_IP_Facility_Office_IP_Ref",
+				Columns:    []*schema.Column{ExamApplicationsIPColumns[54]},
+				RefColumns: []*schema.Column{FacilityColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_Applications_IP_RoleMaster_Roles_IP_Ref",
+				Columns:    []*schema.Column{ExamApplicationsIPColumns[55]},
+				RefColumns: []*schema.Column{RoleMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_Applications_IP_UserMaster_UsersIPRef",
+				Columns:    []*schema.Column{ExamApplicationsIPColumns[56]},
+				RefColumns: []*schema.Column{UserMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ExamApplicationsPSColumns holds the columns for the "Exam_Applications_PS" table.
+	ExamApplicationsPSColumns = []*schema.Column{
+		{Name: "ApplicationID", Type: field.TypeInt64, Increment: true},
+		{Name: "application_number", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "employee_id", Type: field.TypeInt64, Unique: true, Nullable: true},
+		{Name: "employee_name", Type: field.TypeString, Nullable: true},
+		{Name: "dob", Type: field.TypeString, Nullable: true},
+		{Name: "gender", Type: field.TypeEnum, Enums: []string{"Male", "Female"}},
+		{Name: "mobile_number", Type: field.TypeString, Nullable: true},
+		{Name: "email_id", Type: field.TypeString, Nullable: true},
+		{Name: "employee_category", Type: field.TypeString, Nullable: true},
+		{Name: "cadre", Type: field.TypeString, Nullable: true},
+		{Name: "employee_post", Type: field.TypeString, Nullable: true},
+		{Name: "facility_id", Type: field.TypeString, Nullable: true},
+		{Name: "dccs", Type: field.TypeString, Nullable: true},
+		{Name: "dc_in_present_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "deputation_office_id", Type: field.TypeString, Nullable: true},
+		{Name: "disability_type", Type: field.TypeString, Nullable: true},
+		{Name: "disability_percentage", Type: field.TypeString, Nullable: true},
+		{Name: "education", Type: field.TypeString, Nullable: true},
+		{Name: "exam_name_code", Type: field.TypeString, Nullable: true},
+		{Name: "exam_year", Type: field.TypeString, Nullable: true},
+		{Name: "exam_name", Type: field.TypeString, Nullable: true},
+		{Name: "centre_preference", Type: field.TypeString, Nullable: true},
+		{Name: "signature", Type: field.TypeString, Nullable: true},
+		{Name: "photo", Type: field.TypeString, Nullable: true},
+		{Name: "application_status", Type: field.TypeString, Nullable: true},
+		{Name: "appln_submitted_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "va_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "va_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "va_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "ca_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "ca_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "ca_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "application_wdl_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "na_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "na_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "na_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "appliaction_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "cadre_preferences", Type: field.TypeJSON, Nullable: true},
+		{Name: "division_preferences", Type: field.TypeJSON, Nullable: true},
+		{Name: "circle_preferences", Type: field.TypeJSON, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "employee_master_emp_ref", Type: field.TypeInt64, Nullable: true},
+		{Name: "exam_pa_exam_appln_ps_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_ps_exam_appln_ps_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "facility_office_ps_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "role_user_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "user_master_users_ps_ref", Type: field.TypeInt64, Nullable: true},
+	}
+	// ExamApplicationsPSTable holds the schema information for the "Exam_Applications_PS" table.
+	ExamApplicationsPSTable = &schema.Table{
+		Name:       "Exam_Applications_PS",
+		Columns:    ExamApplicationsPSColumns,
+		PrimaryKey: []*schema.Column{ExamApplicationsPSColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "Exam_Applications_PS_EmployeeMaster_Emp_Ref",
+				Columns:    []*schema.Column{ExamApplicationsPSColumns[42]},
+				RefColumns: []*schema.Column{EmployeeMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_Applications_PS_Exam_PA_ExamAppln_PS_Ref",
+				Columns:    []*schema.Column{ExamApplicationsPSColumns[43]},
+				RefColumns: []*schema.Column{ExamPAColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_Applications_PS_Exam_PS_ExamAppln_PS_Ref",
+				Columns:    []*schema.Column{ExamApplicationsPSColumns[44]},
+				RefColumns: []*schema.Column{ExamPSColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_Applications_PS_Facility_Office_PS_Ref",
+				Columns:    []*schema.Column{ExamApplicationsPSColumns[45]},
+				RefColumns: []*schema.Column{FacilityColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_Applications_PS_RoleMaster_Roles_PS_Ref",
+				Columns:    []*schema.Column{ExamApplicationsPSColumns[46]},
+				RefColumns: []*schema.Column{RoleMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_Applications_PS_UserMaster_UsersPSRef",
+				Columns:    []*schema.Column{ExamApplicationsPSColumns[47]},
+				RefColumns: []*schema.Column{UserMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ExamIPColumns holds the columns for the "Exam_IP" table.
+	ExamIPColumns = []*schema.Column{
+		{Name: "ExamCodeIP", Type: field.TypeInt32, Increment: true},
+		{Name: "exam_name_code", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "exam_name", Type: field.TypeString},
+		{Name: "exam_type", Type: field.TypeString},
+		{Name: "notification_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "conducted_by", Type: field.TypeString},
+		{Name: "nodal_office", Type: field.TypeString, Nullable: true},
+		{Name: "calendar_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "paper_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "eligible_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post1", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post2", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post3", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post4", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post5", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post1", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post2", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post3", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post4", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post5", Type: field.TypeString, Nullable: true},
+		{Name: "education_criteria", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_gen", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_sc", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_st", Type: field.TypeString, Nullable: true},
+		{Name: "service_years", Type: field.TypeString, Nullable: true},
+		{Name: "driving_license_required", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper_code", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper1", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper2", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper3", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper4", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper5", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper6", Type: field.TypeString, Nullable: true},
+		{Name: "pay_level_eligibilty", Type: field.TypeBool, Nullable: true},
+		{Name: "category_min_marks_scstph", Type: field.TypeString, Nullable: true},
+		{Name: "category_min_marks_genobc", Type: field.TypeString, Nullable: true},
+		{Name: "local_language_allowed", Type: field.TypeBool, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "exam_calendar_examcal_ip_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_papers_papers_ip_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_applications_ip_exam_appln_ip_ref", Type: field.TypeInt64, Nullable: true},
+		{Name: "notification_notifications_ip", Type: field.TypeInt32, Nullable: true},
+		{Name: "user_master_users_ip_type", Type: field.TypeInt64, Nullable: true},
+	}
+	// ExamIPTable holds the schema information for the "Exam_IP" table.
+	ExamIPTable = &schema.Table{
+		Name:       "Exam_IP",
+		Columns:    ExamIPColumns,
+		PrimaryKey: []*schema.Column{ExamIPColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "Exam_IP_ExamCalendar_examcal_ip_ref",
+				Columns:    []*schema.Column{ExamIPColumns[39]},
+				RefColumns: []*schema.Column{ExamCalendarColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_IP_ExamPapers_papers_ip_ref",
+				Columns:    []*schema.Column{ExamIPColumns[40]},
+				RefColumns: []*schema.Column{ExamPapersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_IP_Exam_Applications_IP_ExamAppln_IP_Ref",
+				Columns:    []*schema.Column{ExamIPColumns[41]},
+				RefColumns: []*schema.Column{ExamApplicationsIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_IP_Notification_notifications_ip",
+				Columns:    []*schema.Column{ExamIPColumns[42]},
+				RefColumns: []*schema.Column{NotificationColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_IP_UserMaster_users_ip_type",
+				Columns:    []*schema.Column{ExamIPColumns[43]},
+				RefColumns: []*schema.Column{UserMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ExamPAColumns holds the columns for the "Exam_PA" table.
+	ExamPAColumns = []*schema.Column{
+		{Name: "ExamCodePA", Type: field.TypeInt32, Increment: true},
+		{Name: "exam_name_code", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "exam_name", Type: field.TypeString},
+		{Name: "exam_type", Type: field.TypeString},
+		{Name: "notification_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "conducted_by", Type: field.TypeString},
+		{Name: "nodal_office", Type: field.TypeString, Nullable: true},
+		{Name: "calendar_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "paper_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "eligible_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post1", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post2", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post3", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post4", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post5", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post1", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post2", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post3", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post4", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post5", Type: field.TypeString, Nullable: true},
+		{Name: "education_criteria", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_gen", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_sc", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_st", Type: field.TypeString, Nullable: true},
+		{Name: "service_years", Type: field.TypeString, Nullable: true},
+		{Name: "driving_license_required", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper_code", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper1", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper2", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper3", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper4", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper5", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper6", Type: field.TypeString, Nullable: true},
+		{Name: "pay_level_eligibilty", Type: field.TypeBool, Nullable: true},
+		{Name: "category_min_marks_scstph", Type: field.TypeString, Nullable: true},
+		{Name: "category_min_marks_genobc", Type: field.TypeString, Nullable: true},
+		{Name: "local_language_allowed", Type: field.TypeBool, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+	}
+	// ExamPATable holds the schema information for the "Exam_PA" table.
+	ExamPATable = &schema.Table{
+		Name:       "Exam_PA",
+		Columns:    ExamPAColumns,
+		PrimaryKey: []*schema.Column{ExamPAColumns[0]},
+	}
+	// ExamPMColumns holds the columns for the "Exam_PM" table.
+	ExamPMColumns = []*schema.Column{
+		{Name: "ExamCodePM", Type: field.TypeInt32, Increment: true},
+		{Name: "exam_name_code", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "exam_name", Type: field.TypeString},
+		{Name: "exam_type", Type: field.TypeString},
+		{Name: "notification_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "conducted_by", Type: field.TypeString},
+		{Name: "nodal_office", Type: field.TypeString, Nullable: true},
+		{Name: "calendar_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "paper_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "eligible_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post1", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post2", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post3", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post4", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post5", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post1", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post2", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post3", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post4", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post5", Type: field.TypeString, Nullable: true},
+		{Name: "education_criteria", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_gen", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_sc", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_st", Type: field.TypeString, Nullable: true},
+		{Name: "service_years", Type: field.TypeString, Nullable: true},
+		{Name: "driving_license_required", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper_code", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper1", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper2", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper3", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper4", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper5", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper6", Type: field.TypeString, Nullable: true},
+		{Name: "pay_level_eligibilty", Type: field.TypeBool, Nullable: true},
+		{Name: "category_min_marks_scstph", Type: field.TypeString, Nullable: true},
+		{Name: "category_min_marks_genobc", Type: field.TypeString, Nullable: true},
+		{Name: "local_language_allowed", Type: field.TypeBool, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+	}
+	// ExamPMTable holds the schema information for the "Exam_PM" table.
+	ExamPMTable = &schema.Table{
+		Name:       "Exam_PM",
+		Columns:    ExamPMColumns,
+		PrimaryKey: []*schema.Column{ExamPMColumns[0]},
+	}
+	// ExamPSColumns holds the columns for the "Exam_PS" table.
+	ExamPSColumns = []*schema.Column{
+		{Name: "ExamCodePS", Type: field.TypeInt32, Increment: true},
+		{Name: "exam_name_code", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "exam_name", Type: field.TypeString},
+		{Name: "exam_type", Type: field.TypeString},
+		{Name: "notification_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "conducted_by", Type: field.TypeString},
+		{Name: "nodal_office", Type: field.TypeString, Nullable: true},
+		{Name: "calendar_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "paper_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "eligible_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post1", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post2", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post3", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post4", Type: field.TypeString, Nullable: true},
+		{Name: "eligible_post5", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post1", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post2", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post3", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post4", Type: field.TypeString, Nullable: true},
+		{Name: "exam_post5", Type: field.TypeString, Nullable: true},
+		{Name: "education_criteria", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_gen", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_sc", Type: field.TypeString, Nullable: true},
+		{Name: "category_age_limit_st", Type: field.TypeString, Nullable: true},
+		{Name: "service_years", Type: field.TypeString, Nullable: true},
+		{Name: "driving_license_required", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper_code", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper1", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper2", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper3", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper4", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper5", Type: field.TypeString, Nullable: true},
+		{Name: "exam_paper6", Type: field.TypeString, Nullable: true},
+		{Name: "pay_level_eligibilty", Type: field.TypeString, Nullable: true},
+		{Name: "category_min_marks_scstph", Type: field.TypeString, Nullable: true},
+		{Name: "category_min_marks_genobc", Type: field.TypeString, Nullable: true},
+		{Name: "local_language_allowed", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "exam_calendar_examcal_ps_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_papers_papers_ps_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_applications_ps_exam_appln_ps_ref", Type: field.TypeInt64, Nullable: true},
+		{Name: "notification_notifications_ps", Type: field.TypeInt32, Nullable: true},
+		{Name: "user_master_users_ps_type", Type: field.TypeInt64, Nullable: true},
+	}
+	// ExamPSTable holds the schema information for the "Exam_PS" table.
+	ExamPSTable = &schema.Table{
+		Name:       "Exam_PS",
+		Columns:    ExamPSColumns,
+		PrimaryKey: []*schema.Column{ExamPSColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "Exam_PS_ExamCalendar_examcal_ps_ref",
+				Columns:    []*schema.Column{ExamPSColumns[39]},
+				RefColumns: []*schema.Column{ExamCalendarColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_PS_ExamPapers_papers_ps_ref",
+				Columns:    []*schema.Column{ExamPSColumns[40]},
+				RefColumns: []*schema.Column{ExamPapersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_PS_Exam_Applications_PS_ExamAppln_PS_Ref",
+				Columns:    []*schema.Column{ExamPSColumns[41]},
+				RefColumns: []*schema.Column{ExamApplicationsPSColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_PS_Notification_notifications_ps",
+				Columns:    []*schema.Column{ExamPSColumns[42]},
+				RefColumns: []*schema.Column{NotificationColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Exam_PS_UserMaster_users_ps_type",
+				Columns:    []*schema.Column{ExamPSColumns[43]},
+				RefColumns: []*schema.Column{UserMasterColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -447,18 +1257,27 @@ var (
 	// FacilityColumns holds the columns for the "Facility" table.
 	FacilityColumns = []*schema.Column{
 		{Name: "FacilityID", Type: field.TypeInt32, Increment: true},
-		{Name: "facility_code", Type: field.TypeString},
+		{Name: "facility_code", Type: field.TypeInt32, Unique: true, Nullable: true},
 		{Name: "office_type", Type: field.TypeString},
+		{Name: "facility_office_id", Type: field.TypeString, Unique: true},
 		{Name: "facility_name", Type: field.TypeString},
 		{Name: "reporting_office_type", Type: field.TypeString, Nullable: true},
 		{Name: "reporting_office_code", Type: field.TypeString, Nullable: true},
 		{Name: "email_id", Type: field.TypeString, Nullable: true},
-		{Name: "mobile_number", Type: field.TypeInt32, Nullable: true},
+		{Name: "mobile_number", Type: field.TypeInt64, Nullable: true},
 		{Name: "division_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "division_name", Type: field.TypeString, Nullable: true},
 		{Name: "region_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "region_name", Type: field.TypeString, Nullable: true},
 		{Name: "circle_code", Type: field.TypeInt32, Nullable: true},
-		{Name: "circle_master_circle_ref", Type: field.TypeInt32, Nullable: true},
-		{Name: "region_master_region_ref_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "circle_name", Type: field.TypeString, Nullable: true},
+		{Name: "reporting_office_id", Type: field.TypeString, Nullable: true},
+		{Name: "reporting_office_name", Type: field.TypeString, Nullable: true},
+		{Name: "circle_id", Type: field.TypeInt32, Nullable: true},
+		{Name: "division_id", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_applications_ip_office_ip_ref", Type: field.TypeInt64, Nullable: true},
+		{Name: "exam_applications_ps_office_ps_ref", Type: field.TypeInt64, Nullable: true},
+		{Name: "region_id", Type: field.TypeInt32, Nullable: true},
 	}
 	// FacilityTable holds the schema information for the "Facility" table.
 	FacilityTable = &schema.Table{
@@ -468,17 +1287,54 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "Facility_CircleMaster_circle_ref",
-				Columns:    []*schema.Column{FacilityColumns[11]},
+				Columns:    []*schema.Column{FacilityColumns[17]},
 				RefColumns: []*schema.Column{CircleMasterColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "Facility_DivisionMaster_divisions_ref",
+				Columns:    []*schema.Column{FacilityColumns[18]},
+				RefColumns: []*schema.Column{DivisionMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Facility_Exam_Applications_IP_Office_IP_Ref",
+				Columns:    []*schema.Column{FacilityColumns[19]},
+				RefColumns: []*schema.Column{ExamApplicationsIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Facility_Exam_Applications_PS_Office_PS_Ref",
+				Columns:    []*schema.Column{FacilityColumns[20]},
+				RefColumns: []*schema.Column{ExamApplicationsPSColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "Facility_RegionMaster_region_ref_ref",
-				Columns:    []*schema.Column{FacilityColumns[12]},
+				Columns:    []*schema.Column{FacilityColumns[21]},
 				RefColumns: []*schema.Column{RegionMasterColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
+	}
+	// LoginColumns holds the columns for the "Login" table.
+	LoginColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "login_id", Type: field.TypeUUID},
+		{Name: "username", Type: field.TypeString, Unique: true, Size: 100},
+		{Name: "password", Type: field.TypeString},
+		{Name: "employeed_id", Type: field.TypeInt32, Nullable: true},
+		{Name: "expiremins_token", Type: field.TypeInt32},
+		{Name: "expiremins_refresh_token", Type: field.TypeInt32},
+		{Name: "role", Type: field.TypeInt32},
+		{Name: "token", Type: field.TypeString},
+		{Name: "verify_remarks", Type: field.TypeString, Nullable: true},
+	}
+	// LoginTable holds the schema information for the "Login" table.
+	LoginTable = &schema.Table{
+		Name:       "Login",
+		Columns:    LoginColumns,
+		PrimaryKey: []*schema.Column{LoginColumns[0]},
 	}
 	// NodalOfficersColumns holds the columns for the "NodalOfficers" table.
 	NodalOfficersColumns = []*schema.Column{
@@ -525,8 +1381,13 @@ var (
 		{Name: "notify_file", Type: field.TypeString, Nullable: true},
 		{Name: "syllabus_file", Type: field.TypeString, Nullable: true},
 		{Name: "vacancies_file", Type: field.TypeString, Nullable: true},
+		{Name: "exam_code_ps", Type: field.TypeInt32, Nullable: true},
+		{Name: "eligibility_master_notifications", Type: field.TypeInt32, Nullable: true},
 		{Name: "exam_code", Type: field.TypeInt32, Nullable: true},
 		{Name: "exam_calendar_notify_ref", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_ip_notifications_ip", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_pa_notifications_ps", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_ps_notifications_ps", Type: field.TypeInt32, Nullable: true},
 	}
 	// NotificationTable holds the schema information for the "Notification" table.
 	NotificationTable = &schema.Table{
@@ -535,15 +1396,39 @@ var (
 		PrimaryKey: []*schema.Column{NotificationColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
+				Symbol:     "Notification_EligibilityMaster_Notifications",
+				Columns:    []*schema.Column{NotificationColumns[13]},
+				RefColumns: []*schema.Column{EligibilityMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "Notification_Exam_notifications",
-				Columns:    []*schema.Column{NotificationColumns[12]},
+				Columns:    []*schema.Column{NotificationColumns[14]},
 				RefColumns: []*schema.Column{ExamColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "Notification_ExamCalendar_Notify_ref",
-				Columns:    []*schema.Column{NotificationColumns[13]},
+				Columns:    []*schema.Column{NotificationColumns[15]},
 				RefColumns: []*schema.Column{ExamCalendarColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Notification_Exam_IP_notifications_ip",
+				Columns:    []*schema.Column{NotificationColumns[16]},
+				RefColumns: []*schema.Column{ExamIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Notification_Exam_PA_notifications_ps",
+				Columns:    []*schema.Column{NotificationColumns[17]},
+				RefColumns: []*schema.Column{ExamPAColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "Notification_Exam_PS_notifications_ps",
+				Columns:    []*schema.Column{NotificationColumns[18]},
+				RefColumns: []*schema.Column{ExamPSColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -553,8 +1438,8 @@ var (
 		{Name: "PaperTypeCode", Type: field.TypeInt32, Increment: true},
 		{Name: "paper_type_description", Type: field.TypeString, Size: 100},
 		{Name: "order_number", Type: field.TypeString, Size: 100},
-		{Name: "sequence_number", Type: field.TypeInt32},
-		{Name: "created_date", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "sequence_number", Type: field.TypeInt32, Nullable: true},
+		{Name: "created_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "paper_code", Type: field.TypeInt32, Nullable: true},
 	}
 	// PaperTypesTable holds the schema information for the "paper_types" table.
@@ -571,10 +1456,68 @@ var (
 			},
 		},
 	}
+	// PlaceOfPreferenceIPColumns holds the columns for the "PlaceOfPreferenceIP" table.
+	PlaceOfPreferenceIPColumns = []*schema.Column{
+		{Name: "PlacePrefId", Type: field.TypeInt32, Increment: true},
+		{Name: "place_pref_no", Type: field.TypeInt32, Nullable: true},
+		{Name: "place_pref_value", Type: field.TypeString, Nullable: true},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "application_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// PlaceOfPreferenceIPTable holds the schema information for the "PlaceOfPreferenceIP" table.
+	PlaceOfPreferenceIPTable = &schema.Table{
+		Name:       "PlaceOfPreferenceIP",
+		Columns:    PlaceOfPreferenceIPColumns,
+		PrimaryKey: []*schema.Column{PlaceOfPreferenceIPColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "PlaceOfPreferenceIP_Exam_Applications_IP_CirclePrefRef",
+				Columns:    []*schema.Column{PlaceOfPreferenceIPColumns[6]},
+				RefColumns: []*schema.Column{ExamApplicationsIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// RecommendationsIPApplicationsColumns holds the columns for the "RecommendationsIPApplications" table.
+	RecommendationsIPApplicationsColumns = []*schema.Column{
+		{Name: "RecommendationId", Type: field.TypeInt64, Increment: true},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "exam_name_code", Type: field.TypeString, Nullable: true},
+		{Name: "exam_year", Type: field.TypeString, Nullable: true},
+		{Name: "vacancy_year", Type: field.TypeInt32, Nullable: true},
+		{Name: "ca_recommendations", Type: field.TypeString, Nullable: true},
+		{Name: "ca_updated_at", Type: field.TypeString, Nullable: true},
+		{Name: "ca_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "ca_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "no_recommendations", Type: field.TypeString, Nullable: true},
+		{Name: "no_updated_at", Type: field.TypeString, Nullable: true},
+		{Name: "no_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "no_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "application_status", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "application_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// RecommendationsIPApplicationsTable holds the schema information for the "RecommendationsIPApplications" table.
+	RecommendationsIPApplicationsTable = &schema.Table{
+		Name:       "RecommendationsIPApplications",
+		Columns:    RecommendationsIPApplicationsColumns,
+		PrimaryKey: []*schema.Column{RecommendationsIPApplicationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "RecommendationsIPApplications_Exam_Applications_IP_IPApplicationsRef",
+				Columns:    []*schema.Column{RecommendationsIPApplicationsColumns[16]},
+				RefColumns: []*schema.Column{ExamApplicationsIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// RegionMasterColumns holds the columns for the "RegionMaster" table.
 	RegionMasterColumns = []*schema.Column{
 		{Name: "RegionID", Type: field.TypeInt32, Increment: true},
-		{Name: "region_code", Type: field.TypeInt32},
+		{Name: "region_code", Type: field.TypeInt32, Unique: true},
 		{Name: "region_office_id", Type: field.TypeString},
 		{Name: "office_type", Type: field.TypeString},
 		{Name: "region_office_name", Type: field.TypeString},
@@ -585,7 +1528,6 @@ var (
 		{Name: "circle_code", Type: field.TypeInt32, Nullable: true},
 		{Name: "circle_master_region_ref", Type: field.TypeInt32, Nullable: true},
 		{Name: "division_master_regions", Type: field.TypeInt32, Nullable: true},
-		{Name: "facility_region_ref", Type: field.TypeInt32, Nullable: true},
 	}
 	// RegionMasterTable holds the schema information for the "RegionMaster" table.
 	RegionMasterTable = &schema.Table{
@@ -605,13 +1547,63 @@ var (
 				RefColumns: []*schema.Column{DivisionMasterColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
-			{
-				Symbol:     "RegionMaster_Facility_region_ref",
-				Columns:    []*schema.Column{RegionMasterColumns[12]},
-				RefColumns: []*schema.Column{FacilityColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
 		},
+	}
+	// ReversalApplicationIPColumns holds the columns for the "Reversal_Application_IP" table.
+	ReversalApplicationIPColumns = []*schema.Column{
+		{Name: "ApplicationID", Type: field.TypeInt64, Increment: true},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "employee_name", Type: field.TypeString, Nullable: true},
+		{Name: "dob", Type: field.TypeString, Nullable: true},
+		{Name: "gender", Type: field.TypeEnum, Enums: []string{"Male", "Female"}},
+		{Name: "mobile_number", Type: field.TypeString, Nullable: true},
+		{Name: "email_id", Type: field.TypeString, Nullable: true},
+		{Name: "employee_category", Type: field.TypeString, Nullable: true},
+		{Name: "cadre", Type: field.TypeString, Nullable: true},
+		{Name: "employee_post", Type: field.TypeString, Nullable: true},
+		{Name: "facility_id", Type: field.TypeString, Nullable: true},
+		{Name: "dccs", Type: field.TypeString, Nullable: true},
+		{Name: "dc_in_present_cadre", Type: field.TypeString, Nullable: true},
+		{Name: "deputation_office_id", Type: field.TypeString, Nullable: true},
+		{Name: "disability_type", Type: field.TypeString, Nullable: true},
+		{Name: "disability_percentage", Type: field.TypeString, Nullable: true},
+		{Name: "education", Type: field.TypeString, Nullable: true},
+		{Name: "exam_code_ip", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_year", Type: field.TypeString, Nullable: true},
+		{Name: "centre_preference", Type: field.TypeString, Nullable: true},
+		{Name: "signature", Type: field.TypeString, Nullable: true},
+		{Name: "photo", Type: field.TypeString, Nullable: true},
+		{Name: "application_status", Type: field.TypeString, Nullable: true},
+		{Name: "reversal_appln_submitted_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "va_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "va_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "va_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "ca_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "ca_user_name", Type: field.TypeString, Nullable: true},
+		{Name: "ca_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "appliaction_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "role_user_code", Type: field.TypeInt32, Nullable: true},
+	}
+	// ReversalApplicationIPTable holds the schema information for the "Reversal_Application_IP" table.
+	ReversalApplicationIPTable = &schema.Table{
+		Name:       "Reversal_Application_IP",
+		Columns:    ReversalApplicationIPColumns,
+		PrimaryKey: []*schema.Column{ReversalApplicationIPColumns[0]},
+	}
+	// RoleMasterColumns holds the columns for the "RoleMaster" table.
+	RoleMasterColumns = []*schema.Column{
+		{Name: "RoleUserCode", Type: field.TypeInt32, Increment: true},
+		{Name: "role_name", Type: field.TypeString},
+		{Name: "created_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "status", Type: field.TypeBool, Default: true},
+	}
+	// RoleMasterTable holds the schema information for the "RoleMaster" table.
+	RoleMasterTable = &schema.Table{
+		Name:       "RoleMaster",
+		Columns:    RoleMasterColumns,
+		PrimaryKey: []*schema.Column{RoleMasterColumns[0]},
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
@@ -659,6 +1651,84 @@ var (
 		Name:       "users",
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
+	}
+	// UserMasterColumns holds the columns for the "UserMaster" table.
+	UserMasterColumns = []*schema.Column{
+		{Name: "UserID", Type: field.TypeInt64, Increment: true},
+		{Name: "employee_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "employee_name", Type: field.TypeString, Nullable: true},
+		{Name: "facility_id", Type: field.TypeString, Nullable: true},
+		{Name: "cadre", Type: field.TypeString, Nullable: true},
+		{Name: "mobile", Type: field.TypeString, Nullable: true},
+		{Name: "email_id", Type: field.TypeString, Nullable: true},
+		{Name: "user_name", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "password", Type: field.TypeString, Nullable: true},
+		{Name: "otp", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_code", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_code_ps", Type: field.TypeInt32, Nullable: true},
+		{Name: "otp_remarks", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "new_password_request", Type: field.TypeBool, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "otp_triggered_time", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true, Default: "API"},
+		{Name: "employee_master_usermaster_ref", Type: field.TypeInt64, Nullable: true},
+		{Name: "exam_applications_ip_users_ip_ref", Type: field.TypeInt64, Nullable: true},
+		{Name: "exam_applications_ps_users_ps_ref", Type: field.TypeInt64, Nullable: true},
+		{Name: "exam_ip_users_ip_type", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_pa_users_ps_type", Type: field.TypeInt32, Nullable: true},
+		{Name: "exam_ps_users_ps_type", Type: field.TypeInt32, Nullable: true},
+		{Name: "role_user_code", Type: field.TypeInt32, Nullable: true},
+	}
+	// UserMasterTable holds the schema information for the "UserMaster" table.
+	UserMasterTable = &schema.Table{
+		Name:       "UserMaster",
+		Columns:    UserMasterColumns,
+		PrimaryKey: []*schema.Column{UserMasterColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "UserMaster_EmployeeMaster_UsermasterRef",
+				Columns:    []*schema.Column{UserMasterColumns[18]},
+				RefColumns: []*schema.Column{EmployeeMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "UserMaster_Exam_Applications_IP_UsersIPRef",
+				Columns:    []*schema.Column{UserMasterColumns[19]},
+				RefColumns: []*schema.Column{ExamApplicationsIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "UserMaster_Exam_Applications_PS_UsersPSRef",
+				Columns:    []*schema.Column{UserMasterColumns[20]},
+				RefColumns: []*schema.Column{ExamApplicationsPSColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "UserMaster_Exam_IP_users_ip_type",
+				Columns:    []*schema.Column{UserMasterColumns[21]},
+				RefColumns: []*schema.Column{ExamIPColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "UserMaster_Exam_PA_users_ps_type",
+				Columns:    []*schema.Column{UserMasterColumns[22]},
+				RefColumns: []*schema.Column{ExamPAColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "UserMaster_Exam_PS_users_ps_type",
+				Columns:    []*schema.Column{UserMasterColumns[23]},
+				RefColumns: []*schema.Column{ExamPSColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "UserMaster_RoleMaster_Roles_Ref",
+				Columns:    []*schema.Column{UserMasterColumns[24]},
+				RefColumns: []*schema.Column{RoleMasterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// VacancyYearsColumns holds the columns for the "VacancyYears" table.
 	VacancyYearsColumns = []*schema.Column{
@@ -711,34 +1781,60 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		AdminLoginTable,
 		AgeEligibilityTable,
 		ApplicationTable,
+		CadreChoiceIPTable,
+		CadreChoicePATable,
+		CadreChoicePMTable,
+		CadreChoicePSTable,
 		CenterTable,
 		CircleMasterTable,
+		DirectorateUsersTable,
 		DisabilityTable,
 		DivisionMasterTable,
+		DivisionChoicePATable,
+		DivisionChoicePMTable,
+		DivisionChoicePSTable,
+		EligibilityMasterTable,
 		EmployeeCadreTable,
 		EmployeeCategoryTable,
 		EmployeeDesignationTable,
+		EmployeeMasterTable,
 		EmployeePostsTable,
 		EmployeesTable,
 		ExamTable,
 		ExamCalendarTable,
-		ExamEligibilityTable,
 		ExamPapersTable,
+		ExamTypeTable,
+		ExamApplicationsIPTable,
+		ExamApplicationsPSTable,
+		ExamIPTable,
+		ExamPATable,
+		ExamPMTable,
+		ExamPSTable,
 		FacilityTable,
+		LoginTable,
 		NodalOfficersTable,
 		NotificationTable,
 		PaperTypesTable,
+		PlaceOfPreferenceIPTable,
+		RecommendationsIPApplicationsTable,
 		RegionMasterTable,
+		ReversalApplicationIPTable,
+		RoleMasterTable,
 		UsersTable,
+		UserMasterTable,
 		VacancyYearsTable,
 		NotificationNotifyRefTable,
 	}
 )
 
 func init() {
-	AgeEligibilityTable.ForeignKeys[0].RefTable = ExamEligibilityTable
+	AdminLoginTable.ForeignKeys[0].RefTable = RoleMasterTable
+	AdminLoginTable.Annotation = &entsql.Annotation{
+		Table: "AdminLogin",
+	}
 	AgeEligibilityTable.Annotation = &entsql.Annotation{
 		Table: "AgeEligibility",
 	}
@@ -746,6 +1842,19 @@ func init() {
 	ApplicationTable.ForeignKeys[1].RefTable = NotificationTable
 	ApplicationTable.Annotation = &entsql.Annotation{
 		Table: "Application",
+	}
+	CadreChoiceIPTable.ForeignKeys[0].RefTable = ExamApplicationsIPTable
+	CadreChoiceIPTable.Annotation = &entsql.Annotation{
+		Table: "Cadre_Choice_IP",
+	}
+	CadreChoicePATable.Annotation = &entsql.Annotation{
+		Table: "Cadre_Choice_PA",
+	}
+	CadreChoicePMTable.Annotation = &entsql.Annotation{
+		Table: "Cadre_Choice_PM",
+	}
+	CadreChoicePSTable.Annotation = &entsql.Annotation{
+		Table: "Cadre_Choice_PS",
 	}
 	CenterTable.ForeignKeys[0].RefTable = ExamPapersTable
 	CenterTable.ForeignKeys[1].RefTable = NodalOfficersTable
@@ -758,6 +1867,10 @@ func init() {
 	CircleMasterTable.Annotation = &entsql.Annotation{
 		Table: "CircleMaster",
 	}
+	DirectorateUsersTable.Annotation = &entsql.Annotation{
+		Table: "DirectorateUsers",
+	}
+	DisabilityTable.ForeignKeys[0].RefTable = ExamPapersTable
 	DisabilityTable.Annotation = &entsql.Annotation{
 		Table: "Disability",
 	}
@@ -765,17 +1878,43 @@ func init() {
 	DivisionMasterTable.Annotation = &entsql.Annotation{
 		Table: "DivisionMaster",
 	}
+	DivisionChoicePATable.Annotation = &entsql.Annotation{
+		Table: "Division_Choice_PA",
+	}
+	DivisionChoicePMTable.Annotation = &entsql.Annotation{
+		Table: "Division_Choice_PM",
+	}
+	DivisionChoicePSTable.Annotation = &entsql.Annotation{
+		Table: "Division_Choice_PS",
+	}
+	EligibilityMasterTable.ForeignKeys[0].RefTable = EmployeePostsTable
+	EligibilityMasterTable.ForeignKeys[1].RefTable = ExamTable
+	EligibilityMasterTable.ForeignKeys[2].RefTable = ExamPapersTable
+	EligibilityMasterTable.Annotation = &entsql.Annotation{
+		Table: "EligibilityMaster",
+	}
 	EmployeeCadreTable.Annotation = &entsql.Annotation{
 		Table: "EmployeeCadre",
 	}
+	EmployeeCategoryTable.ForeignKeys[0].RefTable = EligibilityMasterTable
 	EmployeeCategoryTable.Annotation = &entsql.Annotation{
 		Table: "EmployeeCategory",
 	}
 	EmployeeDesignationTable.Annotation = &entsql.Annotation{
 		Table: "EmployeeDesignation",
 	}
+	EmployeeMasterTable.ForeignKeys[0].RefTable = UserMasterTable
+	EmployeeMasterTable.Annotation = &entsql.Annotation{
+		Table: "EmployeeMaster",
+	}
+	EmployeePostsTable.ForeignKeys[0].RefTable = EligibilityMasterTable
 	EmployeePostsTable.Annotation = &entsql.Annotation{
 		Table: "EmployeePosts",
+	}
+	EmployeesTable.ForeignKeys[0].RefTable = DirectorateUsersTable
+	EmployeesTable.ForeignKeys[1].RefTable = EmployeePostsTable
+	EmployeesTable.Annotation = &entsql.Annotation{
+		Table: "Employees",
 	}
 	ExamTable.ForeignKeys[0].RefTable = VacancyYearsTable
 	ExamTable.Annotation = &entsql.Annotation{
@@ -783,38 +1922,117 @@ func init() {
 	}
 	ExamCalendarTable.ForeignKeys[0].RefTable = ExamTable
 	ExamCalendarTable.ForeignKeys[1].RefTable = ExamPapersTable
-	ExamCalendarTable.ForeignKeys[2].RefTable = VacancyYearsTable
+	ExamCalendarTable.ForeignKeys[2].RefTable = ExamIPTable
+	ExamCalendarTable.ForeignKeys[3].RefTable = ExamPATable
+	ExamCalendarTable.ForeignKeys[4].RefTable = ExamPSTable
+	ExamCalendarTable.ForeignKeys[5].RefTable = VacancyYearsTable
 	ExamCalendarTable.Annotation = &entsql.Annotation{
 		Table: "ExamCalendar",
 	}
-	ExamEligibilityTable.Annotation = &entsql.Annotation{
-		Table: "ExamEligibility",
-	}
-	ExamPapersTable.ForeignKeys[0].RefTable = ExamTable
+	ExamPapersTable.ForeignKeys[0].RefTable = DisabilityTable
+	ExamPapersTable.ForeignKeys[1].RefTable = ExamTable
+	ExamPapersTable.ForeignKeys[2].RefTable = ExamIPTable
+	ExamPapersTable.ForeignKeys[3].RefTable = ExamPATable
+	ExamPapersTable.ForeignKeys[4].RefTable = ExamPSTable
 	ExamPapersTable.Annotation = &entsql.Annotation{
 		Table: "ExamPapers",
 	}
+	ExamTypeTable.ForeignKeys[0].RefTable = ExamTable
+	ExamTypeTable.Annotation = &entsql.Annotation{
+		Table: "ExamType",
+	}
+	ExamApplicationsIPTable.ForeignKeys[0].RefTable = ExamIPTable
+	ExamApplicationsIPTable.ForeignKeys[1].RefTable = FacilityTable
+	ExamApplicationsIPTable.ForeignKeys[2].RefTable = RoleMasterTable
+	ExamApplicationsIPTable.ForeignKeys[3].RefTable = UserMasterTable
+	ExamApplicationsIPTable.Annotation = &entsql.Annotation{
+		Table: "Exam_Applications_IP",
+	}
+	ExamApplicationsPSTable.ForeignKeys[0].RefTable = EmployeeMasterTable
+	ExamApplicationsPSTable.ForeignKeys[1].RefTable = ExamPATable
+	ExamApplicationsPSTable.ForeignKeys[2].RefTable = ExamPSTable
+	ExamApplicationsPSTable.ForeignKeys[3].RefTable = FacilityTable
+	ExamApplicationsPSTable.ForeignKeys[4].RefTable = RoleMasterTable
+	ExamApplicationsPSTable.ForeignKeys[5].RefTable = UserMasterTable
+	ExamApplicationsPSTable.Annotation = &entsql.Annotation{
+		Table: "Exam_Applications_PS",
+	}
+	ExamIPTable.ForeignKeys[0].RefTable = ExamCalendarTable
+	ExamIPTable.ForeignKeys[1].RefTable = ExamPapersTable
+	ExamIPTable.ForeignKeys[2].RefTable = ExamApplicationsIPTable
+	ExamIPTable.ForeignKeys[3].RefTable = NotificationTable
+	ExamIPTable.ForeignKeys[4].RefTable = UserMasterTable
+	ExamIPTable.Annotation = &entsql.Annotation{
+		Table: "Exam_IP",
+	}
+	ExamPATable.Annotation = &entsql.Annotation{
+		Table: "Exam_PA",
+	}
+	ExamPMTable.Annotation = &entsql.Annotation{
+		Table: "Exam_PM",
+	}
+	ExamPSTable.ForeignKeys[0].RefTable = ExamCalendarTable
+	ExamPSTable.ForeignKeys[1].RefTable = ExamPapersTable
+	ExamPSTable.ForeignKeys[2].RefTable = ExamApplicationsPSTable
+	ExamPSTable.ForeignKeys[3].RefTable = NotificationTable
+	ExamPSTable.ForeignKeys[4].RefTable = UserMasterTable
+	ExamPSTable.Annotation = &entsql.Annotation{
+		Table: "Exam_PS",
+	}
 	FacilityTable.ForeignKeys[0].RefTable = CircleMasterTable
-	FacilityTable.ForeignKeys[1].RefTable = RegionMasterTable
+	FacilityTable.ForeignKeys[1].RefTable = DivisionMasterTable
+	FacilityTable.ForeignKeys[2].RefTable = ExamApplicationsIPTable
+	FacilityTable.ForeignKeys[3].RefTable = ExamApplicationsPSTable
+	FacilityTable.ForeignKeys[4].RefTable = RegionMasterTable
 	FacilityTable.Annotation = &entsql.Annotation{
 		Table: "Facility",
+	}
+	LoginTable.Annotation = &entsql.Annotation{
+		Table: "Login",
 	}
 	NodalOfficersTable.ForeignKeys[0].RefTable = ExamTable
 	NodalOfficersTable.ForeignKeys[1].RefTable = NotificationTable
 	NodalOfficersTable.Annotation = &entsql.Annotation{
 		Table: "NodalOfficers",
 	}
-	NotificationTable.ForeignKeys[0].RefTable = ExamTable
-	NotificationTable.ForeignKeys[1].RefTable = ExamCalendarTable
+	NotificationTable.ForeignKeys[0].RefTable = EligibilityMasterTable
+	NotificationTable.ForeignKeys[1].RefTable = ExamTable
+	NotificationTable.ForeignKeys[2].RefTable = ExamCalendarTable
+	NotificationTable.ForeignKeys[3].RefTable = ExamIPTable
+	NotificationTable.ForeignKeys[4].RefTable = ExamPATable
+	NotificationTable.ForeignKeys[5].RefTable = ExamPSTable
 	NotificationTable.Annotation = &entsql.Annotation{
 		Table: "Notification",
 	}
 	PaperTypesTable.ForeignKeys[0].RefTable = ExamPapersTable
+	PlaceOfPreferenceIPTable.ForeignKeys[0].RefTable = ExamApplicationsIPTable
+	PlaceOfPreferenceIPTable.Annotation = &entsql.Annotation{
+		Table: "PlaceOfPreferenceIP",
+	}
+	RecommendationsIPApplicationsTable.ForeignKeys[0].RefTable = ExamApplicationsIPTable
+	RecommendationsIPApplicationsTable.Annotation = &entsql.Annotation{
+		Table: "RecommendationsIPApplications",
+	}
 	RegionMasterTable.ForeignKeys[0].RefTable = CircleMasterTable
 	RegionMasterTable.ForeignKeys[1].RefTable = DivisionMasterTable
-	RegionMasterTable.ForeignKeys[2].RefTable = FacilityTable
 	RegionMasterTable.Annotation = &entsql.Annotation{
 		Table: "RegionMaster",
+	}
+	ReversalApplicationIPTable.Annotation = &entsql.Annotation{
+		Table: "Reversal_Application_IP",
+	}
+	RoleMasterTable.Annotation = &entsql.Annotation{
+		Table: "RoleMaster",
+	}
+	UserMasterTable.ForeignKeys[0].RefTable = EmployeeMasterTable
+	UserMasterTable.ForeignKeys[1].RefTable = ExamApplicationsIPTable
+	UserMasterTable.ForeignKeys[2].RefTable = ExamApplicationsPSTable
+	UserMasterTable.ForeignKeys[3].RefTable = ExamIPTable
+	UserMasterTable.ForeignKeys[4].RefTable = ExamPATable
+	UserMasterTable.ForeignKeys[5].RefTable = ExamPSTable
+	UserMasterTable.ForeignKeys[6].RefTable = RoleMasterTable
+	UserMasterTable.Annotation = &entsql.Annotation{
+		Table: "UserMaster",
 	}
 	VacancyYearsTable.ForeignKeys[0].RefTable = NotificationTable
 	VacancyYearsTable.Annotation = &entsql.Annotation{

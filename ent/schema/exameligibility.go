@@ -11,26 +11,43 @@ import (
 )
 
 // ExamEligibility holds the schema definition for the ExamEligibility entity.
-type ExamEligibility struct {
+type EligibilityMaster struct {
 	ent.Schema
 }
 
 // Fields of the ExamEligibility.
-func (ExamEligibility) Fields() []ent.Field {
-	return []ent.Field{field.Int32("id").
-		//field.Int16("examcode").Positive(),
-		/*field.UUID("id", uuid.UUID{}).
-		Default(uuid.New).
-		StorageKey("examEligibilityCode"),*/StorageKey("EligibilityCode"), field.Int32("Examcode"), field.String("AgeCriteria").Optional(), field.String("ServiceCriteria").Optional(), field.String("DrivingLicenseCriteria").Optional(), field.Int32("NotifyCode").Optional(), field.Int32("EmployeeCadreID").Optional(), field.Int32("CategoryID").Optional()}
+func (EligibilityMaster) Fields() []ent.Field {
+	return []ent.Field{field.Int32("id").StorageKey("EligibilityCode"),
+		 field.Int32("ExamCode").Optional(), 
+		 field.String("ExamName"),
+		 field.String("PostCode").Optional(),
+		 field.Bool("gdsService").Default(false),
+		 field.Int32("AgeCriteria").Optional(), 
+		 field.Int32("ServiceCriteria").Optional(),
+		 field.Bool("DrivingLicenseCriteria").Default(false),
+		 field.Bool("ComputerKnowledge").Default(false),
+		 field.Bool("LevelOfPayMatrixEligibility").Default(false),
+		 field.String("Education"),
+		 field.Int32("NotifyCode").Optional(),
+		 field.String("CategoryCode").Optional(),
+		 field.Int32("PaperCode").Optional(),
+		 field.String("PaperDescription"),
+		 field.Int32("MinimumMarks"),
+		}
 
-	// Edges of the ExamEligibility.
-
+	// Edges of the ExamEligibility.		
+	
 }
 
-func (ExamEligibility) Edges() []ent.Edge {
-	return []ent.Edge{edge.To("age_eligibilities", AgeEligibility.Type)}
-
+func (EligibilityMaster) Edges() []ent.Edge {
+	return []ent.Edge{//edge.To("ExamEligibility", Exam.Type),
+	edge.To("Notifications", Notification.Type),
+	edge.To("CategoryEligibility", EmployeeCategory.Type),
+	edge.To("PostEligibility", EmployeePosts.Type),
+	//edge.To("ExamPaperEligibility", ExamPapers.Type),
+	edge.From("ExamPaper_Eligibility", ExamPapers.Type).Ref("ExamPaperEligibility").Unique().Field("PaperCode"),
+	edge.From("Exam_Eligibility", Exam.Type).Ref("ExamEligibility").Unique().Field("ExamCode"),}
 }
-func (ExamEligibility) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: "ExamEligibility"}}
+func (EligibilityMaster) Annotations() []schema.Annotation {
+	return []schema.Annotation{entsql.Annotation{Table: "EligibilityMaster"}}
 }

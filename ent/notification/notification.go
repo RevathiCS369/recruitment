@@ -36,6 +36,8 @@ const (
 	FieldSyllabusFile = "syllabus_file"
 	// FieldVacanciesFile holds the string denoting the vacanciesfile field in the database.
 	FieldVacanciesFile = "vacancies_file"
+	// FieldExamCodePS holds the string denoting the examcodeps field in the database.
+	FieldExamCodePS = "exam_code_ps"
 	// EdgeApplications holds the string denoting the applications edge name in mutations.
 	EdgeApplications = "applications"
 	// EdgeCenters holds the string denoting the centers edge name in mutations.
@@ -48,6 +50,10 @@ const (
 	EdgeVacancyYears = "vacancy_years"
 	// EdgeNotifyRef holds the string denoting the notify_ref edge name in mutations.
 	EdgeNotifyRef = "notify_ref"
+	// EdgeNotificationsPs holds the string denoting the notifications_ps edge name in mutations.
+	EdgeNotificationsPs = "notifications_ps"
+	// EdgeNotificationsIP holds the string denoting the notifications_ip edge name in mutations.
+	EdgeNotificationsIP = "notifications_ip"
 	// ApplicationFieldID holds the string denoting the ID field of the Application.
 	ApplicationFieldID = "ApplicationCode"
 	// CenterFieldID holds the string denoting the ID field of the Center.
@@ -58,6 +64,10 @@ const (
 	ExamFieldID = "ExamCode"
 	// VacancyYearFieldID holds the string denoting the ID field of the VacancyYear.
 	VacancyYearFieldID = "VacancyYearCode"
+	// Exam_PSFieldID holds the string denoting the ID field of the Exam_PS.
+	Exam_PSFieldID = "ExamCodePS"
+	// Exam_IPFieldID holds the string denoting the ID field of the Exam_IP.
+	Exam_IPFieldID = "ExamCodeIP"
 	// Table holds the table name of the notification in the database.
 	Table = "Notification"
 	// ApplicationsTable is the table that holds the applications relation/edge.
@@ -97,6 +107,20 @@ const (
 	VacancyYearsColumn = "notification_vacancy_years"
 	// NotifyRefTable is the table that holds the notify_ref relation/edge. The primary key declared below.
 	NotifyRefTable = "notification_notify_ref"
+	// NotificationsPsTable is the table that holds the notifications_ps relation/edge.
+	NotificationsPsTable = "Exam_PS"
+	// NotificationsPsInverseTable is the table name for the Exam_PS entity.
+	// It exists in this package in order to avoid circular dependency with the "exam_ps" package.
+	NotificationsPsInverseTable = "Exam_PS"
+	// NotificationsPsColumn is the table column denoting the notifications_ps relation/edge.
+	NotificationsPsColumn = "notification_notifications_ps"
+	// NotificationsIPTable is the table that holds the notifications_ip relation/edge.
+	NotificationsIPTable = "Exam_IP"
+	// NotificationsIPInverseTable is the table name for the Exam_IP entity.
+	// It exists in this package in order to avoid circular dependency with the "exam_ip" package.
+	NotificationsIPInverseTable = "Exam_IP"
+	// NotificationsIPColumn is the table column denoting the notifications_ip relation/edge.
+	NotificationsIPColumn = "notification_notifications_ip"
 )
 
 // Columns holds all SQL columns for notification fields.
@@ -114,12 +138,17 @@ var Columns = []string{
 	FieldNotifyFile,
 	FieldSyllabusFile,
 	FieldVacanciesFile,
+	FieldExamCodePS,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "Notification"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"eligibility_master_notifications",
 	"exam_calendar_notify_ref",
+	"exam_ip_notifications_ip",
+	"exam_pa_notifications_ps",
+	"exam_ps_notifications_ps",
 }
 
 var (
@@ -211,6 +240,11 @@ func ByVacanciesFile(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVacanciesFile, opts...).ToFunc()
 }
 
+// ByExamCodePS orders the results by the ExamCodePS field.
+func ByExamCodePS(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExamCodePS, opts...).ToFunc()
+}
+
 // ByApplicationsCount orders the results by applications count.
 func ByApplicationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -287,6 +321,34 @@ func ByNotifyRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newNotifyRefStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByNotificationsPsCount orders the results by notifications_ps count.
+func ByNotificationsPsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationsPsStep(), opts...)
+	}
+}
+
+// ByNotificationsPs orders the results by notifications_ps terms.
+func ByNotificationsPs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationsPsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByNotificationsIPCount orders the results by notifications_ip count.
+func ByNotificationsIPCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationsIPStep(), opts...)
+	}
+}
+
+// ByNotificationsIP orders the results by notifications_ip terms.
+func ByNotificationsIP(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationsIPStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newApplicationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -327,5 +389,19 @@ func newNotifyRefStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(Table, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, NotifyRefTable, NotifyRefPrimaryKey...),
+	)
+}
+func newNotificationsPsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationsPsInverseTable, Exam_PSFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationsPsTable, NotificationsPsColumn),
+	)
+}
+func newNotificationsIPStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationsIPInverseTable, Exam_IPFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationsIPTable, NotificationsIPColumn),
 	)
 }

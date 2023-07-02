@@ -49,10 +49,15 @@ type ExamCalendar struct {
 	VacancyYearCode int32 `json:"VacancyYearCode,omitempty"`
 	// PaperCode holds the value of the "PaperCode" field.
 	PaperCode int32 `json:"PaperCode,omitempty"`
+	// ExamCodePS holds the value of the "ExamCodePS" field.
+	ExamCodePS int32 `json:"ExamCodePS,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ExamCalendarQuery when eager-loading is set.
-	Edges        ExamCalendarEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                  ExamCalendarEdges `json:"edges"`
+	exam_ip_examcal_ip_ref *int32
+	exam_pa_examcal_ps_ref *int32
+	exam_ps_examcal_ps_ref *int32
+	selectValues           sql.SelectValues
 }
 
 // ExamCalendarEdges holds the relations/edges for other nodes in the graph.
@@ -65,9 +70,13 @@ type ExamCalendarEdges struct {
 	Papers *ExamPapers `json:"papers,omitempty"`
 	// NotifyRef holds the value of the Notify_ref edge.
 	NotifyRef []*Notification `json:"Notify_ref,omitempty"`
+	// ExamcalPsRef holds the value of the examcal_ps_ref edge.
+	ExamcalPsRef []*Exam_PS `json:"examcal_ps_ref,omitempty"`
+	// ExamcalIPRef holds the value of the examcal_ip_ref edge.
+	ExamcalIPRef []*Exam_IP `json:"examcal_ip_ref,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 }
 
 // VcyYearsOrErr returns the VcyYears value or an error if the edge
@@ -118,6 +127,24 @@ func (e ExamCalendarEdges) NotifyRefOrErr() ([]*Notification, error) {
 	return nil, &NotLoadedError{edge: "Notify_ref"}
 }
 
+// ExamcalPsRefOrErr returns the ExamcalPsRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e ExamCalendarEdges) ExamcalPsRefOrErr() ([]*Exam_PS, error) {
+	if e.loadedTypes[4] {
+		return e.ExamcalPsRef, nil
+	}
+	return nil, &NotLoadedError{edge: "examcal_ps_ref"}
+}
+
+// ExamcalIPRefOrErr returns the ExamcalIPRef value or an error if the edge
+// was not loaded in eager-loading.
+func (e ExamCalendarEdges) ExamcalIPRefOrErr() ([]*Exam_IP, error) {
+	if e.loadedTypes[5] {
+		return e.ExamcalIPRef, nil
+	}
+	return nil, &NotLoadedError{edge: "examcal_ip_ref"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ExamCalendar) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -125,12 +152,18 @@ func (*ExamCalendar) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case examcalendar.FieldVacancyYears, examcalendar.FieldExamPapers:
 			values[i] = new([]byte)
-		case examcalendar.FieldID, examcalendar.FieldExamYear, examcalendar.FieldExamCode, examcalendar.FieldVacancyYearCode, examcalendar.FieldPaperCode:
+		case examcalendar.FieldID, examcalendar.FieldExamYear, examcalendar.FieldExamCode, examcalendar.FieldVacancyYearCode, examcalendar.FieldPaperCode, examcalendar.FieldExamCodePS:
 			values[i] = new(sql.NullInt64)
 		case examcalendar.FieldExamName, examcalendar.FieldApprovedOrderNumber:
 			values[i] = new(sql.NullString)
 		case examcalendar.FieldNotificationDate, examcalendar.FieldModelNotificationDate, examcalendar.FieldApplicationEndDate, examcalendar.FieldApprovedOrderDate, examcalendar.FieldTentativeResultDate, examcalendar.FieldCreatedDate:
 			values[i] = new(sql.NullTime)
+		case examcalendar.ForeignKeys[0]: // exam_ip_examcal_ip_ref
+			values[i] = new(sql.NullInt64)
+		case examcalendar.ForeignKeys[1]: // exam_pa_examcal_ps_ref
+			values[i] = new(sql.NullInt64)
+		case examcalendar.ForeignKeys[2]: // exam_ps_examcal_ps_ref
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -240,6 +273,33 @@ func (ec *ExamCalendar) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ec.PaperCode = int32(value.Int64)
 			}
+		case examcalendar.FieldExamCodePS:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ExamCodePS", values[i])
+			} else if value.Valid {
+				ec.ExamCodePS = int32(value.Int64)
+			}
+		case examcalendar.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_ip_examcal_ip_ref", value)
+			} else if value.Valid {
+				ec.exam_ip_examcal_ip_ref = new(int32)
+				*ec.exam_ip_examcal_ip_ref = int32(value.Int64)
+			}
+		case examcalendar.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_pa_examcal_ps_ref", value)
+			} else if value.Valid {
+				ec.exam_pa_examcal_ps_ref = new(int32)
+				*ec.exam_pa_examcal_ps_ref = int32(value.Int64)
+			}
+		case examcalendar.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field exam_ps_examcal_ps_ref", value)
+			} else if value.Valid {
+				ec.exam_ps_examcal_ps_ref = new(int32)
+				*ec.exam_ps_examcal_ps_ref = int32(value.Int64)
+			}
 		default:
 			ec.selectValues.Set(columns[i], values[i])
 		}
@@ -271,6 +331,16 @@ func (ec *ExamCalendar) QueryPapers() *ExamPapersQuery {
 // QueryNotifyRef queries the "Notify_ref" edge of the ExamCalendar entity.
 func (ec *ExamCalendar) QueryNotifyRef() *NotificationQuery {
 	return NewExamCalendarClient(ec.config).QueryNotifyRef(ec)
+}
+
+// QueryExamcalPsRef queries the "examcal_ps_ref" edge of the ExamCalendar entity.
+func (ec *ExamCalendar) QueryExamcalPsRef() *ExamPSQuery {
+	return NewExamCalendarClient(ec.config).QueryExamcalPsRef(ec)
+}
+
+// QueryExamcalIPRef queries the "examcal_ip_ref" edge of the ExamCalendar entity.
+func (ec *ExamCalendar) QueryExamcalIPRef() *ExamIPQuery {
+	return NewExamCalendarClient(ec.config).QueryExamcalIPRef(ec)
 }
 
 // Update returns a builder for updating this ExamCalendar.
@@ -337,6 +407,9 @@ func (ec *ExamCalendar) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("PaperCode=")
 	builder.WriteString(fmt.Sprintf("%v", ec.PaperCode))
+	builder.WriteString(", ")
+	builder.WriteString("ExamCodePS=")
+	builder.WriteString(fmt.Sprintf("%v", ec.ExamCodePS))
 	builder.WriteByte(')')
 	return builder.String()
 }

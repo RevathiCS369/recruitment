@@ -7,7 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"recruit/ent/center"
+	"recruit/ent/disability"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
 	"recruit/ent/exampapers"
 	"recruit/ent/papertypes"
@@ -58,15 +62,31 @@ func (epu *ExamPapersUpdate) ClearExamCode() *ExamPapersUpdate {
 	return epu
 }
 
-// SetCompetitiveQualifying sets the "competitiveQualifying" field.
-func (epu *ExamPapersUpdate) SetCompetitiveQualifying(s string) *ExamPapersUpdate {
-	epu.mutation.SetCompetitiveQualifying(s)
+// SetCompetitiveQualifying sets the "CompetitiveQualifying" field.
+func (epu *ExamPapersUpdate) SetCompetitiveQualifying(b bool) *ExamPapersUpdate {
+	epu.mutation.SetCompetitiveQualifying(b)
 	return epu
 }
 
-// SetExceptionForDisability sets the "exceptionForDisability" field.
-func (epu *ExamPapersUpdate) SetExceptionForDisability(s string) *ExamPapersUpdate {
-	epu.mutation.SetExceptionForDisability(s)
+// SetNillableCompetitiveQualifying sets the "CompetitiveQualifying" field if the given value is not nil.
+func (epu *ExamPapersUpdate) SetNillableCompetitiveQualifying(b *bool) *ExamPapersUpdate {
+	if b != nil {
+		epu.SetCompetitiveQualifying(*b)
+	}
+	return epu
+}
+
+// SetExceptionForDisability sets the "ExceptionForDisability" field.
+func (epu *ExamPapersUpdate) SetExceptionForDisability(b bool) *ExamPapersUpdate {
+	epu.mutation.SetExceptionForDisability(b)
+	return epu
+}
+
+// SetNillableExceptionForDisability sets the "ExceptionForDisability" field if the given value is not nil.
+func (epu *ExamPapersUpdate) SetNillableExceptionForDisability(b *bool) *ExamPapersUpdate {
+	if b != nil {
+		epu.SetExceptionForDisability(*b)
+	}
 	return epu
 }
 
@@ -153,6 +173,121 @@ func (epu *ExamPapersUpdate) SetCreatedDate(t time.Time) *ExamPapersUpdate {
 	return epu
 }
 
+// SetNillableCreatedDate sets the "CreatedDate" field if the given value is not nil.
+func (epu *ExamPapersUpdate) SetNillableCreatedDate(t *time.Time) *ExamPapersUpdate {
+	if t != nil {
+		epu.SetCreatedDate(*t)
+	}
+	return epu
+}
+
+// ClearCreatedDate clears the value of the "CreatedDate" field.
+func (epu *ExamPapersUpdate) ClearCreatedDate() *ExamPapersUpdate {
+	epu.mutation.ClearCreatedDate()
+	return epu
+}
+
+// SetPaperTypeCode sets the "PaperTypeCode" field.
+func (epu *ExamPapersUpdate) SetPaperTypeCode(i int32) *ExamPapersUpdate {
+	epu.mutation.ResetPaperTypeCode()
+	epu.mutation.SetPaperTypeCode(i)
+	return epu
+}
+
+// SetNillablePaperTypeCode sets the "PaperTypeCode" field if the given value is not nil.
+func (epu *ExamPapersUpdate) SetNillablePaperTypeCode(i *int32) *ExamPapersUpdate {
+	if i != nil {
+		epu.SetPaperTypeCode(*i)
+	}
+	return epu
+}
+
+// AddPaperTypeCode adds i to the "PaperTypeCode" field.
+func (epu *ExamPapersUpdate) AddPaperTypeCode(i int32) *ExamPapersUpdate {
+	epu.mutation.AddPaperTypeCode(i)
+	return epu
+}
+
+// ClearPaperTypeCode clears the value of the "PaperTypeCode" field.
+func (epu *ExamPapersUpdate) ClearPaperTypeCode() *ExamPapersUpdate {
+	epu.mutation.ClearPaperTypeCode()
+	return epu
+}
+
+// SetPaperTypeName sets the "PaperTypeName" field.
+func (epu *ExamPapersUpdate) SetPaperTypeName(s string) *ExamPapersUpdate {
+	epu.mutation.SetPaperTypeName(s)
+	return epu
+}
+
+// SetNillablePaperTypeName sets the "PaperTypeName" field if the given value is not nil.
+func (epu *ExamPapersUpdate) SetNillablePaperTypeName(s *string) *ExamPapersUpdate {
+	if s != nil {
+		epu.SetPaperTypeName(*s)
+	}
+	return epu
+}
+
+// ClearPaperTypeName clears the value of the "PaperTypeName" field.
+func (epu *ExamPapersUpdate) ClearPaperTypeName() *ExamPapersUpdate {
+	epu.mutation.ClearPaperTypeName()
+	return epu
+}
+
+// SetDisabilityTypeID sets the "DisabilityTypeID" field.
+func (epu *ExamPapersUpdate) SetDisabilityTypeID(i int32) *ExamPapersUpdate {
+	epu.mutation.ResetDisabilityTypeID()
+	epu.mutation.SetDisabilityTypeID(i)
+	return epu
+}
+
+// SetNillableDisabilityTypeID sets the "DisabilityTypeID" field if the given value is not nil.
+func (epu *ExamPapersUpdate) SetNillableDisabilityTypeID(i *int32) *ExamPapersUpdate {
+	if i != nil {
+		epu.SetDisabilityTypeID(*i)
+	}
+	return epu
+}
+
+// AddDisabilityTypeID adds i to the "DisabilityTypeID" field.
+func (epu *ExamPapersUpdate) AddDisabilityTypeID(i int32) *ExamPapersUpdate {
+	epu.mutation.AddDisabilityTypeID(i)
+	return epu
+}
+
+// ClearDisabilityTypeID clears the value of the "DisabilityTypeID" field.
+func (epu *ExamPapersUpdate) ClearDisabilityTypeID() *ExamPapersUpdate {
+	epu.mutation.ClearDisabilityTypeID()
+	return epu
+}
+
+// SetExamCodePS sets the "ExamCodePS" field.
+func (epu *ExamPapersUpdate) SetExamCodePS(i int32) *ExamPapersUpdate {
+	epu.mutation.ResetExamCodePS()
+	epu.mutation.SetExamCodePS(i)
+	return epu
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (epu *ExamPapersUpdate) SetNillableExamCodePS(i *int32) *ExamPapersUpdate {
+	if i != nil {
+		epu.SetExamCodePS(*i)
+	}
+	return epu
+}
+
+// AddExamCodePS adds i to the "ExamCodePS" field.
+func (epu *ExamPapersUpdate) AddExamCodePS(i int32) *ExamPapersUpdate {
+	epu.mutation.AddExamCodePS(i)
+	return epu
+}
+
+// ClearExamCodePS clears the value of the "ExamCodePS" field.
+func (epu *ExamPapersUpdate) ClearExamCodePS() *ExamPapersUpdate {
+	epu.mutation.ClearExamCodePS()
+	return epu
+}
+
 // AddCenterIDs adds the "centers" edge to the Center entity by IDs.
 func (epu *ExamPapersUpdate) AddCenterIDs(ids ...int32) *ExamPapersUpdate {
 	epu.mutation.AddCenterIDs(ids...)
@@ -215,6 +350,66 @@ func (epu *ExamPapersUpdate) AddPapersRef(e ...*ExamCalendar) *ExamPapersUpdate 
 		ids[i] = e[i].ID
 	}
 	return epu.AddPapersRefIDs(ids...)
+}
+
+// AddExamPaperEligibilityIDs adds the "ExamPaperEligibility" edge to the EligibilityMaster entity by IDs.
+func (epu *ExamPapersUpdate) AddExamPaperEligibilityIDs(ids ...int32) *ExamPapersUpdate {
+	epu.mutation.AddExamPaperEligibilityIDs(ids...)
+	return epu
+}
+
+// AddExamPaperEligibility adds the "ExamPaperEligibility" edges to the EligibilityMaster entity.
+func (epu *ExamPapersUpdate) AddExamPaperEligibility(e ...*EligibilityMaster) *ExamPapersUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.AddExamPaperEligibilityIDs(ids...)
+}
+
+// AddDisRefIDs adds the "dis_ref" edge to the Disability entity by IDs.
+func (epu *ExamPapersUpdate) AddDisRefIDs(ids ...int32) *ExamPapersUpdate {
+	epu.mutation.AddDisRefIDs(ids...)
+	return epu
+}
+
+// AddDisRef adds the "dis_ref" edges to the Disability entity.
+func (epu *ExamPapersUpdate) AddDisRef(d ...*Disability) *ExamPapersUpdate {
+	ids := make([]int32, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return epu.AddDisRefIDs(ids...)
+}
+
+// AddPapersPsRefIDs adds the "papers_ps_ref" edge to the Exam_PS entity by IDs.
+func (epu *ExamPapersUpdate) AddPapersPsRefIDs(ids ...int32) *ExamPapersUpdate {
+	epu.mutation.AddPapersPsRefIDs(ids...)
+	return epu
+}
+
+// AddPapersPsRef adds the "papers_ps_ref" edges to the Exam_PS entity.
+func (epu *ExamPapersUpdate) AddPapersPsRef(e ...*Exam_PS) *ExamPapersUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.AddPapersPsRefIDs(ids...)
+}
+
+// AddPapersIPRefIDs adds the "papers_ip_ref" edge to the Exam_IP entity by IDs.
+func (epu *ExamPapersUpdate) AddPapersIPRefIDs(ids ...int32) *ExamPapersUpdate {
+	epu.mutation.AddPapersIPRefIDs(ids...)
+	return epu
+}
+
+// AddPapersIPRef adds the "papers_ip_ref" edges to the Exam_IP entity.
+func (epu *ExamPapersUpdate) AddPapersIPRef(e ...*Exam_IP) *ExamPapersUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.AddPapersIPRefIDs(ids...)
 }
 
 // Mutation returns the ExamPapersMutation object of the builder.
@@ -291,6 +486,90 @@ func (epu *ExamPapersUpdate) RemovePapersRef(e ...*ExamCalendar) *ExamPapersUpda
 	return epu.RemovePapersRefIDs(ids...)
 }
 
+// ClearExamPaperEligibility clears all "ExamPaperEligibility" edges to the EligibilityMaster entity.
+func (epu *ExamPapersUpdate) ClearExamPaperEligibility() *ExamPapersUpdate {
+	epu.mutation.ClearExamPaperEligibility()
+	return epu
+}
+
+// RemoveExamPaperEligibilityIDs removes the "ExamPaperEligibility" edge to EligibilityMaster entities by IDs.
+func (epu *ExamPapersUpdate) RemoveExamPaperEligibilityIDs(ids ...int32) *ExamPapersUpdate {
+	epu.mutation.RemoveExamPaperEligibilityIDs(ids...)
+	return epu
+}
+
+// RemoveExamPaperEligibility removes "ExamPaperEligibility" edges to EligibilityMaster entities.
+func (epu *ExamPapersUpdate) RemoveExamPaperEligibility(e ...*EligibilityMaster) *ExamPapersUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.RemoveExamPaperEligibilityIDs(ids...)
+}
+
+// ClearDisRef clears all "dis_ref" edges to the Disability entity.
+func (epu *ExamPapersUpdate) ClearDisRef() *ExamPapersUpdate {
+	epu.mutation.ClearDisRef()
+	return epu
+}
+
+// RemoveDisRefIDs removes the "dis_ref" edge to Disability entities by IDs.
+func (epu *ExamPapersUpdate) RemoveDisRefIDs(ids ...int32) *ExamPapersUpdate {
+	epu.mutation.RemoveDisRefIDs(ids...)
+	return epu
+}
+
+// RemoveDisRef removes "dis_ref" edges to Disability entities.
+func (epu *ExamPapersUpdate) RemoveDisRef(d ...*Disability) *ExamPapersUpdate {
+	ids := make([]int32, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return epu.RemoveDisRefIDs(ids...)
+}
+
+// ClearPapersPsRef clears all "papers_ps_ref" edges to the Exam_PS entity.
+func (epu *ExamPapersUpdate) ClearPapersPsRef() *ExamPapersUpdate {
+	epu.mutation.ClearPapersPsRef()
+	return epu
+}
+
+// RemovePapersPsRefIDs removes the "papers_ps_ref" edge to Exam_PS entities by IDs.
+func (epu *ExamPapersUpdate) RemovePapersPsRefIDs(ids ...int32) *ExamPapersUpdate {
+	epu.mutation.RemovePapersPsRefIDs(ids...)
+	return epu
+}
+
+// RemovePapersPsRef removes "papers_ps_ref" edges to Exam_PS entities.
+func (epu *ExamPapersUpdate) RemovePapersPsRef(e ...*Exam_PS) *ExamPapersUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.RemovePapersPsRefIDs(ids...)
+}
+
+// ClearPapersIPRef clears all "papers_ip_ref" edges to the Exam_IP entity.
+func (epu *ExamPapersUpdate) ClearPapersIPRef() *ExamPapersUpdate {
+	epu.mutation.ClearPapersIPRef()
+	return epu
+}
+
+// RemovePapersIPRefIDs removes the "papers_ip_ref" edge to Exam_IP entities by IDs.
+func (epu *ExamPapersUpdate) RemovePapersIPRefIDs(ids ...int32) *ExamPapersUpdate {
+	epu.mutation.RemovePapersIPRefIDs(ids...)
+	return epu
+}
+
+// RemovePapersIPRef removes "papers_ip_ref" edges to Exam_IP entities.
+func (epu *ExamPapersUpdate) RemovePapersIPRef(e ...*Exam_IP) *ExamPapersUpdate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epu.RemovePapersIPRefIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (epu *ExamPapersUpdate) Save(ctx context.Context) (int, error) {
 	return withHooks(ctx, epu.sqlSave, epu.mutation, epu.hooks)
@@ -323,16 +602,6 @@ func (epu *ExamPapersUpdate) check() error {
 	if v, ok := epu.mutation.PaperDescription(); ok {
 		if err := exampapers.PaperDescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "PaperDescription", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.PaperDescription": %w`, err)}
-		}
-	}
-	if v, ok := epu.mutation.CompetitiveQualifying(); ok {
-		if err := exampapers.CompetitiveQualifyingValidator(v); err != nil {
-			return &ValidationError{Name: "competitiveQualifying", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.competitiveQualifying": %w`, err)}
-		}
-	}
-	if v, ok := epu.mutation.ExceptionForDisability(); ok {
-		if err := exampapers.ExceptionForDisabilityValidator(v); err != nil {
-			return &ValidationError{Name: "exceptionForDisability", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.exceptionForDisability": %w`, err)}
 		}
 	}
 	if v, ok := epu.mutation.MaximumMarks(); ok {
@@ -384,10 +653,10 @@ func (epu *ExamPapersUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(exampapers.FieldPaperDescription, field.TypeString, value)
 	}
 	if value, ok := epu.mutation.CompetitiveQualifying(); ok {
-		_spec.SetField(exampapers.FieldCompetitiveQualifying, field.TypeString, value)
+		_spec.SetField(exampapers.FieldCompetitiveQualifying, field.TypeBool, value)
 	}
 	if value, ok := epu.mutation.ExceptionForDisability(); ok {
-		_spec.SetField(exampapers.FieldExceptionForDisability, field.TypeString, value)
+		_spec.SetField(exampapers.FieldExceptionForDisability, field.TypeBool, value)
 	}
 	if value, ok := epu.mutation.MaximumMarks(); ok {
 		_spec.SetField(exampapers.FieldMaximumMarks, field.TypeInt, value)
@@ -424,6 +693,42 @@ func (epu *ExamPapersUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := epu.mutation.CreatedDate(); ok {
 		_spec.SetField(exampapers.FieldCreatedDate, field.TypeTime, value)
+	}
+	if epu.mutation.CreatedDateCleared() {
+		_spec.ClearField(exampapers.FieldCreatedDate, field.TypeTime)
+	}
+	if value, ok := epu.mutation.PaperTypeCode(); ok {
+		_spec.SetField(exampapers.FieldPaperTypeCode, field.TypeInt32, value)
+	}
+	if value, ok := epu.mutation.AddedPaperTypeCode(); ok {
+		_spec.AddField(exampapers.FieldPaperTypeCode, field.TypeInt32, value)
+	}
+	if epu.mutation.PaperTypeCodeCleared() {
+		_spec.ClearField(exampapers.FieldPaperTypeCode, field.TypeInt32)
+	}
+	if value, ok := epu.mutation.PaperTypeName(); ok {
+		_spec.SetField(exampapers.FieldPaperTypeName, field.TypeString, value)
+	}
+	if epu.mutation.PaperTypeNameCleared() {
+		_spec.ClearField(exampapers.FieldPaperTypeName, field.TypeString)
+	}
+	if value, ok := epu.mutation.DisabilityTypeID(); ok {
+		_spec.SetField(exampapers.FieldDisabilityTypeID, field.TypeInt32, value)
+	}
+	if value, ok := epu.mutation.AddedDisabilityTypeID(); ok {
+		_spec.AddField(exampapers.FieldDisabilityTypeID, field.TypeInt32, value)
+	}
+	if epu.mutation.DisabilityTypeIDCleared() {
+		_spec.ClearField(exampapers.FieldDisabilityTypeID, field.TypeInt32)
+	}
+	if value, ok := epu.mutation.ExamCodePS(); ok {
+		_spec.SetField(exampapers.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if value, ok := epu.mutation.AddedExamCodePS(); ok {
+		_spec.AddField(exampapers.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if epu.mutation.ExamCodePSCleared() {
+		_spec.ClearField(exampapers.FieldExamCodePS, field.TypeInt32)
 	}
 	if epu.mutation.CentersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -589,6 +894,186 @@ func (epu *ExamPapersUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if epu.mutation.ExamPaperEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.ExamPaperEligibilityTable,
+			Columns: []string{exampapers.ExamPaperEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.RemovedExamPaperEligibilityIDs(); len(nodes) > 0 && !epu.mutation.ExamPaperEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.ExamPaperEligibilityTable,
+			Columns: []string{exampapers.ExamPaperEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.ExamPaperEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.ExamPaperEligibilityTable,
+			Columns: []string{exampapers.ExamPaperEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epu.mutation.DisRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.DisRefTable,
+			Columns: []string{exampapers.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(disability.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.RemovedDisRefIDs(); len(nodes) > 0 && !epu.mutation.DisRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.DisRefTable,
+			Columns: []string{exampapers.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(disability.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.DisRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.DisRefTable,
+			Columns: []string{exampapers.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(disability.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epu.mutation.PapersPsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersPsRefTable,
+			Columns: []string{exampapers.PapersPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.RemovedPapersPsRefIDs(); len(nodes) > 0 && !epu.mutation.PapersPsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersPsRefTable,
+			Columns: []string{exampapers.PapersPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.PapersPsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersPsRefTable,
+			Columns: []string{exampapers.PapersPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epu.mutation.PapersIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersIPRefTable,
+			Columns: []string{exampapers.PapersIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.RemovedPapersIPRefIDs(); len(nodes) > 0 && !epu.mutation.PapersIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersIPRefTable,
+			Columns: []string{exampapers.PapersIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epu.mutation.PapersIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersIPRefTable,
+			Columns: []string{exampapers.PapersIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, epu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{exampapers.Label}
@@ -635,15 +1120,31 @@ func (epuo *ExamPapersUpdateOne) ClearExamCode() *ExamPapersUpdateOne {
 	return epuo
 }
 
-// SetCompetitiveQualifying sets the "competitiveQualifying" field.
-func (epuo *ExamPapersUpdateOne) SetCompetitiveQualifying(s string) *ExamPapersUpdateOne {
-	epuo.mutation.SetCompetitiveQualifying(s)
+// SetCompetitiveQualifying sets the "CompetitiveQualifying" field.
+func (epuo *ExamPapersUpdateOne) SetCompetitiveQualifying(b bool) *ExamPapersUpdateOne {
+	epuo.mutation.SetCompetitiveQualifying(b)
 	return epuo
 }
 
-// SetExceptionForDisability sets the "exceptionForDisability" field.
-func (epuo *ExamPapersUpdateOne) SetExceptionForDisability(s string) *ExamPapersUpdateOne {
-	epuo.mutation.SetExceptionForDisability(s)
+// SetNillableCompetitiveQualifying sets the "CompetitiveQualifying" field if the given value is not nil.
+func (epuo *ExamPapersUpdateOne) SetNillableCompetitiveQualifying(b *bool) *ExamPapersUpdateOne {
+	if b != nil {
+		epuo.SetCompetitiveQualifying(*b)
+	}
+	return epuo
+}
+
+// SetExceptionForDisability sets the "ExceptionForDisability" field.
+func (epuo *ExamPapersUpdateOne) SetExceptionForDisability(b bool) *ExamPapersUpdateOne {
+	epuo.mutation.SetExceptionForDisability(b)
+	return epuo
+}
+
+// SetNillableExceptionForDisability sets the "ExceptionForDisability" field if the given value is not nil.
+func (epuo *ExamPapersUpdateOne) SetNillableExceptionForDisability(b *bool) *ExamPapersUpdateOne {
+	if b != nil {
+		epuo.SetExceptionForDisability(*b)
+	}
 	return epuo
 }
 
@@ -730,6 +1231,121 @@ func (epuo *ExamPapersUpdateOne) SetCreatedDate(t time.Time) *ExamPapersUpdateOn
 	return epuo
 }
 
+// SetNillableCreatedDate sets the "CreatedDate" field if the given value is not nil.
+func (epuo *ExamPapersUpdateOne) SetNillableCreatedDate(t *time.Time) *ExamPapersUpdateOne {
+	if t != nil {
+		epuo.SetCreatedDate(*t)
+	}
+	return epuo
+}
+
+// ClearCreatedDate clears the value of the "CreatedDate" field.
+func (epuo *ExamPapersUpdateOne) ClearCreatedDate() *ExamPapersUpdateOne {
+	epuo.mutation.ClearCreatedDate()
+	return epuo
+}
+
+// SetPaperTypeCode sets the "PaperTypeCode" field.
+func (epuo *ExamPapersUpdateOne) SetPaperTypeCode(i int32) *ExamPapersUpdateOne {
+	epuo.mutation.ResetPaperTypeCode()
+	epuo.mutation.SetPaperTypeCode(i)
+	return epuo
+}
+
+// SetNillablePaperTypeCode sets the "PaperTypeCode" field if the given value is not nil.
+func (epuo *ExamPapersUpdateOne) SetNillablePaperTypeCode(i *int32) *ExamPapersUpdateOne {
+	if i != nil {
+		epuo.SetPaperTypeCode(*i)
+	}
+	return epuo
+}
+
+// AddPaperTypeCode adds i to the "PaperTypeCode" field.
+func (epuo *ExamPapersUpdateOne) AddPaperTypeCode(i int32) *ExamPapersUpdateOne {
+	epuo.mutation.AddPaperTypeCode(i)
+	return epuo
+}
+
+// ClearPaperTypeCode clears the value of the "PaperTypeCode" field.
+func (epuo *ExamPapersUpdateOne) ClearPaperTypeCode() *ExamPapersUpdateOne {
+	epuo.mutation.ClearPaperTypeCode()
+	return epuo
+}
+
+// SetPaperTypeName sets the "PaperTypeName" field.
+func (epuo *ExamPapersUpdateOne) SetPaperTypeName(s string) *ExamPapersUpdateOne {
+	epuo.mutation.SetPaperTypeName(s)
+	return epuo
+}
+
+// SetNillablePaperTypeName sets the "PaperTypeName" field if the given value is not nil.
+func (epuo *ExamPapersUpdateOne) SetNillablePaperTypeName(s *string) *ExamPapersUpdateOne {
+	if s != nil {
+		epuo.SetPaperTypeName(*s)
+	}
+	return epuo
+}
+
+// ClearPaperTypeName clears the value of the "PaperTypeName" field.
+func (epuo *ExamPapersUpdateOne) ClearPaperTypeName() *ExamPapersUpdateOne {
+	epuo.mutation.ClearPaperTypeName()
+	return epuo
+}
+
+// SetDisabilityTypeID sets the "DisabilityTypeID" field.
+func (epuo *ExamPapersUpdateOne) SetDisabilityTypeID(i int32) *ExamPapersUpdateOne {
+	epuo.mutation.ResetDisabilityTypeID()
+	epuo.mutation.SetDisabilityTypeID(i)
+	return epuo
+}
+
+// SetNillableDisabilityTypeID sets the "DisabilityTypeID" field if the given value is not nil.
+func (epuo *ExamPapersUpdateOne) SetNillableDisabilityTypeID(i *int32) *ExamPapersUpdateOne {
+	if i != nil {
+		epuo.SetDisabilityTypeID(*i)
+	}
+	return epuo
+}
+
+// AddDisabilityTypeID adds i to the "DisabilityTypeID" field.
+func (epuo *ExamPapersUpdateOne) AddDisabilityTypeID(i int32) *ExamPapersUpdateOne {
+	epuo.mutation.AddDisabilityTypeID(i)
+	return epuo
+}
+
+// ClearDisabilityTypeID clears the value of the "DisabilityTypeID" field.
+func (epuo *ExamPapersUpdateOne) ClearDisabilityTypeID() *ExamPapersUpdateOne {
+	epuo.mutation.ClearDisabilityTypeID()
+	return epuo
+}
+
+// SetExamCodePS sets the "ExamCodePS" field.
+func (epuo *ExamPapersUpdateOne) SetExamCodePS(i int32) *ExamPapersUpdateOne {
+	epuo.mutation.ResetExamCodePS()
+	epuo.mutation.SetExamCodePS(i)
+	return epuo
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (epuo *ExamPapersUpdateOne) SetNillableExamCodePS(i *int32) *ExamPapersUpdateOne {
+	if i != nil {
+		epuo.SetExamCodePS(*i)
+	}
+	return epuo
+}
+
+// AddExamCodePS adds i to the "ExamCodePS" field.
+func (epuo *ExamPapersUpdateOne) AddExamCodePS(i int32) *ExamPapersUpdateOne {
+	epuo.mutation.AddExamCodePS(i)
+	return epuo
+}
+
+// ClearExamCodePS clears the value of the "ExamCodePS" field.
+func (epuo *ExamPapersUpdateOne) ClearExamCodePS() *ExamPapersUpdateOne {
+	epuo.mutation.ClearExamCodePS()
+	return epuo
+}
+
 // AddCenterIDs adds the "centers" edge to the Center entity by IDs.
 func (epuo *ExamPapersUpdateOne) AddCenterIDs(ids ...int32) *ExamPapersUpdateOne {
 	epuo.mutation.AddCenterIDs(ids...)
@@ -792,6 +1408,66 @@ func (epuo *ExamPapersUpdateOne) AddPapersRef(e ...*ExamCalendar) *ExamPapersUpd
 		ids[i] = e[i].ID
 	}
 	return epuo.AddPapersRefIDs(ids...)
+}
+
+// AddExamPaperEligibilityIDs adds the "ExamPaperEligibility" edge to the EligibilityMaster entity by IDs.
+func (epuo *ExamPapersUpdateOne) AddExamPaperEligibilityIDs(ids ...int32) *ExamPapersUpdateOne {
+	epuo.mutation.AddExamPaperEligibilityIDs(ids...)
+	return epuo
+}
+
+// AddExamPaperEligibility adds the "ExamPaperEligibility" edges to the EligibilityMaster entity.
+func (epuo *ExamPapersUpdateOne) AddExamPaperEligibility(e ...*EligibilityMaster) *ExamPapersUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.AddExamPaperEligibilityIDs(ids...)
+}
+
+// AddDisRefIDs adds the "dis_ref" edge to the Disability entity by IDs.
+func (epuo *ExamPapersUpdateOne) AddDisRefIDs(ids ...int32) *ExamPapersUpdateOne {
+	epuo.mutation.AddDisRefIDs(ids...)
+	return epuo
+}
+
+// AddDisRef adds the "dis_ref" edges to the Disability entity.
+func (epuo *ExamPapersUpdateOne) AddDisRef(d ...*Disability) *ExamPapersUpdateOne {
+	ids := make([]int32, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return epuo.AddDisRefIDs(ids...)
+}
+
+// AddPapersPsRefIDs adds the "papers_ps_ref" edge to the Exam_PS entity by IDs.
+func (epuo *ExamPapersUpdateOne) AddPapersPsRefIDs(ids ...int32) *ExamPapersUpdateOne {
+	epuo.mutation.AddPapersPsRefIDs(ids...)
+	return epuo
+}
+
+// AddPapersPsRef adds the "papers_ps_ref" edges to the Exam_PS entity.
+func (epuo *ExamPapersUpdateOne) AddPapersPsRef(e ...*Exam_PS) *ExamPapersUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.AddPapersPsRefIDs(ids...)
+}
+
+// AddPapersIPRefIDs adds the "papers_ip_ref" edge to the Exam_IP entity by IDs.
+func (epuo *ExamPapersUpdateOne) AddPapersIPRefIDs(ids ...int32) *ExamPapersUpdateOne {
+	epuo.mutation.AddPapersIPRefIDs(ids...)
+	return epuo
+}
+
+// AddPapersIPRef adds the "papers_ip_ref" edges to the Exam_IP entity.
+func (epuo *ExamPapersUpdateOne) AddPapersIPRef(e ...*Exam_IP) *ExamPapersUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.AddPapersIPRefIDs(ids...)
 }
 
 // Mutation returns the ExamPapersMutation object of the builder.
@@ -868,6 +1544,90 @@ func (epuo *ExamPapersUpdateOne) RemovePapersRef(e ...*ExamCalendar) *ExamPapers
 	return epuo.RemovePapersRefIDs(ids...)
 }
 
+// ClearExamPaperEligibility clears all "ExamPaperEligibility" edges to the EligibilityMaster entity.
+func (epuo *ExamPapersUpdateOne) ClearExamPaperEligibility() *ExamPapersUpdateOne {
+	epuo.mutation.ClearExamPaperEligibility()
+	return epuo
+}
+
+// RemoveExamPaperEligibilityIDs removes the "ExamPaperEligibility" edge to EligibilityMaster entities by IDs.
+func (epuo *ExamPapersUpdateOne) RemoveExamPaperEligibilityIDs(ids ...int32) *ExamPapersUpdateOne {
+	epuo.mutation.RemoveExamPaperEligibilityIDs(ids...)
+	return epuo
+}
+
+// RemoveExamPaperEligibility removes "ExamPaperEligibility" edges to EligibilityMaster entities.
+func (epuo *ExamPapersUpdateOne) RemoveExamPaperEligibility(e ...*EligibilityMaster) *ExamPapersUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.RemoveExamPaperEligibilityIDs(ids...)
+}
+
+// ClearDisRef clears all "dis_ref" edges to the Disability entity.
+func (epuo *ExamPapersUpdateOne) ClearDisRef() *ExamPapersUpdateOne {
+	epuo.mutation.ClearDisRef()
+	return epuo
+}
+
+// RemoveDisRefIDs removes the "dis_ref" edge to Disability entities by IDs.
+func (epuo *ExamPapersUpdateOne) RemoveDisRefIDs(ids ...int32) *ExamPapersUpdateOne {
+	epuo.mutation.RemoveDisRefIDs(ids...)
+	return epuo
+}
+
+// RemoveDisRef removes "dis_ref" edges to Disability entities.
+func (epuo *ExamPapersUpdateOne) RemoveDisRef(d ...*Disability) *ExamPapersUpdateOne {
+	ids := make([]int32, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return epuo.RemoveDisRefIDs(ids...)
+}
+
+// ClearPapersPsRef clears all "papers_ps_ref" edges to the Exam_PS entity.
+func (epuo *ExamPapersUpdateOne) ClearPapersPsRef() *ExamPapersUpdateOne {
+	epuo.mutation.ClearPapersPsRef()
+	return epuo
+}
+
+// RemovePapersPsRefIDs removes the "papers_ps_ref" edge to Exam_PS entities by IDs.
+func (epuo *ExamPapersUpdateOne) RemovePapersPsRefIDs(ids ...int32) *ExamPapersUpdateOne {
+	epuo.mutation.RemovePapersPsRefIDs(ids...)
+	return epuo
+}
+
+// RemovePapersPsRef removes "papers_ps_ref" edges to Exam_PS entities.
+func (epuo *ExamPapersUpdateOne) RemovePapersPsRef(e ...*Exam_PS) *ExamPapersUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.RemovePapersPsRefIDs(ids...)
+}
+
+// ClearPapersIPRef clears all "papers_ip_ref" edges to the Exam_IP entity.
+func (epuo *ExamPapersUpdateOne) ClearPapersIPRef() *ExamPapersUpdateOne {
+	epuo.mutation.ClearPapersIPRef()
+	return epuo
+}
+
+// RemovePapersIPRefIDs removes the "papers_ip_ref" edge to Exam_IP entities by IDs.
+func (epuo *ExamPapersUpdateOne) RemovePapersIPRefIDs(ids ...int32) *ExamPapersUpdateOne {
+	epuo.mutation.RemovePapersIPRefIDs(ids...)
+	return epuo
+}
+
+// RemovePapersIPRef removes "papers_ip_ref" edges to Exam_IP entities.
+func (epuo *ExamPapersUpdateOne) RemovePapersIPRef(e ...*Exam_IP) *ExamPapersUpdateOne {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return epuo.RemovePapersIPRefIDs(ids...)
+}
+
 // Where appends a list predicates to the ExamPapersUpdate builder.
 func (epuo *ExamPapersUpdateOne) Where(ps ...predicate.ExamPapers) *ExamPapersUpdateOne {
 	epuo.mutation.Where(ps...)
@@ -913,16 +1673,6 @@ func (epuo *ExamPapersUpdateOne) check() error {
 	if v, ok := epuo.mutation.PaperDescription(); ok {
 		if err := exampapers.PaperDescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "PaperDescription", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.PaperDescription": %w`, err)}
-		}
-	}
-	if v, ok := epuo.mutation.CompetitiveQualifying(); ok {
-		if err := exampapers.CompetitiveQualifyingValidator(v); err != nil {
-			return &ValidationError{Name: "competitiveQualifying", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.competitiveQualifying": %w`, err)}
-		}
-	}
-	if v, ok := epuo.mutation.ExceptionForDisability(); ok {
-		if err := exampapers.ExceptionForDisabilityValidator(v); err != nil {
-			return &ValidationError{Name: "exceptionForDisability", err: fmt.Errorf(`ent: validator failed for field "ExamPapers.exceptionForDisability": %w`, err)}
 		}
 	}
 	if v, ok := epuo.mutation.MaximumMarks(); ok {
@@ -991,10 +1741,10 @@ func (epuo *ExamPapersUpdateOne) sqlSave(ctx context.Context) (_node *ExamPapers
 		_spec.SetField(exampapers.FieldPaperDescription, field.TypeString, value)
 	}
 	if value, ok := epuo.mutation.CompetitiveQualifying(); ok {
-		_spec.SetField(exampapers.FieldCompetitiveQualifying, field.TypeString, value)
+		_spec.SetField(exampapers.FieldCompetitiveQualifying, field.TypeBool, value)
 	}
 	if value, ok := epuo.mutation.ExceptionForDisability(); ok {
-		_spec.SetField(exampapers.FieldExceptionForDisability, field.TypeString, value)
+		_spec.SetField(exampapers.FieldExceptionForDisability, field.TypeBool, value)
 	}
 	if value, ok := epuo.mutation.MaximumMarks(); ok {
 		_spec.SetField(exampapers.FieldMaximumMarks, field.TypeInt, value)
@@ -1031,6 +1781,42 @@ func (epuo *ExamPapersUpdateOne) sqlSave(ctx context.Context) (_node *ExamPapers
 	}
 	if value, ok := epuo.mutation.CreatedDate(); ok {
 		_spec.SetField(exampapers.FieldCreatedDate, field.TypeTime, value)
+	}
+	if epuo.mutation.CreatedDateCleared() {
+		_spec.ClearField(exampapers.FieldCreatedDate, field.TypeTime)
+	}
+	if value, ok := epuo.mutation.PaperTypeCode(); ok {
+		_spec.SetField(exampapers.FieldPaperTypeCode, field.TypeInt32, value)
+	}
+	if value, ok := epuo.mutation.AddedPaperTypeCode(); ok {
+		_spec.AddField(exampapers.FieldPaperTypeCode, field.TypeInt32, value)
+	}
+	if epuo.mutation.PaperTypeCodeCleared() {
+		_spec.ClearField(exampapers.FieldPaperTypeCode, field.TypeInt32)
+	}
+	if value, ok := epuo.mutation.PaperTypeName(); ok {
+		_spec.SetField(exampapers.FieldPaperTypeName, field.TypeString, value)
+	}
+	if epuo.mutation.PaperTypeNameCleared() {
+		_spec.ClearField(exampapers.FieldPaperTypeName, field.TypeString)
+	}
+	if value, ok := epuo.mutation.DisabilityTypeID(); ok {
+		_spec.SetField(exampapers.FieldDisabilityTypeID, field.TypeInt32, value)
+	}
+	if value, ok := epuo.mutation.AddedDisabilityTypeID(); ok {
+		_spec.AddField(exampapers.FieldDisabilityTypeID, field.TypeInt32, value)
+	}
+	if epuo.mutation.DisabilityTypeIDCleared() {
+		_spec.ClearField(exampapers.FieldDisabilityTypeID, field.TypeInt32)
+	}
+	if value, ok := epuo.mutation.ExamCodePS(); ok {
+		_spec.SetField(exampapers.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if value, ok := epuo.mutation.AddedExamCodePS(); ok {
+		_spec.AddField(exampapers.FieldExamCodePS, field.TypeInt32, value)
+	}
+	if epuo.mutation.ExamCodePSCleared() {
+		_spec.ClearField(exampapers.FieldExamCodePS, field.TypeInt32)
 	}
 	if epuo.mutation.CentersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1189,6 +1975,186 @@ func (epuo *ExamPapersUpdateOne) sqlSave(ctx context.Context) (_node *ExamPapers
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(examcalendar.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epuo.mutation.ExamPaperEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.ExamPaperEligibilityTable,
+			Columns: []string{exampapers.ExamPaperEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.RemovedExamPaperEligibilityIDs(); len(nodes) > 0 && !epuo.mutation.ExamPaperEligibilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.ExamPaperEligibilityTable,
+			Columns: []string{exampapers.ExamPaperEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.ExamPaperEligibilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.ExamPaperEligibilityTable,
+			Columns: []string{exampapers.ExamPaperEligibilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(eligibilitymaster.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epuo.mutation.DisRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.DisRefTable,
+			Columns: []string{exampapers.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(disability.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.RemovedDisRefIDs(); len(nodes) > 0 && !epuo.mutation.DisRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.DisRefTable,
+			Columns: []string{exampapers.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(disability.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.DisRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.DisRefTable,
+			Columns: []string{exampapers.DisRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(disability.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epuo.mutation.PapersPsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersPsRefTable,
+			Columns: []string{exampapers.PapersPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.RemovedPapersPsRefIDs(); len(nodes) > 0 && !epuo.mutation.PapersPsRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersPsRefTable,
+			Columns: []string{exampapers.PapersPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.PapersPsRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersPsRefTable,
+			Columns: []string{exampapers.PapersPsRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if epuo.mutation.PapersIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersIPRefTable,
+			Columns: []string{exampapers.PapersIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.RemovedPapersIPRefIDs(); len(nodes) > 0 && !epuo.mutation.PapersIPRefCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersIPRefTable,
+			Columns: []string{exampapers.PapersIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := epuo.mutation.PapersIPRefIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   exampapers.PapersIPRefTable,
+			Columns: []string{exampapers.PapersIPRefColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {

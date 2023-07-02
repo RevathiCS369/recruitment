@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -21,8 +22,19 @@ const (
 	FieldDisabilityPercentage = "disability_percentage"
 	// FieldDisabilityFlag holds the string denoting the disabilityflag field in the database.
 	FieldDisabilityFlag = "disability_flag"
+	// EdgeDisRef holds the string denoting the dis_ref edge name in mutations.
+	EdgeDisRef = "dis_ref"
+	// ExamPapersFieldID holds the string denoting the ID field of the ExamPapers.
+	ExamPapersFieldID = "PaperCode"
 	// Table holds the table name of the disability in the database.
 	Table = "Disability"
+	// DisRefTable is the table that holds the dis_ref relation/edge.
+	DisRefTable = "ExamPapers"
+	// DisRefInverseTable is the table name for the ExamPapers entity.
+	// It exists in this package in order to avoid circular dependency with the "exampapers" package.
+	DisRefInverseTable = "ExamPapers"
+	// DisRefColumn is the table column denoting the dis_ref relation/edge.
+	DisRefColumn = "disability_dis_ref"
 )
 
 // Columns holds all SQL columns for disability fields.
@@ -34,10 +46,21 @@ var Columns = []string{
 	FieldDisabilityFlag,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "Disability"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"exam_papers_dis_ref",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -93,4 +116,25 @@ func ByDisabilityPercentage(opts ...sql.OrderTermOption) OrderOption {
 // ByDisabilityFlag orders the results by the DisabilityFlag field.
 func ByDisabilityFlag(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisabilityFlag, opts...).ToFunc()
+}
+
+// ByDisRefCount orders the results by dis_ref count.
+func ByDisRefCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDisRefStep(), opts...)
+	}
+}
+
+// ByDisRef orders the results by dis_ref terms.
+func ByDisRef(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDisRefStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newDisRefStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DisRefInverseTable, ExamPapersFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DisRefTable, DisRefColumn),
+	)
 }

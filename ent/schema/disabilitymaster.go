@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	//"entgo.io/ent/schema/edge"
+    "entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -16,15 +16,20 @@ type Disability struct {
 
 func (Disability) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int32("id").StorageKey("DisabilityTypeID"), 
+		
+		field.Int32("id").StorageKey("DisabilityTypeID"),
+		
 		field.String("DisabilityTypeCode"),
 		field.String("DisabilityTypeDescription"),
 		field.Int32("DisabilityPercentage"),
-		field.Enum("DisabilityFlag").Values("Temporary", "Permanent"),}
+		field.Enum("DisabilityFlag").Values("Temporary", "Permanent"),	
+	    //field.Int32("PaperCode").Optional()
+		} 
 }
 func (Disability) Edges() []ent.Edge {
-	//edge.To("user_disability","Employees.Type")
-	return nil
+	return []ent.Edge{edge.To("dis_ref", ExamPapers.Type),
+	}
+
 }
 func (Disability) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "Disability"}}

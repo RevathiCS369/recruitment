@@ -26,6 +26,22 @@ const (
 	FieldCalendarCode = "calendar_code"
 	// FieldPaperCode holds the string denoting the papercode field in the database.
 	FieldPaperCode = "paper_code"
+	// FieldExamType holds the string denoting the examtype field in the database.
+	FieldExamType = "exam_type"
+	// FieldTentativeNotificationMandatoryDate holds the string denoting the tentativenotificationmandatorydate field in the database.
+	FieldTentativeNotificationMandatoryDate = "tentative_notification_mandatory_date"
+	// FieldLocalLanguage holds the string denoting the locallanguage field in the database.
+	FieldLocalLanguage = "local_language"
+	// FieldOptionForPost holds the string denoting the optionforpost field in the database.
+	FieldOptionForPost = "option_for_post"
+	// FieldOptionToWriteExamOtherThanParent holds the string denoting the optiontowriteexamotherthanparent field in the database.
+	FieldOptionToWriteExamOtherThanParent = "option_to_write_exam_other_than_parent"
+	// FieldOrderNumber holds the string denoting the ordernumber field in the database.
+	FieldOrderNumber = "order_number"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldExamTypeCode holds the string denoting the examtypecode field in the database.
+	FieldExamTypeCode = "exam_type_code"
 	// EdgeNodalOfficers holds the string denoting the nodal_officers edge name in mutations.
 	EdgeNodalOfficers = "nodal_officers"
 	// EdgeNotifications holds the string denoting the notifications edge name in mutations.
@@ -34,6 +50,10 @@ const (
 	EdgeExamsRef = "exams_ref"
 	// EdgePapers holds the string denoting the papers edge name in mutations.
 	EdgePapers = "papers"
+	// EdgeExamEligibility holds the string denoting the exameligibility edge name in mutations.
+	EdgeExamEligibility = "ExamEligibility"
+	// EdgeExamsType holds the string denoting the exams_type edge name in mutations.
+	EdgeExamsType = "exams_type"
 	// NodalOfficerFieldID holds the string denoting the ID field of the NodalOfficer.
 	NodalOfficerFieldID = "NodalOfficerCode"
 	// NotificationFieldID holds the string denoting the ID field of the Notification.
@@ -42,6 +62,10 @@ const (
 	ExamCalendarFieldID = "CalendarCode"
 	// ExamPapersFieldID holds the string denoting the ID field of the ExamPapers.
 	ExamPapersFieldID = "PaperCode"
+	// EligibilityMasterFieldID holds the string denoting the ID field of the EligibilityMaster.
+	EligibilityMasterFieldID = "EligibilityCode"
+	// ExamTypeFieldID holds the string denoting the ID field of the ExamType.
+	ExamTypeFieldID = "ExamTypeCode"
 	// Table holds the table name of the exam in the database.
 	Table = "Exam"
 	// NodalOfficersTable is the table that holds the nodal_officers relation/edge.
@@ -72,6 +96,20 @@ const (
 	PapersInverseTable = "ExamPapers"
 	// PapersColumn is the table column denoting the papers relation/edge.
 	PapersColumn = "exam_code"
+	// ExamEligibilityTable is the table that holds the ExamEligibility relation/edge.
+	ExamEligibilityTable = "EligibilityMaster"
+	// ExamEligibilityInverseTable is the table name for the EligibilityMaster entity.
+	// It exists in this package in order to avoid circular dependency with the "eligibilitymaster" package.
+	ExamEligibilityInverseTable = "EligibilityMaster"
+	// ExamEligibilityColumn is the table column denoting the ExamEligibility relation/edge.
+	ExamEligibilityColumn = "exam_code"
+	// ExamsTypeTable is the table that holds the exams_type relation/edge.
+	ExamsTypeTable = "ExamType"
+	// ExamsTypeInverseTable is the table name for the ExamType entity.
+	// It exists in this package in order to avoid circular dependency with the "examtype" package.
+	ExamsTypeInverseTable = "ExamType"
+	// ExamsTypeColumn is the table column denoting the exams_type relation/edge.
+	ExamsTypeColumn = "exam_code"
 )
 
 // Columns holds all SQL columns for exam fields.
@@ -84,6 +122,14 @@ var Columns = []string{
 	FieldNodalOfficerLevel,
 	FieldCalendarCode,
 	FieldPaperCode,
+	FieldExamType,
+	FieldTentativeNotificationMandatoryDate,
+	FieldLocalLanguage,
+	FieldOptionForPost,
+	FieldOptionToWriteExamOtherThanParent,
+	FieldOrderNumber,
+	FieldStatus,
+	FieldExamTypeCode,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "Exam"
@@ -106,6 +152,17 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultTentativeNotificationMandatoryDate holds the default value on creation for the "TentativeNotificationMandatoryDate" field.
+	DefaultTentativeNotificationMandatoryDate bool
+	// DefaultLocalLanguage holds the default value on creation for the "LocalLanguage" field.
+	DefaultLocalLanguage bool
+	// DefaultOptionForPost holds the default value on creation for the "OptionForPost" field.
+	DefaultOptionForPost bool
+	// DefaultOptionToWriteExamOtherThanParent holds the default value on creation for the "OptionToWriteExamOtherThanParent" field.
+	DefaultOptionToWriteExamOtherThanParent bool
+)
 
 // OrderOption defines the ordering options for the Exam queries.
 type OrderOption func(*sql.Selector)
@@ -148,6 +205,46 @@ func ByCalendarCode(opts ...sql.OrderTermOption) OrderOption {
 // ByPaperCode orders the results by the PaperCode field.
 func ByPaperCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPaperCode, opts...).ToFunc()
+}
+
+// ByExamType orders the results by the ExamType field.
+func ByExamType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExamType, opts...).ToFunc()
+}
+
+// ByTentativeNotificationMandatoryDate orders the results by the TentativeNotificationMandatoryDate field.
+func ByTentativeNotificationMandatoryDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTentativeNotificationMandatoryDate, opts...).ToFunc()
+}
+
+// ByLocalLanguage orders the results by the LocalLanguage field.
+func ByLocalLanguage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalLanguage, opts...).ToFunc()
+}
+
+// ByOptionForPost orders the results by the OptionForPost field.
+func ByOptionForPost(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOptionForPost, opts...).ToFunc()
+}
+
+// ByOptionToWriteExamOtherThanParent orders the results by the OptionToWriteExamOtherThanParent field.
+func ByOptionToWriteExamOtherThanParent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOptionToWriteExamOtherThanParent, opts...).ToFunc()
+}
+
+// ByOrderNumber orders the results by the OrderNumber field.
+func ByOrderNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderNumber, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the Status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByExamTypeCode orders the results by the ExamTypeCode field.
+func ByExamTypeCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExamTypeCode, opts...).ToFunc()
 }
 
 // ByNodalOfficersCount orders the results by nodal_officers count.
@@ -205,6 +302,34 @@ func ByPapers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newPapersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByExamEligibilityCount orders the results by ExamEligibility count.
+func ByExamEligibilityCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newExamEligibilityStep(), opts...)
+	}
+}
+
+// ByExamEligibility orders the results by ExamEligibility terms.
+func ByExamEligibility(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newExamEligibilityStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByExamsTypeCount orders the results by exams_type count.
+func ByExamsTypeCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newExamsTypeStep(), opts...)
+	}
+}
+
+// ByExamsType orders the results by exams_type terms.
+func ByExamsType(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newExamsTypeStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newNodalOfficersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -231,5 +356,19 @@ func newPapersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PapersInverseTable, ExamPapersFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PapersTable, PapersColumn),
+	)
+}
+func newExamEligibilityStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ExamEligibilityInverseTable, EligibilityMasterFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ExamEligibilityTable, ExamEligibilityColumn),
+	)
+}
+func newExamsTypeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ExamsTypeInverseTable, ExamTypeFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ExamsTypeTable, ExamsTypeColumn),
 	)
 }

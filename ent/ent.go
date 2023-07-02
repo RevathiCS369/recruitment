@@ -6,27 +6,50 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"recruit/ent/adminlogin"
 	"recruit/ent/ageeligibility"
 	"recruit/ent/application"
+	"recruit/ent/cadre_choice_ip"
+	"recruit/ent/cadre_choice_pa"
+	"recruit/ent/cadre_choice_pm"
+	"recruit/ent/cadre_choice_ps"
 	"recruit/ent/center"
 	"recruit/ent/circlemaster"
+	"recruit/ent/directorateusers"
 	"recruit/ent/disability"
+	"recruit/ent/division_choice_pa"
+	"recruit/ent/division_choice_pm"
+	"recruit/ent/division_choice_ps"
 	"recruit/ent/divisionmaster"
+	"recruit/ent/eligibilitymaster"
 	"recruit/ent/employeecadre"
 	"recruit/ent/employeecategory"
 	"recruit/ent/employeedesignation"
+	"recruit/ent/employeemaster"
 	"recruit/ent/employeeposts"
 	"recruit/ent/employees"
 	"recruit/ent/exam"
+	"recruit/ent/exam_applications_ip"
+	"recruit/ent/exam_applications_ps"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_pa"
+	"recruit/ent/exam_pm"
+	"recruit/ent/exam_ps"
 	"recruit/ent/examcalendar"
-	"recruit/ent/exameligibility"
 	"recruit/ent/exampapers"
+	"recruit/ent/examtype"
 	"recruit/ent/facility"
+	"recruit/ent/login"
 	"recruit/ent/nodalofficer"
 	"recruit/ent/notification"
 	"recruit/ent/papertypes"
+	"recruit/ent/placeofpreferenceip"
+	"recruit/ent/recommendationsipapplications"
 	"recruit/ent/regionmaster"
+	"recruit/ent/reversal_application_ip"
+	"recruit/ent/rolemaster"
 	"recruit/ent/user"
+	"recruit/ent/usermaster"
 	"recruit/ent/vacancyyear"
 	"reflect"
 	"sync"
@@ -94,28 +117,51 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			ageeligibility.Table:      ageeligibility.ValidColumn,
-			application.Table:         application.ValidColumn,
-			center.Table:              center.ValidColumn,
-			circlemaster.Table:        circlemaster.ValidColumn,
-			disability.Table:          disability.ValidColumn,
-			divisionmaster.Table:      divisionmaster.ValidColumn,
-			employeecadre.Table:       employeecadre.ValidColumn,
-			employeecategory.Table:    employeecategory.ValidColumn,
-			employeedesignation.Table: employeedesignation.ValidColumn,
-			employeeposts.Table:       employeeposts.ValidColumn,
-			employees.Table:           employees.ValidColumn,
-			exam.Table:                exam.ValidColumn,
-			examcalendar.Table:        examcalendar.ValidColumn,
-			exameligibility.Table:     exameligibility.ValidColumn,
-			exampapers.Table:          exampapers.ValidColumn,
-			facility.Table:            facility.ValidColumn,
-			nodalofficer.Table:        nodalofficer.ValidColumn,
-			notification.Table:        notification.ValidColumn,
-			papertypes.Table:          papertypes.ValidColumn,
-			regionmaster.Table:        regionmaster.ValidColumn,
-			user.Table:                user.ValidColumn,
-			vacancyyear.Table:         vacancyyear.ValidColumn,
+			adminlogin.Table:                    adminlogin.ValidColumn,
+			ageeligibility.Table:                ageeligibility.ValidColumn,
+			application.Table:                   application.ValidColumn,
+			cadre_choice_ip.Table:               cadre_choice_ip.ValidColumn,
+			cadre_choice_pa.Table:               cadre_choice_pa.ValidColumn,
+			cadre_choice_pm.Table:               cadre_choice_pm.ValidColumn,
+			cadre_choice_ps.Table:               cadre_choice_ps.ValidColumn,
+			center.Table:                        center.ValidColumn,
+			circlemaster.Table:                  circlemaster.ValidColumn,
+			directorateusers.Table:              directorateusers.ValidColumn,
+			disability.Table:                    disability.ValidColumn,
+			divisionmaster.Table:                divisionmaster.ValidColumn,
+			division_choice_pa.Table:            division_choice_pa.ValidColumn,
+			division_choice_pm.Table:            division_choice_pm.ValidColumn,
+			division_choice_ps.Table:            division_choice_ps.ValidColumn,
+			eligibilitymaster.Table:             eligibilitymaster.ValidColumn,
+			employeecadre.Table:                 employeecadre.ValidColumn,
+			employeecategory.Table:              employeecategory.ValidColumn,
+			employeedesignation.Table:           employeedesignation.ValidColumn,
+			employeemaster.Table:                employeemaster.ValidColumn,
+			employeeposts.Table:                 employeeposts.ValidColumn,
+			employees.Table:                     employees.ValidColumn,
+			exam.Table:                          exam.ValidColumn,
+			examcalendar.Table:                  examcalendar.ValidColumn,
+			exampapers.Table:                    exampapers.ValidColumn,
+			examtype.Table:                      examtype.ValidColumn,
+			exam_applications_ip.Table:          exam_applications_ip.ValidColumn,
+			exam_applications_ps.Table:          exam_applications_ps.ValidColumn,
+			exam_ip.Table:                       exam_ip.ValidColumn,
+			exam_pa.Table:                       exam_pa.ValidColumn,
+			exam_pm.Table:                       exam_pm.ValidColumn,
+			exam_ps.Table:                       exam_ps.ValidColumn,
+			facility.Table:                      facility.ValidColumn,
+			login.Table:                         login.ValidColumn,
+			nodalofficer.Table:                  nodalofficer.ValidColumn,
+			notification.Table:                  notification.ValidColumn,
+			papertypes.Table:                    papertypes.ValidColumn,
+			placeofpreferenceip.Table:           placeofpreferenceip.ValidColumn,
+			recommendationsipapplications.Table: recommendationsipapplications.ValidColumn,
+			regionmaster.Table:                  regionmaster.ValidColumn,
+			reversal_application_ip.Table:       reversal_application_ip.ValidColumn,
+			rolemaster.Table:                    rolemaster.ValidColumn,
+			user.Table:                          user.ValidColumn,
+			usermaster.Table:                    usermaster.ValidColumn,
+			vacancyyear.Table:                   vacancyyear.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

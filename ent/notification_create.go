@@ -9,6 +9,8 @@ import (
 	"recruit/ent/application"
 	"recruit/ent/center"
 	"recruit/ent/exam"
+	"recruit/ent/exam_ip"
+	"recruit/ent/exam_ps"
 	"recruit/ent/nodalofficer"
 	"recruit/ent/notification"
 	"recruit/ent/vacancyyear"
@@ -137,6 +139,20 @@ func (nc *NotificationCreate) SetNillableVacanciesFile(s *string) *NotificationC
 	return nc
 }
 
+// SetExamCodePS sets the "ExamCodePS" field.
+func (nc *NotificationCreate) SetExamCodePS(i int32) *NotificationCreate {
+	nc.mutation.SetExamCodePS(i)
+	return nc
+}
+
+// SetNillableExamCodePS sets the "ExamCodePS" field if the given value is not nil.
+func (nc *NotificationCreate) SetNillableExamCodePS(i *int32) *NotificationCreate {
+	if i != nil {
+		nc.SetExamCodePS(*i)
+	}
+	return nc
+}
+
 // SetID sets the "id" field.
 func (nc *NotificationCreate) SetID(i int32) *NotificationCreate {
 	nc.mutation.SetID(i)
@@ -235,6 +251,36 @@ func (nc *NotificationCreate) AddNotifyRef(n ...*Notification) *NotificationCrea
 		ids[i] = n[i].ID
 	}
 	return nc.AddNotifyRefIDs(ids...)
+}
+
+// AddNotificationsPIDs adds the "notifications_ps" edge to the Exam_PS entity by IDs.
+func (nc *NotificationCreate) AddNotificationsPIDs(ids ...int32) *NotificationCreate {
+	nc.mutation.AddNotificationsPIDs(ids...)
+	return nc
+}
+
+// AddNotificationsPs adds the "notifications_ps" edges to the Exam_PS entity.
+func (nc *NotificationCreate) AddNotificationsPs(e ...*Exam_PS) *NotificationCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nc.AddNotificationsPIDs(ids...)
+}
+
+// AddNotificationsIPIDs adds the "notifications_ip" edge to the Exam_IP entity by IDs.
+func (nc *NotificationCreate) AddNotificationsIPIDs(ids ...int32) *NotificationCreate {
+	nc.mutation.AddNotificationsIPIDs(ids...)
+	return nc
+}
+
+// AddNotificationsIP adds the "notifications_ip" edges to the Exam_IP entity.
+func (nc *NotificationCreate) AddNotificationsIP(e ...*Exam_IP) *NotificationCreate {
+	ids := make([]int32, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return nc.AddNotificationsIPIDs(ids...)
 }
 
 // Mutation returns the NotificationMutation object of the builder.
@@ -368,6 +414,10 @@ func (nc *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 		_spec.SetField(notification.FieldVacanciesFile, field.TypeString, value)
 		_node.VacanciesFile = value
 	}
+	if value, ok := nc.mutation.ExamCodePS(); ok {
+		_spec.SetField(notification.FieldExamCodePS, field.TypeInt32, value)
+		_node.ExamCodePS = value
+	}
 	if nodes := nc.mutation.ApplicationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -458,6 +508,38 @@ func (nc *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.NotificationsPsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsPsTable,
+			Columns: []string{notification.NotificationsPsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ps.FieldID, field.TypeInt32),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.NotificationsIPIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   notification.NotificationsIPTable,
+			Columns: []string{notification.NotificationsIPColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(exam_ip.FieldID, field.TypeInt32),
 			},
 		}
 		for _, k := range nodes {

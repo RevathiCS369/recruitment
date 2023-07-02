@@ -17,7 +17,7 @@ type EmployeeDesignation struct {
 func (EmployeeDesignation) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int32("id").StorageKey("DesignationID"), 
-		field.String("DesignationCode"),
+		field.String("DesignationCode").Unique(),
 		field.String("DesignationDescription"),}
 }
 func (EmployeeDesignation) Edges() []ent.Edge {

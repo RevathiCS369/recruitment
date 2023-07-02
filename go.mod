@@ -30,6 +30,8 @@ require (
 	github.com/go-openapi/jsonreference v0.20.2 // indirect
 	github.com/go-openapi/spec v0.20.9 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
+	github.com/go-resty/resty/v2 v2.7.0 // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/google/go-github/v32 v32.1.0 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
@@ -50,10 +52,12 @@ require (
 	github.com/schollz/progressbar/v3 v3.3.4 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+	github.com/souvikhaldar/gobudgetsms v0.0.0-20181104103442-ac7075c13441 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/swaggo/files v1.0.1 // indirect
 	github.com/swaggo/gin-swagger v1.6.0 // indirect
 	github.com/swaggo/swag v1.16.1 // indirect
+	github.com/twilio/twilio-go v1.7.2 // indirect
 	github.com/urfave/cli/v2 v2.25.3 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect

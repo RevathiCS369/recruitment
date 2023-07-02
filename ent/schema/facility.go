@@ -18,28 +18,43 @@ type Facility struct {
 func (Facility) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int32("id").StorageKey("FacilityID"), 
-		field.String("FacilityCode"),
+		field.Int32("FacilityCode").Unique().Optional(),
 		field.String("OfficeType"),
+		field.String("FacilityOfficeID").Unique(),
 		field.String("FacilityName"),	
 		field.String("ReportingOfficeType").Optional(),
 		field.String("ReportingOfficeCode").Optional(),
 		field.String("EmailID").Optional(),
-		field.Int32("MobileNumber").Optional(),
-		field.Int32("DivisionCode").Optional(),
+		field.Int64("MobileNumber").Optional(),
+		field.Int32("DivisionCode").Optional(),		
+		field.String("DivisionName").Optional(),
+		field.Int32("DivisionID").Optional(),
 		field.Int32("RegionCode").Optional(),
+		field.Int32("RegionID").Optional(),
+		field.String("RegionName").Optional(),
 		field.Int32("CircleCode").Optional(),
+		field.Int32("CircleID").Optional(),
+		field.String("CircleName").Optional(),
+		field.String("ReportingOfficeID").Optional(),
+		field.String("ReportingOfficeName").Optional(),
 		} 
 } 
 
 func (Facility) Edges() []ent.Edge {
 	return []ent.Edge{
-		//edge.From("divisions", DivisionMaster.Type).Ref("div_ref").Unique().Field("DivisionID"),
+		edge.From("divisions", DivisionMaster.Type).Ref("divisions_ref").Unique().Field("DivisionID"),
+		edge.From("regions", RegionMaster.Type).Ref("region_ref_ref").Unique().Field("RegionID"),
+		edge.From("circles", CircleMaster.Type).Ref("circle_ref").Unique().Field("CircleID"),
 		//edge.To("divisions_ref", DivisionMaster.Type),
-		edge.To("region_ref", RegionMaster.Type),
+		//edge.To("region_ref", RegionMaster.Type),
 		edge.To("circle_ref", CircleMaster.Type),
+		edge.To("Office_PS_Ref", Exam_Applications_PS.Type),
+		edge.To("Office_IP_Ref", Exam_Applications_IP.Type),
+		//edge.To("divisions_ref", DivisionMaster.Type),
+		//emp_facility
 	}
+	} 
 
-}
 
 func (Facility) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "Facility"}}

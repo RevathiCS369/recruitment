@@ -8,6 +8,9 @@ import (
 	"fmt"
 	"math"
 	"recruit/ent/circlemaster"
+	"recruit/ent/divisionmaster"
+	"recruit/ent/exam_applications_ip"
+	"recruit/ent/exam_applications_ps"
 	"recruit/ent/facility"
 	"recruit/ent/predicate"
 	"recruit/ent/regionmaster"
@@ -20,13 +23,17 @@ import (
 // FacilityQuery is the builder for querying Facility entities.
 type FacilityQuery struct {
 	config
-	ctx           *QueryContext
-	order         []facility.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.Facility
-	withRegionRef *RegionMasterQuery
-	withCircleRef *CircleMasterQuery
-	withFKs       bool
+	ctx             *QueryContext
+	order           []facility.OrderOption
+	inters          []Interceptor
+	predicates      []predicate.Facility
+	withDivisions   *DivisionMasterQuery
+	withRegions     *RegionMasterQuery
+	withCircles     *CircleMasterQuery
+	withCircleRef   *CircleMasterQuery
+	withOfficePSRef *ExamApplicationsPSQuery
+	withOfficeIPRef *ExamApplicationsIPQuery
+	withFKs         bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -63,8 +70,30 @@ func (fq *FacilityQuery) Order(o ...facility.OrderOption) *FacilityQuery {
 	return fq
 }
 
-// QueryRegionRef chains the current query on the "region_ref" edge.
-func (fq *FacilityQuery) QueryRegionRef() *RegionMasterQuery {
+// QueryDivisions chains the current query on the "divisions" edge.
+func (fq *FacilityQuery) QueryDivisions() *DivisionMasterQuery {
+	query := (&DivisionMasterClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(facility.Table, facility.FieldID, selector),
+			sqlgraph.To(divisionmaster.Table, divisionmaster.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, facility.DivisionsTable, facility.DivisionsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegions chains the current query on the "regions" edge.
+func (fq *FacilityQuery) QueryRegions() *RegionMasterQuery {
 	query := (&RegionMasterClient{config: fq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := fq.prepareQuery(ctx); err != nil {
@@ -77,7 +106,29 @@ func (fq *FacilityQuery) QueryRegionRef() *RegionMasterQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(facility.Table, facility.FieldID, selector),
 			sqlgraph.To(regionmaster.Table, regionmaster.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, facility.RegionRefTable, facility.RegionRefColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, facility.RegionsTable, facility.RegionsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCircles chains the current query on the "circles" edge.
+func (fq *FacilityQuery) QueryCircles() *CircleMasterQuery {
+	query := (&CircleMasterClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(facility.Table, facility.FieldID, selector),
+			sqlgraph.To(circlemaster.Table, circlemaster.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, facility.CirclesTable, facility.CirclesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
 		return fromU, nil
@@ -100,6 +151,50 @@ func (fq *FacilityQuery) QueryCircleRef() *CircleMasterQuery {
 			sqlgraph.From(facility.Table, facility.FieldID, selector),
 			sqlgraph.To(circlemaster.Table, circlemaster.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, facility.CircleRefTable, facility.CircleRefColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOfficePSRef chains the current query on the "Office_PS_Ref" edge.
+func (fq *FacilityQuery) QueryOfficePSRef() *ExamApplicationsPSQuery {
+	query := (&ExamApplicationsPSClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(facility.Table, facility.FieldID, selector),
+			sqlgraph.To(exam_applications_ps.Table, exam_applications_ps.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, facility.OfficePSRefTable, facility.OfficePSRefColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOfficeIPRef chains the current query on the "Office_IP_Ref" edge.
+func (fq *FacilityQuery) QueryOfficeIPRef() *ExamApplicationsIPQuery {
+	query := (&ExamApplicationsIPClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(facility.Table, facility.FieldID, selector),
+			sqlgraph.To(exam_applications_ip.Table, exam_applications_ip.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, facility.OfficeIPRefTable, facility.OfficeIPRefColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
 		return fromU, nil
@@ -294,27 +389,53 @@ func (fq *FacilityQuery) Clone() *FacilityQuery {
 		return nil
 	}
 	return &FacilityQuery{
-		config:        fq.config,
-		ctx:           fq.ctx.Clone(),
-		order:         append([]facility.OrderOption{}, fq.order...),
-		inters:        append([]Interceptor{}, fq.inters...),
-		predicates:    append([]predicate.Facility{}, fq.predicates...),
-		withRegionRef: fq.withRegionRef.Clone(),
-		withCircleRef: fq.withCircleRef.Clone(),
+		config:          fq.config,
+		ctx:             fq.ctx.Clone(),
+		order:           append([]facility.OrderOption{}, fq.order...),
+		inters:          append([]Interceptor{}, fq.inters...),
+		predicates:      append([]predicate.Facility{}, fq.predicates...),
+		withDivisions:   fq.withDivisions.Clone(),
+		withRegions:     fq.withRegions.Clone(),
+		withCircles:     fq.withCircles.Clone(),
+		withCircleRef:   fq.withCircleRef.Clone(),
+		withOfficePSRef: fq.withOfficePSRef.Clone(),
+		withOfficeIPRef: fq.withOfficeIPRef.Clone(),
 		// clone intermediate query.
 		sql:  fq.sql.Clone(),
 		path: fq.path,
 	}
 }
 
-// WithRegionRef tells the query-builder to eager-load the nodes that are connected to
-// the "region_ref" edge. The optional arguments are used to configure the query builder of the edge.
-func (fq *FacilityQuery) WithRegionRef(opts ...func(*RegionMasterQuery)) *FacilityQuery {
+// WithDivisions tells the query-builder to eager-load the nodes that are connected to
+// the "divisions" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FacilityQuery) WithDivisions(opts ...func(*DivisionMasterQuery)) *FacilityQuery {
+	query := (&DivisionMasterClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withDivisions = query
+	return fq
+}
+
+// WithRegions tells the query-builder to eager-load the nodes that are connected to
+// the "regions" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FacilityQuery) WithRegions(opts ...func(*RegionMasterQuery)) *FacilityQuery {
 	query := (&RegionMasterClient{config: fq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	fq.withRegionRef = query
+	fq.withRegions = query
+	return fq
+}
+
+// WithCircles tells the query-builder to eager-load the nodes that are connected to
+// the "circles" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FacilityQuery) WithCircles(opts ...func(*CircleMasterQuery)) *FacilityQuery {
+	query := (&CircleMasterClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withCircles = query
 	return fq
 }
 
@@ -329,13 +450,35 @@ func (fq *FacilityQuery) WithCircleRef(opts ...func(*CircleMasterQuery)) *Facili
 	return fq
 }
 
+// WithOfficePSRef tells the query-builder to eager-load the nodes that are connected to
+// the "Office_PS_Ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FacilityQuery) WithOfficePSRef(opts ...func(*ExamApplicationsPSQuery)) *FacilityQuery {
+	query := (&ExamApplicationsPSClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withOfficePSRef = query
+	return fq
+}
+
+// WithOfficeIPRef tells the query-builder to eager-load the nodes that are connected to
+// the "Office_IP_Ref" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FacilityQuery) WithOfficeIPRef(opts ...func(*ExamApplicationsIPQuery)) *FacilityQuery {
+	query := (&ExamApplicationsIPClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withOfficeIPRef = query
+	return fq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
 // Example:
 //
 //	var v []struct {
-//		FacilityCode string `json:"FacilityCode,omitempty"`
+//		FacilityCode int32 `json:"FacilityCode,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -358,7 +501,7 @@ func (fq *FacilityQuery) GroupBy(field string, fields ...string) *FacilityGroupB
 // Example:
 //
 //	var v []struct {
-//		FacilityCode string `json:"FacilityCode,omitempty"`
+//		FacilityCode int32 `json:"FacilityCode,omitempty"`
 //	}
 //
 //	client.Facility.Query().
@@ -408,9 +551,13 @@ func (fq *FacilityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Fac
 		nodes       = []*Facility{}
 		withFKs     = fq.withFKs
 		_spec       = fq.querySpec()
-		loadedTypes = [2]bool{
-			fq.withRegionRef != nil,
+		loadedTypes = [6]bool{
+			fq.withDivisions != nil,
+			fq.withRegions != nil,
+			fq.withCircles != nil,
 			fq.withCircleRef != nil,
+			fq.withOfficePSRef != nil,
+			fq.withOfficeIPRef != nil,
 		}
 	)
 	if withFKs {
@@ -434,10 +581,21 @@ func (fq *FacilityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Fac
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := fq.withRegionRef; query != nil {
-		if err := fq.loadRegionRef(ctx, query, nodes,
-			func(n *Facility) { n.Edges.RegionRef = []*RegionMaster{} },
-			func(n *Facility, e *RegionMaster) { n.Edges.RegionRef = append(n.Edges.RegionRef, e) }); err != nil {
+	if query := fq.withDivisions; query != nil {
+		if err := fq.loadDivisions(ctx, query, nodes, nil,
+			func(n *Facility, e *DivisionMaster) { n.Edges.Divisions = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withRegions; query != nil {
+		if err := fq.loadRegions(ctx, query, nodes, nil,
+			func(n *Facility, e *RegionMaster) { n.Edges.Regions = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withCircles; query != nil {
+		if err := fq.loadCircles(ctx, query, nodes, nil,
+			func(n *Facility, e *CircleMaster) { n.Edges.Circles = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -448,37 +606,107 @@ func (fq *FacilityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Fac
 			return nil, err
 		}
 	}
+	if query := fq.withOfficePSRef; query != nil {
+		if err := fq.loadOfficePSRef(ctx, query, nodes,
+			func(n *Facility) { n.Edges.OfficePSRef = []*Exam_Applications_PS{} },
+			func(n *Facility, e *Exam_Applications_PS) { n.Edges.OfficePSRef = append(n.Edges.OfficePSRef, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withOfficeIPRef; query != nil {
+		if err := fq.loadOfficeIPRef(ctx, query, nodes,
+			func(n *Facility) { n.Edges.OfficeIPRef = []*Exam_Applications_IP{} },
+			func(n *Facility, e *Exam_Applications_IP) { n.Edges.OfficeIPRef = append(n.Edges.OfficeIPRef, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
 }
 
-func (fq *FacilityQuery) loadRegionRef(ctx context.Context, query *RegionMasterQuery, nodes []*Facility, init func(*Facility), assign func(*Facility, *RegionMaster)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int32]*Facility)
+func (fq *FacilityQuery) loadDivisions(ctx context.Context, query *DivisionMasterQuery, nodes []*Facility, init func(*Facility), assign func(*Facility, *DivisionMaster)) error {
+	ids := make([]int32, 0, len(nodes))
+	nodeids := make(map[int32][]*Facility)
 	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
+		fk := nodes[i].DivisionID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
 		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	query.withFKs = true
-	query.Where(predicate.RegionMaster(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(facility.RegionRefColumn), fks...))
-	}))
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(divisionmaster.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.facility_region_ref
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "facility_region_ref" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "facility_region_ref" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "DivisionID" returned %v`, n.ID)
 		}
-		assign(node, n)
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (fq *FacilityQuery) loadRegions(ctx context.Context, query *RegionMasterQuery, nodes []*Facility, init func(*Facility), assign func(*Facility, *RegionMaster)) error {
+	ids := make([]int32, 0, len(nodes))
+	nodeids := make(map[int32][]*Facility)
+	for i := range nodes {
+		fk := nodes[i].RegionID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(regionmaster.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "RegionID" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (fq *FacilityQuery) loadCircles(ctx context.Context, query *CircleMasterQuery, nodes []*Facility, init func(*Facility), assign func(*Facility, *CircleMaster)) error {
+	ids := make([]int32, 0, len(nodes))
+	nodeids := make(map[int32][]*Facility)
+	for i := range nodes {
+		fk := nodes[i].CircleID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(circlemaster.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "CircleID" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
 	}
 	return nil
 }
@@ -513,6 +741,68 @@ func (fq *FacilityQuery) loadCircleRef(ctx context.Context, query *CircleMasterQ
 	}
 	return nil
 }
+func (fq *FacilityQuery) loadOfficePSRef(ctx context.Context, query *ExamApplicationsPSQuery, nodes []*Facility, init func(*Facility), assign func(*Facility, *Exam_Applications_PS)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*Facility)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Exam_Applications_PS(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(facility.OfficePSRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.facility_office_ps_ref
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "facility_office_ps_ref" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "facility_office_ps_ref" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (fq *FacilityQuery) loadOfficeIPRef(ctx context.Context, query *ExamApplicationsIPQuery, nodes []*Facility, init func(*Facility), assign func(*Facility, *Exam_Applications_IP)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int32]*Facility)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Exam_Applications_IP(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(facility.OfficeIPRefColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.facility_office_ip_ref
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "facility_office_ip_ref" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "facility_office_ip_ref" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (fq *FacilityQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := fq.querySpec()
@@ -538,6 +828,15 @@ func (fq *FacilityQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != facility.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if fq.withDivisions != nil {
+			_spec.Node.AddColumnOnce(facility.FieldDivisionID)
+		}
+		if fq.withRegions != nil {
+			_spec.Node.AddColumnOnce(facility.FieldRegionID)
+		}
+		if fq.withCircles != nil {
+			_spec.Node.AddColumnOnce(facility.FieldCircleID)
 		}
 	}
 	if ps := fq.predicates; len(ps) > 0 {

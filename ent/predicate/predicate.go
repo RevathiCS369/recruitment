@@ -6,11 +6,26 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// AdminLogin is the predicate function for adminlogin builders.
+type AdminLogin func(*sql.Selector)
+
 // AgeEligibility is the predicate function for ageeligibility builders.
 type AgeEligibility func(*sql.Selector)
 
 // Application is the predicate function for application builders.
 type Application func(*sql.Selector)
+
+// Cadre_Choice_IP is the predicate function for cadre_choice_ip builders.
+type Cadre_Choice_IP func(*sql.Selector)
+
+// Cadre_Choice_PA is the predicate function for cadre_choice_pa builders.
+type Cadre_Choice_PA func(*sql.Selector)
+
+// Cadre_Choice_PM is the predicate function for cadre_choice_pm builders.
+type Cadre_Choice_PM func(*sql.Selector)
+
+// Cadre_Choice_PS is the predicate function for cadre_choice_ps builders.
+type Cadre_Choice_PS func(*sql.Selector)
 
 // Center is the predicate function for center builders.
 type Center func(*sql.Selector)
@@ -18,11 +33,26 @@ type Center func(*sql.Selector)
 // CircleMaster is the predicate function for circlemaster builders.
 type CircleMaster func(*sql.Selector)
 
+// DirectorateUsers is the predicate function for directorateusers builders.
+type DirectorateUsers func(*sql.Selector)
+
 // Disability is the predicate function for disability builders.
 type Disability func(*sql.Selector)
 
 // DivisionMaster is the predicate function for divisionmaster builders.
 type DivisionMaster func(*sql.Selector)
+
+// Division_Choice_PA is the predicate function for division_choice_pa builders.
+type Division_Choice_PA func(*sql.Selector)
+
+// Division_Choice_PM is the predicate function for division_choice_pm builders.
+type Division_Choice_PM func(*sql.Selector)
+
+// Division_Choice_PS is the predicate function for division_choice_ps builders.
+type Division_Choice_PS func(*sql.Selector)
+
+// EligibilityMaster is the predicate function for eligibilitymaster builders.
+type EligibilityMaster func(*sql.Selector)
 
 // EmployeeCadre is the predicate function for employeecadre builders.
 type EmployeeCadre func(*sql.Selector)
@@ -32,6 +62,9 @@ type EmployeeCategory func(*sql.Selector)
 
 // EmployeeDesignation is the predicate function for employeedesignation builders.
 type EmployeeDesignation func(*sql.Selector)
+
+// EmployeeMaster is the predicate function for employeemaster builders.
+type EmployeeMaster func(*sql.Selector)
 
 // EmployeePosts is the predicate function for employeeposts builders.
 type EmployeePosts func(*sql.Selector)
@@ -45,14 +78,35 @@ type Exam func(*sql.Selector)
 // ExamCalendar is the predicate function for examcalendar builders.
 type ExamCalendar func(*sql.Selector)
 
-// ExamEligibility is the predicate function for exameligibility builders.
-type ExamEligibility func(*sql.Selector)
-
 // ExamPapers is the predicate function for exampapers builders.
 type ExamPapers func(*sql.Selector)
 
+// ExamType is the predicate function for examtype builders.
+type ExamType func(*sql.Selector)
+
+// Exam_Applications_IP is the predicate function for exam_applications_ip builders.
+type Exam_Applications_IP func(*sql.Selector)
+
+// Exam_Applications_PS is the predicate function for exam_applications_ps builders.
+type Exam_Applications_PS func(*sql.Selector)
+
+// Exam_IP is the predicate function for exam_ip builders.
+type Exam_IP func(*sql.Selector)
+
+// Exam_PA is the predicate function for exam_pa builders.
+type Exam_PA func(*sql.Selector)
+
+// Exam_PM is the predicate function for exam_pm builders.
+type Exam_PM func(*sql.Selector)
+
+// Exam_PS is the predicate function for exam_ps builders.
+type Exam_PS func(*sql.Selector)
+
 // Facility is the predicate function for facility builders.
 type Facility func(*sql.Selector)
+
+// Login is the predicate function for login builders.
+type Login func(*sql.Selector)
 
 // NodalOfficer is the predicate function for nodalofficer builders.
 type NodalOfficer func(*sql.Selector)
@@ -63,11 +117,26 @@ type Notification func(*sql.Selector)
 // PaperTypes is the predicate function for papertypes builders.
 type PaperTypes func(*sql.Selector)
 
+// PlaceOfPreferenceIP is the predicate function for placeofpreferenceip builders.
+type PlaceOfPreferenceIP func(*sql.Selector)
+
+// RecommendationsIPApplications is the predicate function for recommendationsipapplications builders.
+type RecommendationsIPApplications func(*sql.Selector)
+
 // RegionMaster is the predicate function for regionmaster builders.
 type RegionMaster func(*sql.Selector)
 
+// Reversal_Application_IP is the predicate function for reversal_application_ip builders.
+type Reversal_Application_IP func(*sql.Selector)
+
+// RoleMaster is the predicate function for rolemaster builders.
+type RoleMaster func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
+
+// UserMaster is the predicate function for usermaster builders.
+type UserMaster func(*sql.Selector)
 
 // VacancyYear is the predicate function for vacancyyear builders.
 type VacancyYear func(*sql.Selector)

@@ -39,7 +39,6 @@ type RegionMaster struct {
 	Edges                    RegionMasterEdges `json:"edges"`
 	circle_master_region_ref *int32
 	division_master_regions  *int32
-	facility_region_ref      *int32
 	selectValues             sql.SelectValues
 }
 
@@ -95,8 +94,6 @@ func (*RegionMaster) scanValues(columns []string) ([]any, error) {
 		case regionmaster.ForeignKeys[0]: // circle_master_region_ref
 			values[i] = new(sql.NullInt64)
 		case regionmaster.ForeignKeys[1]: // division_master_regions
-			values[i] = new(sql.NullInt64)
-		case regionmaster.ForeignKeys[2]: // facility_region_ref
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -186,13 +183,6 @@ func (rm *RegionMaster) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				rm.division_master_regions = new(int32)
 				*rm.division_master_regions = int32(value.Int64)
-			}
-		case regionmaster.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field facility_region_ref", value)
-			} else if value.Valid {
-				rm.facility_region_ref = new(int32)
-				*rm.facility_region_ref = int32(value.Int64)
 			}
 		default:
 			rm.selectValues.Set(columns[i], values[i])
